@@ -1,0 +1,317 @@
+
+@import "tailwindcss";
+
+
+:root {
+  /* Light theme colors */
+  --background: #ffffff;
+  --foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --border: #e5e5e5;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  
+  /* Glass effect variables */
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Gradient colors */
+  --gradient: linear-gradient(135deg, 
+    #FF0F65 18%, 
+    #FF6B5F 41%, 
+    #E46C8B 48%, 
+    #A860EC 55%, 
+    #AD5EE3 62%, 
+    #BE55BF 69%, 
+    #D5458A 76%, 
+    #F91748 91%
+  );
+
+  /* Glass effect */
+  --glass-background: rgba(255, 255, 255, 0.55);
+}
+
+.dark {
+  /* Dark theme colors */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --border: #404040;
+  --card: #171717;
+  --card-foreground: #ededed;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #262626;
+  --secondary-foreground: #ededed;
+  --accent: #262626;
+  --accent-foreground: #ededed;
+  
+  /* Glass effect variables for dark mode */
+  --glass-bg: rgba(0, 0, 0, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+
+  /* Glass effect */
+  --glass-background: rgba(0, 0, 0, 0.55);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Gradient utility classes */
+.bg-gradient {
+  background: var(--gradient);
+}
+
+.bg-text-gradient {
+  background: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hover-text-gradient {
+  transition: all 0.3s ease;
+}
+
+.hover-text-gradient:hover {
+  background: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.custom-transition{
+  transition: 0.4s all ease-in-out
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
+/* Navigation transitions */
+.nav-item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-item a,
+.nav-item button {
+  transition: all 0.3s ease;
+}
+
+button{
+  cursor: pointer;
+}
+a{
+  cursor: pointer;
+}
+
+/* Dropdown animations */
+@keyframes dropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.dropdown-enter-active {
+  animation: dropdownEnter 0.3s ease forwards;
+}
+
+.dropdown-exit-active {
+  animation: dropdownExit 0.3s ease forwards;
+}
+
+/* Glass effect utility class */
+.glass-effect {
+  background: var(--glass-background);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
+}
+
+/* Darker variant of glass effect */
+.glass-effect-darker {
+  background: var(--background);
+  opacity: 0.97;
+  backdrop-filter: blur(12px);
+  border-right: 1px solid var(--glass-border);
+  box-shadow: 4px 0 32px 0 var(--glass-shadow);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-primary-gradient-hover {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary-gradient-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--gradient);
+  background-size: 100% 100%;
+  transition: opacity 0.4s ease-in-out;
+  opacity: 0;
+  z-index: -1;
+}
+
+.btn-primary-gradient-hover:hover::before {
+  opacity: 1;
+}
+
+/* New utility for gradient border on focus */
+.input-gradient-focus {
+  border: 2px solid var(--border);
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.input-gradient-focus:focus {
+  border-color: transparent;
+  background-image: linear-gradient(var(--background), var(--background)), var(--gradient);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Custom scrollbar utilities */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Typing indicator */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 4px 0;
+}
+
+.typing-indicator span {
+    width: 6px;
+    height: 6px;
+    background-color: currentColor;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: typing 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateY(-4px);
+        opacity: 0.8;
+    }
+}
+

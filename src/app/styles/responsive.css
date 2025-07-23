@@ -1,0 +1,24 @@
+/* min width */
+
+
+/* max-width */
+
+@media(max-width:768px) {
+
+    .chatbot {
+        top: 5%;
+        left: 5%;
+        right: 5%;
+        width: 90%;
+        height: 90%;
+    }
+
+    .hero-right-img {
+        width: 100%;
+    }
+}
+
+@media(max-width:576px) {
+
+  
+}

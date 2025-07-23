@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+.chatrio-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: var(--chatrio-widget-width, 350px);
+  height: var(--chatrio-widget-height, 500px);
+  border: 1px solid var(--chatrio-border-color, #e5e5e5);
+  border-radius: var(--chatrio-border-radius, 16px);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  background: var(--chatrio-bg, #fff);
+  color: var(--chatrio-text, #000);
+  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  font-size: var(--chatrio-font-size, 14px);
+  font-weight: var(--chatrio-font-weight, 400);
+  opacity: var(--chatrio-opacity, 1);
+  transform: scale(0);
+  transform-origin: bottom right;
+  transition: transform var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
+}
+
+.chatrio-widget.open {
+  transform: scale(1);
+}
+
+/* Animation Classes */
+.chatrio-scale-in {
+  transform: scale(1) !important;
+}
+
+.chatrio-scale-out {
+  transform: scale(0) !important;
+}
+
+.chatrio-slide-in {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+.chatrio-slide-out {
+  transform: translateY(100%) !important;
+  opacity: 0 !important;
+}
+
+.chatrio-fade-in {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.chatrio-fade-out {
+  opacity: 0 !important;
+  transform: scale(1) !important;
+}
+
+.chatrio-bounce-in {
+  animation: bounceIn var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
+  transform: scale(1) !important;
+}
+
+.chatrio-bounce-out {
+  animation: bounceOut var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
+  transform: scale(0) !important;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes bounceOut {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(0.3); opacity: 0; }
+}
+
+.chatrio-launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: var(--chatrio-launcher-size, 60px);
+  height: var(--chatrio-launcher-size, 60px);
+  background: var(--chatrio-launcher-bg, #000);
+  color: var(--chatrio-launcher-text, #fff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--chatrio-launcher-size, 60px) * 0.4);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 10000;
+  transition: transform 0.2s ease-in-out;
+  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+}
+
+.chatrio-launcher:hover { 
+  transform: scale(1.05); 
+}
+
+.chatrio-header {
+  background: var(--chatrio-header-bg, #000);
+  color: var(--chatrio-header-text, #fff);
+  padding: 12px;
+  font-weight: var(--chatrio-font-weight, 500);
+  font-size: var(--chatrio-header-font-size, 16px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  cursor: default;
+}
+
+.chatrio-header img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chatrio-close-btn {
+  background: none;
+  border: none;
+  color: var(--chatrio-header-text, #fff);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 5px;
+  transition: opacity 0.2s ease;
+}
+
+.chatrio-close-btn:hover {
+  opacity: 0.8;
+}
+
+.chatrio-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background: var(--chatrio-messages-bg, #fafbfc);
+  cursor: default;
+}
+
+.chatrio-input-area {
+  display: flex;
+  border-top: 1px solid var(--chatrio-border-color, #e5e5e5);
+  background: var(--chatrio-input-bg, #fff);
+}
+
+.chatrio-input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: var(--chatrio-font-size, 14px);
+  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  font-weight: var(--chatrio-font-weight, 400);
+  background: transparent;
+  color: inherit;
+}
+
+.chatrio-input::placeholder {
+  color: var(--chatrio-text, #000);
+  opacity: 0.6;
+}
+
+.chatrio-send-btn {
+  background: var(--chatrio-send-button-bg, #000);
+  color: var(--chatrio-send-button-text, #fff);
+  border: none;
+  padding: 0 16px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: var(--chatrio-font-size, 14px);
+  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  border-radius: 0 0 var(--chatrio-border-radius, 16px) 0;
+  transition: opacity 0.2s ease;
+}
+
+.chatrio-send-btn:hover { 
+  opacity: 0.9; 
+}
+
+.chatrio-message {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: var(--chatrio-message-border-radius, 12px);
+  max-width: 80%;
+  word-break: break-word;
+  font-size: var(--chatrio-message-font-size, 14px);
+  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  font-weight: var(--chatrio-font-weight, 400);
+  line-height: 1.5;
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chatrio-message-user {
+  background: var(--chatrio-user-bg, #e6f0ff);
+  color: var(--chatrio-user-text, #222);
+  align-self: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+.chatrio-message-assistant {
+  background: var(--chatrio-assistant-bg, #f3f3f3);
+  color: var(--chatrio-assistant-text, #444);
+  align-self: flex-start;
+  text-align: left;
+  margin-right: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .chatrio-widget {
+    width: calc(100vw - 32px);
+    height: calc(100vh - 100px);
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+  
+  .chatrio-launcher {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+/* Scrollbar styling */
+.chatrio-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatrio-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatrio-messages::-webkit-scrollbar-thumb {
+  background: var(--chatrio-border-color, #e5e5e5);
+  border-radius: 3px;
+}
+
+.chatrio-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--chatrio-text, #000);
+  opacity: 0.3;
+} 

@@ -1,0 +1,807 @@
+{
+  "rag_context": {
+    "business_profile": {
+      "company_name": "Kenil Savaliya - Portfolio & Freelance Web Development",
+      "overview": "Kenil Savaliya is a dedicated Full-Stack Developer specializing in accessible, responsive, and user-centric web applications. Based in India, Kenil leverages strong MERN stack proficiency and a Bachelor's in Computer Applications (BCA) to deliver high-quality digital solutions for a diverse range of clients. His portfolio showcases a variety of projects, from elegant portfolio websites and engaging landing pages to feature-rich e-commerce platforms and custom software solutions.",
+      "industry_business_type": {
+        "industry": "Software Development, Web Development, Freelance Services",
+        "business_type": "Freelance Developer, Independent Contractor"
+      },
+      "core_services_products": [
+        "Full-Stack Web Development (MERN Stack: MongoDB, Express.js, React.js, Node.js)",
+        "Front-end Development (HTML5, CSS3, JavaScript ES6, React.js, Framer, Tailwind CSS, Bootstrap 5, jQuery, Zoomla)",
+        "Back-end Development (Node.js, Express.js, MongoDB, MySQL, PHP, Java, C, C++)",
+        "Responsive Web Design & Development",
+        "User-Centric UI/UX Design & Implementation",
+        "E-commerce Website Development (with advanced filtering, secure checkout, user accounts)",
+        "Custom Software Solutions",
+        "Portfolio Website Creation",
+        "Landing Page Design & Development",
+        "Web Animation Integration",
+        "Database Management & Integration"
+      ],
+      "target_customers": [
+        "Businesses and brands seeking custom web applications or e-commerce platforms",
+        "Content creators (e.g., YouTubers, course instructors) needing portfolio, landing, or cohort websites",
+        "Individuals and small businesses requiring professional, responsive online presence",
+        "Clients looking for comprehensive full-stack development expertise with a focus on user experience",
+        "Anyone requiring tailored digital solutions with modern technologies"
+      ],
+      "unique_value_propositions": [
+        "Specialization and proven expertise in the MERN stack for robust and scalable web solutions.",
+        "Extensive portfolio featuring 10+ real-world projects, demonstrating versatility across different industries and design complexities.",
+        "Strong emphasis on accessible, responsive, and user-centric design principles, ensuring optimal performance across all devices.",
+        "Passion for problem-solving, delivering seamless user experiences, and exceeding client expectations.",
+        "Commitment to continuous learning and staying updated with the latest industry trends and technologies (e.g., Webflow, modern web tech).",
+        "Comprehensive skill set covering both front-end and back-end development, enabling end-to-end project management."
+      ],
+      "company_mission_vision": "To create innovative, impactful, and high-quality web applications that not only meet but exceed user expectations, by combining advanced technical expertise with a strong focus on intuitive user experience and effective problem-solving.",
+      "key_differentiators": [
+        "Full-stack proficiency (MERN) allows for holistic and efficient project execution.",
+        "Diverse project experience from elegant portfolios to complex e-commerce systems, showcasing adaptability.",
+        "Dedication to crafting visually appealing and highly functional user interfaces.",
+        "Proactive approach to learning and implementing cutting-edge technologies.",
+        "A history of delivering user-friendly solutions tailored to specific business needs."
+      ]
+    },
+    "comprehensive_faq_database": [
+      {
+        "question": "Who is Kenil Savaliya?",
+        "answer": "Kenil Savaliya is a Full-Stack Developer based in India with a Bachelor's in Computer Applications (BCA). He specializes in building accessible, responsive, and user-centric websites and applications, leveraging his expertise in the MERN stack and other modern web technologies."
+      },
+      {
+        "question": "What is Kenil Savaliya's educational background?",
+        "answer": "Kenil Savaliya holds a Bachelor's degree in Computer Applications (BCA)."
+      },
+      {
+        "question": "What kind of projects does Kenil Savaliya specialize in?",
+        "answer": "Kenil specializes in a wide range of web development projects, including full-stack web applications, front-end and back-end development, responsive design, e-commerce websites, custom software solutions, portfolio websites, and engaging landing pages. He has experience with complex projects like an online medical consulting web app and various e-commerce platforms."
+      },
+      {
+        "question": "What technologies does Kenil Savaliya use for front-end development?",
+        "answer": "For front-end development, Kenil is proficient in HTML 5, CSS 3, JavaScript ES6, jQuery, Bootstrap 5, React.js, Tailwind CSS, Framer, and Zoomla."
+      },
+      {
+        "question": "What technologies does Kenil Savaliya use for back-end development?",
+        "answer": "For back-end development, Kenil has hands-on experience with Node.js, Express.js, MongoDB, MySQL, PHP, Java, C, and C++."
+      },
+      {
+        "question": "What is MERN stack and does Kenil work with it?",
+        "answer": "MERN stack stands for MongoDB, Express.js, React.js, and Node.js. Yes, Kenil Savaliya specializes in full-stack development with the MERN stack, ensuring robust and scalable solutions."
+      },
+      {
+        "question": "How many real-world projects has Kenil built?",
+        "answer": "Kenil Savaliya has built over 10 real-world projects, showcasing his practical experience and diverse skill set."
+      },
+      {
+        "question": "What is Kenil's experience with e-commerce websites?",
+        "answer": "Kenil has significant experience building e-commerce websites. He developed a feature-rich site for the brand 'Cein' and a responsive e-commerce shoes website for 'Sharpe', both including advanced filtering, detailed product pages, secure checkout, and user accounts."
+      },
+      {
+        "question": "Can Kenil develop responsive websites?",
+        "answer": "Yes, Kenil Savaliya specializes in developing responsive websites and applications, ensuring they work seamlessly and look perfect across all devices. This is a core part of his development philosophy."
+      },
+      {
+        "question": "Tell me about the 'ManavVisuals - Main Portfolio Website' project.",
+        "answer": "This project involved crafting an elegant portfolio website for YouTuber ManavVisuals using Framer. It features a modern, minimalist design with smooth animations, responsive layouts, and an intuitive user interface, focused on showcasing the creator's work through a visually appealing and user-friendly design."
+      },
+      {
+        "question": "What role did Kenil have in the 'ManavVisuals - Main Portfolio Website' project?",
+        "answer": "For the 'ManavVisuals - Main Portfolio Website', Kenil served as the Full Stack Developer."
+      },
+      {
+        "question": "When was the 'ManavVisuals - Main Portfolio Website' project completed?",
+        "answer": "The 'ManavVisuals - Main Portfolio Website' project was completed in 2025."
+      },
+      {
+        "question": "Tell me about the 'ManavVisuals - After Effects Course Landing' project.",
+        "answer": "This project involved designing an engaging landing page for ManavVisuals' After Effects course using Framer. The page features dynamic content sections, smooth scroll animations, and an attractive course preview layout, implementing responsive design principles."
+      },
+      {
+        "question": "What role did Kenil have in the 'ManavVisuals - After Effects Course Landing' project?",
+        "answer": "For the 'ManavVisuals - After Effects Course Landing' project, Kenil served as the Full Stack Developer."
+      },
+      {
+        "question": "When was the 'ManavVisuals - After Effects Course Landing' project completed?",
+        "answer": "The 'ManavVisuals - After Effects Course Landing' project was completed in 2025."
+      },
+      {
+        "question": "Tell me about the 'ManavVisuals - Cohort Website for his students' project.",
+        "answer": "This project involved developing a responsive cohort website in Framer for a client who runs a YouTube channel, focusing on building a user-friendly UI that works seamlessly across all devices for students."
+      },
+      {
+        "question": "What role did Kenil have in the 'ManavVisuals - Cohort Website' project?",
+        "answer": "For the 'ManavVisuals - Cohort Website for his students' project, Kenil served as the Front-end Developer."
+      },
+      {
+        "question": "When was the 'ManavVisuals - Cohort Website' project completed?",
+        "answer": "The 'ManavVisuals - Cohort Website' project was completed in 2025."
+      },
+      {
+        "question": "Tell me about the 'Women's Clothing Website' project.",
+        "answer": "Kenil developed a feature-rich e-commerce website for the brand 'Cein'. This site offered 5-7 pages with a seamless shopping experience, including advanced filtering, detailed product pages, secure checkout, and user accounts, all designed for functionality and ease of use."
+      },
+      {
+        "question": "What role did Kenil have in the 'Women's Clothing Website' project?",
+        "answer": "For the 'Women's Clothing Website' project, Kenil served as the Front-end Developer."
+      },
+      {
+        "question": "When was the 'Women's Clothing Website' project completed?",
+        "answer": "The 'Women's Clothing Website' project was completed in 2022."
+      },
+      {
+        "question": "Tell me about the 'E-commerce Shoes Website' project.",
+        "answer": "Kenil built a responsive e-commerce website for the brand 'Sharpe' using HTML, CSS, and Bootstrap. The site features 5-7 pages, including advanced filtering, product pages, secure checkout, and user accounts, all designed for a smooth and user-friendly shopping experience."
+      },
+      {
+        "question": "What role did Kenil have in the 'E-commerce Shoes Website' project?",
+        "answer": "For the 'E-commerce Shoes Website' project, Kenil served as the Front-end Developer."
+      },
+      {
+        "question": "When was the 'E-commerce Shoes Website' project completed?",
+        "answer": "The 'E-commerce Shoes Website' project was completed in 2022."
+      },
+      {
+        "question": "Does Kenil have experience with UI/UX design?",
+        "answer": "Yes, Kenil focuses on building user-friendly UI and is expanding his design skills with tools like Webflow. Several projects like 'ManavVisuals - Main Portfolio' and 'After Effects Course Landing' highlight his UI/UX involvement."
+      },
+      {
+        "question": "Is Kenil good at web animations?",
+        "answer": "Yes, Kenil has experience with web animations, as demonstrated in the 'ManavVisuals - Main Portfolio Website' which features smooth animations and the 'After Effects Course Landing' with smooth scroll animations."
+      },
+      {
+        "question": "What is Kenil's experience as a Freelance Developer?",
+        "answer": "Kenil has been working as a Freelance Developer since November 2022. In this role, he creates custom software solutions, websites, and various projects for clients across different industries, focusing on delivering high-quality, user-friendly solutions tailored to meet specific business needs."
+      },
+      {
+        "question": "Where did Kenil intern as a Backend Intern?",
+        "answer": "Kenil interned as a Backend Intern at Drodify, located in Ahmedabad."
+      },
+      {
+        "question": "When was Kenil's Backend Intern experience?",
+        "answer": "Kenil's Backend Intern experience was from July 2023 to September 2023."
+      },
+      {
+        "question": "What did Kenil do during his Backend Internship?",
+        "answer": "During his Backend Internship at Drodify, Kenil gained hands-on experience with Java programming and object-oriented concepts, exploring memory allocation, data handling, and control flow to strengthen core programming fundamentals."
+      },
+      {
+        "question": "Does Kenil offer support or maintenance after a project is completed?",
+        "answer": "While the provided information doesn't explicitly detail post-project support or maintenance plans, Kenil is committed to delivering high-quality, well-rounded solutions. It's best to discuss support requirements directly with him during project consultation to ensure your needs are met."
+      },
+      {
+        "question": "How can I get a quote for my project?",
+        "answer": "To get a detailed quote for your project, please reach out to Kenil directly. You can use the contact information provided on his portfolio website to discuss your specific requirements."
+      },
+      {
+        "question": "What is Kenil's approach to problem-solving?",
+        "answer": "Kenil is passionate about problem-solving and focuses on delivering seamless user experiences. He thrives on finding innovative solutions and ensuring that his work aligns with the latest industry trends."
+      },
+      {
+        "question": "Is Kenil familiar with modern web technologies?",
+        "answer": "Yes, Kenil is dedicated to staying at the cutting edge of technology, continuously expanding his skill set and enhancing his expertise in modern web technologies. He is always exploring new ways to improve application architecture and performance."
+      },
+      {
+        "question": "What is the typical timeline for a project?",
+        "answer": "The timeline for a project varies greatly depending on its complexity, scope, and specific requirements. For an accurate estimate, it's best to discuss your project details directly with Kenil."
+      },
+      {
+        "question": "Does Kenil provide a contract or agreement for projects?",
+        "answer": "As a freelance developer, Kenil would typically provide a project agreement or contract outlining the scope, deliverables, timeline, and terms. Please discuss this with him when you inquire about a project."
+      },
+      {
+        "question": "Can Kenil work with existing codebases or projects?",
+        "answer": "The information doesn't explicitly state this, but as a full-stack developer with diverse technical skills and problem-solving focus, Kenil likely has the capability to work with existing codebases. It's recommended to discuss the specifics of your existing project with him."
+      },
+      {
+        "question": "What is Kenil's philosophy on user experience (UX)?",
+        "answer": "Kenil is passionate about problem-solving and focuses on delivering seamless user experiences that prioritize both usability and performance. He specializes in building user-centric websites and applications."
+      },
+      {
+        "question": "Does Kenil offer any pre-built templates or designs?",
+        "answer": "Kenil's portfolio highlights custom development tailored to client needs. While he utilizes frameworks like Framer, Bootstrap, and Tailwind CSS, his approach is to build unique, bespoke solutions rather than offering pre-built templates. He focuses on custom functionality and design."
+      },
+      {
+        "question": "What is Kenil's experience with databases?",
+        "answer": "Kenil has hands-on experience with both MongoDB and MySQL for database management, enabling him to build scalable and efficient server-side applications."
+      },
+      {
+        "question": "What is the process for starting a project with Kenil?",
+        "answer": "The typical process involves an initial discussion where you explain your project idea and requirements. Kenil will then assess the scope and provide a proposal or quote. Once agreed, development begins, with regular communication until completion. To start, please reach out via his contact information."
+      },
+      {
+        "question": "Can Kenil develop mobile applications?",
+        "answer": "The provided information focuses on web development. While React.js can be used for React Native (mobile apps), the portfolio specifically showcases web projects. For mobile app inquiries, it's best to contact Kenil directly to discuss his capabilities and experience in that area."
+      },
+      {
+        "question": "Does Kenil offer a resume for download?",
+        "answer": "Yes, his 'About Me' page mentions 'DOWNLOAD RESUME', indicating his resume is available there."
+      },
+      {
+        "question": "What is the purpose of Kenil's portfolio website?",
+        "answer": "Kenil's portfolio website serves to showcase his web development skills, featured projects, and provide contact information for potential clients and collaborators."
+      },
+      {
+        "question": "What is Kenil's goal as a developer?",
+        "answer": "Kenil's goal is to create innovative and impactful applications that not only meet but exceed user expectations, delivering high-quality, well-rounded solutions."
+      },
+      {
+        "question": "How does Kenil ensure high-quality results?",
+        "answer": "Kenil ensures high-quality results by staying updated on industry trends, continuously expanding his skill set, enhancing his expertise in modern web technologies, and committing to well-rounded solutions."
+      },
+      {
+        "question": "Does Kenil have experience with designing landing pages?",
+        "answer": "Yes, Kenil has experience designing engaging landing pages, specifically mentioned with the 'ManavVisuals - After Effects Course Landing' project, which utilized Framer for dynamic content and smooth animations."
+      },
+      {
+        "question": "What kind of client relationships does Kenil seek?",
+        "answer": "Kenil is eager to contribute and grow in challenging development environments, implying he seeks clients who offer interesting and impactful projects where he can apply and expand his skills and deliver high-quality solutions."
+      },
+      {
+        "question": "Is Kenil available for full-time employment?",
+        "answer": "Kenil is currently listed as a 'Freelance Developer' since Nov 2022. While he's eager to 'contribute and grow in a challenging development environment,' for specific employment inquiries, it's best to contact him directly."
+      },
+      {
+        "question": "How does Kenil handle project communication?",
+        "answer": "While not explicitly stated, professional freelance developers like Kenil typically maintain clear and consistent communication throughout a project, using preferred methods such as email, video calls, or project management tools. This should be discussed directly."
+      },
+      {
+        "question": "What makes Kenil's e-commerce solutions unique?",
+        "answer": "Kenil's e-commerce solutions are feature-rich, focusing on a seamless shopping experience. They include advanced filtering, detailed product pages, secure checkout, and user accounts, all designed for functionality, ease of use, and responsiveness across devices, as demonstrated by his projects for 'Cein' and 'Sharpe'."
+      },
+      {
+        "question": "Does Kenil work with any specific CMS platforms?",
+        "answer": "The data mentions 'Framer' for some projects and he's 'expanding design skills with Webflow'. While not traditional CMS like WordPress, these are platforms he uses for site building and design. For other CMS platforms, it's best to inquire directly."
+      },
+      {
+        "question": "What is the 'online medical consulting web app' Kenil mentions?",
+        "answer": "Kenil has mentioned building an 'online medical consulting web app' as one of his 10+ real-world projects, demonstrating his capability in developing complex applications beyond typical portfolio or e-commerce sites. More specific details are not provided in the scraped data, but it showcases his versatility."
+      },
+      {
+        "question": "Can I see a live demo of Kenil's projects?",
+        "answer": "Yes, Kenil's portfolio lists 'LIVE DEMO' links for some ManavVisuals projects. You can visit his portfolio website (https://kenilsavaliya29.netlify.app/) to access these links and explore his work directly."
+      },
+      {
+        "question": "How does Kenil approach security in web development?",
+        "answer": "While not explicitly detailed, Kenil's work on e-commerce sites involved 'secure checkout', indicating an awareness of security needs. As a professional developer, he would implement best practices for data protection and application security. Specifics can be discussed per project requirements."
+      },
+      {
+        "question": "What is Kenil's location?",
+        "answer": "Kenil Savaliya is a Full-Stack Developer based in India. His backend internship was in Ahmedabad, India."
+      },
+      {
+        "question": "Is Kenil available for urgent projects?",
+        "answer": "Availability for urgent projects depends on Kenil's current workload and the project's complexity. It's recommended to contact him as soon as possible with your project details and desired timeline to check his availability."
+      },
+      {
+        "question": "Has Kenil worked on healthcare applications?",
+        "answer": "Yes, Kenil mentions building an 'online medical consulting web app' as one of his 10+ real-world projects, demonstrating his experience in the healthcare domain."
+      },
+      {
+        "question": "What is Framer and how does Kenil use it?",
+        "answer": "Framer is a tool used for designing and building interactive websites with powerful animation capabilities. Kenil uses Framer to craft elegant portfolio websites and engaging landing pages, incorporating modern, minimalist designs, smooth animations, and responsive layouts, as seen in his ManavVisuals projects."
+      },
+      {
+        "question": "What kind of user experience can I expect from an e-commerce site built by Kenil?",
+        "answer": "You can expect a seamless shopping experience with intuitive navigation, detailed product pages, secure checkout, and user account functionalities, all designed for functionality and ease of use, and fully responsive across devices."
+      },
+      {
+        "question": "Does Kenil implement advanced filtering on e-commerce sites?",
+        "answer": "Yes, Kenil has implemented advanced filtering features on e-commerce websites he developed, such as the 'Women's Clothing Website' for 'Cein' and the 'E-commerce Shoes Website' for 'Sharpe'."
+      },
+      {
+        "question": "Can Kenil integrate user account functionalities?",
+        "answer": "Yes, Kenil has experience integrating user account features into e-commerce websites, allowing for personalized shopping experiences and order management."
+      },
+      {
+        "question": "Is Kenil proficient in Webflow?",
+        "answer": "Kenil is currently expanding his design skills with Webflow, indicating his ongoing commitment to learning and incorporating new design and development tools."
+      },
+      {
+        "question": "What version of JavaScript does Kenil use?",
+        "answer": "Kenil is proficient in JavaScript ES6, which is a modern standard for JavaScript."
+      },
+      {
+        "question": "What is the significance of Kenil's BCA degree for web development?",
+        "answer": "Kenil's Bachelor's in Computer Applications (BCA) provides him with a strong foundational background in computer science, programming fundamentals, and problem-solving, which are essential for comprehensive full-stack web development."
+      },
+      {
+        "question": "What are the key takeaways from Kenil's freelance experience?",
+        "answer": "Since November 2022, Kenil's freelance experience highlights his ability to deliver custom software solutions and websites for diverse clients, focusing on high-quality, user-friendly results tailored to specific business needs across various industries."
+      },
+      {
+        "question": "What is Drodify?",
+        "answer": "Drodify is the company in Ahmedabad where Kenil Savaliya completed a Backend Intern role from July 2023 to September 2023."
+      },
+      {
+        "question": "How does Kenil ensure a user-friendly UI?",
+        "answer": "Kenil ensures a user-friendly UI by specializing in accessible, responsive, and user-centric designs. He focuses on intuitive interfaces, seamless user experiences, and is continuously enhancing his design skills with tools like Framer and Webflow."
+      },
+      {
+        "question": "Does Kenil provide website hosting or domain registration services?",
+        "answer": "The provided information does not explicitly state that Kenil provides hosting or domain registration services. As a freelance developer, he typically focuses on the development aspect. It's recommended to discuss these requirements directly with him."
+      },
+      {
+        "question": "Does Kenil offer SEO services for the websites he builds?",
+        "answer": "The scraped data does not mention specific SEO services. Kenil focuses on building well-structured, responsive websites which are inherently SEO-friendly. For dedicated SEO services, please discuss directly with Kenil."
+      },
+      {
+        "question": "Can Kenil help with website content creation?",
+        "answer": "Kenil's expertise is in web development and design. While he creates engaging layouts for content, the scraped data does not indicate he offers content creation services. Clients usually provide the content, or it can be arranged through third-party services."
+      },
+      {
+        "question": "How does Kenil handle intellectual property rights for projects?",
+        "answer": "As is standard practice for freelance development, intellectual property rights would typically be addressed within the project contract or agreement. This ensures clarity on ownership of the developed code and design. Please discuss this with Kenil during project discussions."
+      },
+      {
+        "question": "What is Kenil's availability for new projects?",
+        "answer": "Kenil's availability for new projects depends on his current workload. It's best to contact him directly through his website to inquire about his current schedule and discuss your project's timeline."
+      },
+      {
+        "question": "Does Kenil work with clients outside of India?",
+        "answer": "While Kenil is based in India, his freelance nature implies he can work remotely with clients internationally. For international projects, please contact him directly to discuss collaboration and time zone differences."
+      },
+      {
+        "question": "What are the payment terms for Kenil's projects?",
+        "answer": "Payment terms are typically outlined in the project agreement. This usually involves an initial deposit, milestone payments, and a final payment upon project completion. Specific terms would be discussed and agreed upon with Kenil directly."
+      }
+    ],
+    "chatbot_personality": {
+      "tone_of_voice": "Professional, knowledgeable, helpful, concise, and enthusiastic about web development and Kenil's capabilities.",
+      "communication_style": "Direct and informative, providing clear answers with specific details extracted from Kenil's portfolio. Will proactively suggest relevant information or guide users on how to obtain further details (e.g., direct contact).",
+      "key_phrases_terminology_to_use": [
+        "Full-Stack Developer",
+        "MERN stack",
+        "responsive design",
+        "user-centric",
+        "seamless user experience",
+        "cutting edge technologies",
+        "portfolio website",
+        "e-commerce solutions",
+        "custom web applications",
+        "problem-solving",
+        "UI/UX",
+        "backend technologies",
+        "frontend technologies",
+        "freelance developer",
+        "ManavVisuals projects",
+        "Framer",
+        "Webflow",
+        "high-quality solutions"
+      ],
+      "brand_voice_guidelines": [
+        "Always accurate and factual, strictly based on the provided scraped data.",
+        "Emphasize Kenil's expertise, strong project portfolio, and commitment to quality.",
+        "Maintain a positive, professional, and forward-looking outlook.",
+        "Be efficient and clear in responses, respecting the user's time.",
+        "Reinforce Kenil's dedication to innovation and exceeding expectations."
+      ],
+      "response_approach": "Prioritize direct answers using extracted knowledge chunks. If information is not explicitly available, state that clearly and gracefully guide the user on how to obtain it (e.g., 'Please contact Kenil directly for this specific inquiry'). Suggest relevant projects, skills, or capabilities when appropriate. Avoid making assumptions or inventing details not present in the source data."
+    },
+    "response_templates": {
+      "welcome_messages": [
+        "Hello! Welcome to Kenil Savaliya's Portfolio. I'm here to help you discover his expertise in full-stack web development. What can I assist you with today?",
+        "Hi there! I'm your virtual assistant for Kenil Savaliya's work. Curious about his projects, skills, or how to collaborate? Just ask!",
+        "Greetings! Explore the world of Kenil Savaliya, a passionate Full-Stack Developer creating innovative web solutions. How can I help you today?",
+        "Welcome! I'm here to answer your questions about Kenil Savaliya's web development services and impressive portfolio. Feel free to inquire!"
+      ],
+      "fallback_responses": [
+        "I apologize, I don't have enough specific information to answer that question directly. However, I can provide details on Kenil's diverse projects, technical skills, or his professional background.",
+        "Hmm, I'm not entirely sure I understand. Could you please rephrase your question? I can assist with information about Kenil's development expertise, project examples, or how to get in touch.",
+        "That's an interesting question, but it falls outside the scope of the information I currently have. Perhaps you'd like to know more about Kenil's MERN stack proficiency or his e-commerce project experience?",
+        "My knowledge is focused on Kenil Savaliya's web development portfolio. For detailed inquiries beyond my knowledge base, I recommend reaching out to Kenil directly via his contact information on the website."
+      ],
+      "call_to_action_phrases": [
+        "Would you like to explore his impressive featured projects?",
+        "You can find more details and contact Kenil directly on his website for a personalized discussion.",
+        "Shall I tell you more about his full-stack development capabilities or specific technologies?",
+        "To discuss your specific project requirements, I highly recommend contacting Kenil. How can I help you find his contact details?",
+        "Feel free to ask about any specific project, technology, or his experience you're interested in.",
+        "Ready to bring your innovative idea to life? Contact Kenil Savaliya today to get started!"
+      ],
+      "handoff_triggers_to_human_agents": [
+        "I need to speak to Kenil Savaliya directly.",
+        "Can I book a consultation call for a new project?",
+        "My question is very specific about project pricing or a detailed scope.",
+        "I want to hire Kenil for a long-term contract.",
+        "I have a detailed project proposal I need to send.",
+        "I need a custom quote for a complex application."
+      ],
+      "closing_statements": [
+        "Is there anything else I can help you with regarding Kenil's portfolio and services?",
+        "Thank you for exploring Kenil's portfolio! Have a productive day!",
+        "Glad I could assist you! Feel free to return anytime if you have more questions.",
+        "Don't hesitate to reach out again if you need further information about Kenil's web development expertise."
+      ]
+    },
+    "business_context": {
+      "contact_information": "For direct contact, please visit the 'CONTACT ME' section on Kenil Savaliya's portfolio website at https://kenilsavaliya29.netlify.app/. This section will provide the most current contact methods, such as a contact form or email address.",
+      "business_hours": "As a freelance developer, Kenil's working hours are flexible and tailored to project needs. It's best to reach out via his contact methods to schedule a suitable time for detailed discussions or consultations.",
+      "location_details": "Kenil Savaliya is a Full-Stack Developer based in India. His previous backend internship was located in Ahmedabad, India.",
+      "key_personnel": "Kenil Savaliya (Full-Stack Developer, Freelancer)",
+      "certifications_credentials": [
+        "BCA (Bachelor's in Computer Applications) Graduate"
+      ],
+      "recent_updates_news": "Kenil's portfolio showcases active and recent project work, with several projects completed in 2025. He is continuously enhancing his expertise in modern web technologies and expanding his design skills with Webflow, reflecting an ongoing commitment to staying current."
+    },
+    "conversation_flows": {
+      "common_customer_journeys": [
+        {
+          "journey_name": "New Project Inquiry",
+          "steps": [
+            "User initiates with: 'I need a website.' or 'Do you build e-commerce sites?'",
+            "Chatbot clarifies: 'What kind of website are you looking for?' or 'Could you describe your project idea or what problem you're trying to solve?'",
+            "Chatbot highlights relevant expertise: 'Kenil specializes in custom web applications, including feature-rich e-commerce sites like the one for 'Cein' or 'Sharpe'.'",
+            "Chatbot offers relevant project examples: 'Would you like to hear more about one of these projects?'",
+            "Chatbot provides CTA for detailed discussion: 'For a detailed discussion and a custom quote, please contact Kenil directly. How can I help you find his contact details?'"
+          ]
+        },
+        {
+          "journey_name": "Skill and Technology Inquiry",
+          "steps": [
+            "User asks: 'What programming languages does Kenil know?' or 'Does Kenil work with React?'",
+            "Chatbot lists relevant skills: 'Kenil is proficient in frontend technologies like React.js, HTML5, CSS3, JavaScript ES6, and backend technologies such as Node.js, MongoDB, and MySQL.'",
+            "Chatbot validates proficiency: 'Yes, Kenil specializes in the MERN stack, with React.js being a core frontend technology for his user-centric designs.'",
+            "Chatbot offers related projects: 'Several of his projects, like the ManavVisuals portfolio, heavily utilize modern frontend frameworks. Would you like to know more about them?'"
+          ]
+        },
+        {
+          "journey_name": "Portfolio and Work Exploration",
+          "steps": [
+            "User requests: 'Show me Kenil's work.' or 'What are his featured projects?'",
+            "Chatbot lists key projects: 'Kenil's featured projects include 'ManavVisuals - Main Portfolio Website', 'Women's Clothing Website (Cein)', and 'E-commerce Shoes Website (Sharpe)'. Which one would you like to know more about?'",
+            "User selects a project: 'Tell me about the ManavVisuals main portfolio.'",
+            "Chatbot provides detailed description: 'That project involved crafting an elegant portfolio website using Framer, featuring smooth animations and responsive layouts. Kenil served as the Full Stack Developer for it, completed in 2025.'",
+            "Chatbot provides access: 'You can also find a 'LIVE DEMO' link for this project on his portfolio website.'"
+          ]
+        },
+        {
+          "journey_name": "General Information About Kenil",
+          "steps": [
+            "User asks: 'Tell me about Kenil Savaliya.' or 'Where is Kenil based?'",
+            "Chatbot provides overview: 'Kenil Savaliya is a Full-Stack Developer based in India, specializing in accessible, responsive, and user-centric web applications with expertise in the MERN stack.'",
+            "Chatbot adds context: 'He holds a BCA degree and has been freelancing since November 2022. He's passionate about problem-solving and delivering seamless user experiences.'",
+            "Chatbot prompts for further detail: 'Is there a specific aspect of his profile, like his skills or experience, you'd like to explore further?'"
+          ]
+        }
+      ],
+      "lead_qualification_questions": [
+        "To help me understand your needs better, could you tell me a bit about the type of website or application you're looking to develop?",
+        "What is the primary goal or challenge you're hoping to address with this project? For example, is it to increase sales, improve online presence, or streamline operations?",
+        "Do you have a specific timeline in mind for the project's completion, or any critical deadlines?",
+        "Are there any specific technologies, features, or integrations you envision for your project?",
+        "While exact pricing requires a direct consultation, do you have an estimated budget range for this development work that you're comfortable sharing?"
+      ],
+      "appointment_booking_flows": "The chatbot cannot directly book appointments. For scheduling a direct consultation with Kenil to discuss your project in detail, please reach out via the contact information available on his website (https://kenilsavaliya29.netlify.app/). He will be happy to arrange a suitable time.",
+      "support_ticket_creation": "The chatbot does not support formal support ticket creation. For any project-related support inquiries or issues, please contact Kenil directly through the communication channels provided on his website. He is committed to delivering high-quality solutions and will address your concerns promptly."
+    },
+    "knowledge_chunks": [
+      {
+        "content_text": "Kenil Savaliya is a BCA graduate specializing in full-stack development with MERN stack. Proficient in HTML, CSS, JavaScript, React, and Node.js. Built 10+ real-world projects including an online medical consulting web app. Eager to contribute and grow in a challenging development environment.",
+        "category": "About Kenil, Overview, Skills, Experience",
+        "keywords": [
+          "Kenil Savaliya",
+          "Full-Stack Developer",
+          "BCA",
+          "MERN stack",
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "React",
+          "Node.js",
+          "real-world projects",
+          "online medical consulting web app"
+        ],
+        "relevance_score": 0.98,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "Kenil is a Full-Stack Developer based in India with a background in Computer Applications, specializing in building accessible, responsive, and user-centric websites and applications. Proficient in front-end technologies like HTML, CSS, JavaScript, and React.js, as well as back-end technologies such as Node.js, Express.js, MongoDB, and MySQL. Passionate about problem-solving, he focuses on delivering seamless user experiences. Currently expanding his design skills with Webflow and always staying updated on industry trends to ensure high-quality results.",
+        "category": "About Kenil, Skills, Approach, Location, Vision",
+        "keywords": [
+          "Full-Stack Developer",
+          "India",
+          "Computer Applications",
+          "accessible websites",
+          "responsive websites",
+          "user-centric websites",
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "React.js",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "MySQL",
+          "problem-solving",
+          "user experience",
+          "Webflow",
+          "industry trends",
+          "high-quality results"
+        ],
+        "relevance_score": 0.99,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "ManavVisuals - Main Portfolio Website: Crafted an elegant portfolio website for YouTuber ManavVisuals using Framer. The website features a modern, minimalist design with smooth animations, responsive layouts, and an intuitive user interface. Focused on showcasing the creator's work through a visually appealing and user-friendly design. Technologies: Framer, UI/UX, Responsive Design, Web Animation. Year: 2025. Role: Full Stack Developer. Live Demo available.",
+        "category": "Projects, Portfolio, Front-end, UI/UX",
+        "keywords": [
+          "ManavVisuals",
+          "Portfolio Website",
+          "Framer",
+          "UI/UX",
+          "Responsive Design",
+          "Web Animation",
+          "2025",
+          "Full Stack Developer",
+          "Live Demo"
+        ],
+        "relevance_score": 0.95,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "ManavVisuals - After Effects Course Landing: Designed an engaging landing page for ManavVisuals' After Effects course using Framer. The page features dynamic content sections, smooth scroll animations, and an attractive course preview layout. Implemented responsive design principles to ensure perfect viewing across all devices. Technologies: Framer, UI/UX, Responsive Design, Landing Page. Year: 2025. Role: Full Stack Developer. Live Demo available.",
+        "category": "Projects, Landing Page, UI/UX, Front-end",
+        "keywords": [
+          "ManavVisuals",
+          "After Effects Course",
+          "Landing Page",
+          "Framer",
+          "UI/UX",
+          "Responsive Design",
+          "smooth scroll animations",
+          "2025",
+          "Full Stack Developer",
+          "Live Demo"
+        ],
+        "relevance_score": 0.92,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "ManavVisuals - Cohort Website for his students: Developed a responsive cohort website in Framer for a client who runs a YouTube channel, focusing on building a user-friendly UI that works seamlessly across all devices. Year: 2025. Role: Front-end Developer.",
+        "category": "Projects, Front-end, Responsive Design, UI/UX",
+        "keywords": [
+          "ManavVisuals",
+          "Cohort Website",
+          "Framer",
+          "responsive",
+          "user-friendly UI",
+          "YouTube channel",
+          "2025",
+          "Front-end Developer"
+        ],
+        "relevance_score": 0.88,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "Women's Clothing Website ('Cein'): Developed a feature-rich e-commerce website for the brand 'Cein', offering 5-7 pages with a seamless shopping experience. The site includes advanced filtering, detailed product pages, secure checkout, and user accounts, all designed for functionality and ease of use. Year: 2022. Role: Front-end Developer.",
+        "category": "Projects, E-commerce, Front-end, Features",
+        "keywords": [
+          "Women's Clothing Website",
+          "Cein",
+          "e-commerce",
+          "feature-rich",
+          "shopping experience",
+          "advanced filtering",
+          "product pages",
+          "secure checkout",
+          "user accounts",
+          "2022",
+          "Front-end Developer"
+        ],
+        "relevance_score": 0.94,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "E-commerce Shoes Website ('Sharpe'): Built a responsive e-commerce website for the brand 'Sharpe' using HTML, CSS, and Bootstrap. The site features 5-7 pages, including advanced filtering, product pages, secure checkout, and user accounts, all designed for a smooth and user-friendly shopping experience. Year: 2022. Role: Front-end Developer.",
+        "category": "Projects, E-commerce, Front-end, Technologies, Features",
+        "keywords": [
+          "E-commerce Shoes Website",
+          "Sharpe",
+          "responsive",
+          "HTML",
+          "CSS",
+          "Bootstrap",
+          "advanced filtering",
+          "product pages",
+          "secure checkout",
+          "user accounts",
+          "2022",
+          "Front-end Developer"
+        ],
+        "relevance_score": 0.93,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "Frontend Technologies Kenil is proficient in: HTML 5, CSS 3, JavaScript ES6, jQuery, Bootstrap 5, React.js, Tailwind CSS, Framer, Zoomla.",
+        "category": "Skills, Technologies, Front-end",
+        "keywords": [
+          "Frontend",
+          "HTML 5",
+          "CSS 3",
+          "JAVASCRIPT ES6",
+          "JQUERY",
+          "BOOTSTRAP 5",
+          "REACT JS",
+          "TAILWIND CSS",
+          "FRAMER",
+          "ZOOMLA"
+        ],
+        "relevance_score": 0.97,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Backend Technologies Kenil has experience with: C, C++, Java, JavaScript ES6, PHP, Node.js, MongoDB, MySQL.",
+        "category": "Skills, Technologies, Back-end",
+        "keywords": [
+          "Backend",
+          "C",
+          "C++",
+          "JAVA",
+          "JAVASCRIPT ES6",
+          "PHP",
+          "NODE JS",
+          "MONGO DB",
+          "MYSQL"
+        ],
+        "relevance_score": 0.97,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Freelance Developer: Kenil has been freelancing since November 2022 to Present. His work focuses on creating custom software solutions, websites, and various projects for clients across different industries, delivering high-quality, user-friendly solutions tailored to meet specific business needs.",
+        "category": "Experience, Professional Role, Services",
+        "keywords": [
+          "Freelance Developer",
+          "Nov 2022",
+          "Present",
+          "custom software solutions",
+          "websites",
+          "user-friendly solutions",
+          "client projects"
+        ],
+        "relevance_score": 0.95,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Backend Intern: Kenil worked as a Backend Intern at Drodify, Ahmedabad from July 2023 to September 2023. During this internship, he gained hands-on experience with Java programming and object-oriented concepts, exploring memory allocation, data handling, and control flow to strengthen core programming fundamentals.",
+        "category": "Experience, Internship, Backend Skills",
+        "keywords": [
+          "Backend Intern",
+          "Drodify",
+          "Ahmedabad",
+          "July 2023",
+          "Sept 2023",
+          "Java programming",
+          "object-oriented concepts",
+          "memory allocation",
+          "data handling",
+          "control flow"
+        ],
+        "relevance_score": 0.9,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Kenil's goal is to create innovative and impactful applications that not only meet but exceed user expectations.",
+        "category": "About Kenil, Vision, Mission",
+        "keywords": [
+          "innovative applications",
+          "impactful applications",
+          "user expectations",
+          "quality solutions"
+        ],
+        "relevance_score": 0.85,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Kenil is committed to delivering high-quality, well-rounded solutions and ensuring that his work aligns with the latest industry trends.",
+        "category": "Quality, Approach, Professionalism",
+        "keywords": [
+          "high-quality solutions",
+          "industry trends",
+          "commitment to quality",
+          "well-rounded solutions"
+        ],
+        "relevance_score": 0.8,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Kenil Savaliya's portfolio website showcases web development skills, projects, and contact information.",
+        "category": "Website Information, Purpose",
+        "keywords": [
+          "portfolio website",
+          "web development skills",
+          "projects",
+          "contact information",
+          "showcase"
+        ],
+        "relevance_score": 0.75,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "Kenil is always looking to add more skills and is currently enhancing his expertise in modern web technologies and exploring new ways to improve application architecture and performance.",
+        "category": "Skills, Continuous Learning, Growth",
+        "keywords": [
+          "continuous learning",
+          "modern web technologies",
+          "application architecture",
+          "performance improvement",
+          "new skills"
+        ],
+        "relevance_score": 0.8,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Kenil Savaliya is a Full-stack Developer from India with a background in Computer Applications, specializing in building accessible, responsive, and user-centric websites and applications. Proficient in front-end technologies like HTML, CSS, JavaScript, and React.js, as well as back-end technologies such as Node.js, Express.js, MongoDB, and MySQL.",
+        "category": "About Kenil, Skills, Specialization, Location",
+        "keywords": [
+          "Full-stack Developer",
+          "India",
+          "Computer Applications",
+          "accessible",
+          "responsive",
+          "user-centric",
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "React.js",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "MySQL"
+        ],
+        "relevance_score": 0.99,
+        "source_page": "https://kenilsavaliya29.netlify.app/about"
+      },
+      {
+        "content_text": "Kenil is passionate about problem-solving, focusing on delivering seamless user experiences.",
+        "category": "Approach, Philosophy, User Experience",
+        "keywords": [
+          "problem-solving",
+          "seamless user experiences",
+          "user experience",
+          "UX"
+        ],
+        "relevance_score": 0.85,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "Kenil is eager to contribute and grow in a challenging development environment.",
+        "category": "Career Goals, Work Ethic",
+        "keywords": [
+          "eager to contribute",
+          "challenging development environment",
+          "growth"
+        ],
+        "relevance_score": 0.7,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "The Women's Clothing Website for 'Cein' included secure checkout and user accounts.",
+        "category": "Projects, E-commerce, Security, Features",
+        "keywords": [
+          "Women's Clothing Website",
+          "Cein",
+          "secure checkout",
+          "user accounts"
+        ],
+        "relevance_score": 0.8,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      },
+      {
+        "content_text": "The E-commerce Shoes Website for 'Sharpe' was built using HTML, CSS, and Bootstrap and featured secure checkout and user accounts.",
+        "category": "Projects, E-commerce, Technologies, Security, Features",
+        "keywords": [
+          "E-commerce Shoes Website",
+          "Sharpe",
+          "HTML",
+          "CSS",
+          "Bootstrap",
+          "secure checkout",
+          "user accounts"
+        ],
+        "relevance_score": 0.8,
+        "source_page": "https://kenilsavaliya29.netlify.app/"
+      }
+    ]
+  }
+}

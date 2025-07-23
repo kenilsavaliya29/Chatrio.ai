@@ -1,0 +1,33 @@
+{
+  "url": "https://kenilsavaliya29.netlify.app/",
+  "title": "Kenil's Portfolio Website",
+  "description": "Kenil's Portfolio Website showcasing web development skills, projects, and contact information.",
+  "pages": [
+    {
+      "url": "https://kenilsavaliya29.netlify.app/",
+      "title": "Kenil's Portfolio Website",
+      "description": "Kenil's Portfolio Website showcasing web development skills, projects, and contact information.",
+      "h1": "hi, i am  Kenil Savaliya.",
+      "h2s": [],
+      "h3s": [],
+      "content": "HI, I AM KENIL SAVALIYA. BCA graduate specializing in full-stack development with MERN stack. Proficient in HTML, CSS, JavaScript, React, and Node.js. Built 10+ real-world projects including an online medical consulting web app. Eager to contribute and grow in a challenging development environment. CONTACT ME Featured Projects Here are some of the selected projects that showcase my passion for front-end development. ManavVisuals - Main Portfolio Website Crafted an elegant portfolio website for YouTuber ManavVisuals using Framer. The website features a modern, minimalist design with smooth animations, responsive layouts, and an intuitive user interface. Focused on showcasing the creator's work through a visually appealing and user-friendly design. Framer UI / UX Responsive Design Web Animation PROJECT INFO Year 2025 Role Full Stack Developer LIVE DEMO ManavVisuals - After Effects Course Landing Designed an engaging landing page for ManavVisuals' After Effects course using Framer. The page features dynamic content sections, smooth scroll animations, and an attractive course preview layout. Implemented responsive design principles to ensure perfect viewing across all devices. Framer UI / UX Responsive Design Landing Page PROJECT INFO Year 2025 Role Full Stack Developer LIVE DEMO ManavVisuals - Cohort Website for his students I developed a responsive cohort website in Framer for a client who runs a YouTube channel, focusing on building a user-friendly UI that works seamlessly across all devices. PROJECT INFO Year 2025 Role Front-end Developer LIVE DEMO Women's Clothing Website I developed a feature-rich e-commerce website for the brand \"Cein\", offering 5-7 pages with a seamless shopping experience. The site includes advanced filtering, detailed product pages, secure checkout, and user accounts, all designed for functionality and ease of use. PROJECT INFO Year 2022 Role Front-end Developer LIVE DEMO E-commerce Shoes Website I built a responsive e-commerce website for the brand Sharpe using HTML, CSS, and Bootstrap. The site features 5-7 pages, including advanced filtering, product pages, secure checkout, and user accounts, all designed for a smooth and user-friendly shopping experience. PROJECT INFO Year 2022 Role Front-end Developer LIVE DEMO ABOUT ME I am a Full-Stack Developer based in India with a background in Computer Applications. I am a Full-stack Developer from India with a background in Computer Applications, specializing in building accessible, responsive, and user-centric websites and applications. Proficient in front-end technologies like HTML, CSS, JavaScript, and React.js, as well as back-end technologies such as Node.js, Express.js, MongoDB, and MySQL. Passionate about problem-solving, I focus on delivering seamless user experiences. Currently expanding my design skills with Webflow and always staying updated on industry trends to ensure high-quality results. MORE ABOUT ME",
+      "wordCount": 424,
+      "scrapedAt": "2025-07-22T07:54:27.676Z"
+    },
+    {
+      "url": "https://kenilsavaliya29.netlify.app/about",
+      "title": "Kenil's Portfolio Website",
+      "description": "Kenil's Portfolio Website showcasing web development skills, projects, and contact information.",
+      "h1": "ABOUT ME",
+      "h2s": [],
+      "h3s": [],
+      "content": "ABOUT ME I am a Full-Stack Developer based in India with a Bachelor's in Computer Applications. As a BCA graduate and Full-stack Developer, I specialize in developing accessible, responsive, and user-centric websites and applications. On the front-end, I am proficient in HTML, CSS, JavaScript, and React.js, ensuring that every project I work on is visually appealing and functionally robust. On the back-end, I have hands-on experience with Node.js, Express.js, MongoDB, and MySQL, enabling me to build scalable and efficient server-side applications. With a passion for problem-solving, I thrive on delivering seamless user experiences that prioritize both usability and performance. I am dedicated to staying at the cutting edge of technology, continuously expanding my skill set. Currently, I am enhancing my expertise in modern web technologies and exploring new ways to improve application architecture and performance. I am committed to delivering high-quality, well-rounded solutions and ensuring that my work aligns with the latest industry trends. My goal is to create innovative and impactful applications that not only meet but exceed user expectations. DOWNLOAD RESUME My Capabilities I am always looking to add more skills. Currently here are my strong and best skills I can provide. Frontend Technologies :- HTML 5 CSS 3 JAVASCRIPT ES6 JQUERY BOOTSTRAP 5 REACT JS TAILWIND CSS FRAMER ZOOMLA Backend Technologies :- C C++ JAVA JAVASCRIPT ES6 PHP NODE JS MONGO DB MYSQL My Experiences Freelance Developer Nov 2022 — Present I've been freelancing since 2022, creating custom software solutions, websites, and various projects for clients across different industries. My work focuses on delivering high-quality, user-friendly solutions tailored to meet specific business needs. Backend Intern July 2023 — Sept 2023 Drodify, Ahmedabad Gained hands-on experience with Java programming and object-oriented concepts during a logic-focused internship. Explored memory allocation, data handling, and control flow to strengthen core programming fundamentals.",
+      "wordCount": 301,
+      "scrapedAt": "2025-07-22T07:54:29.982Z"
+    }
+  ],
+  "totalPages": 2,
+  "totalWords": 725,
+  "scrapingTime": 11236,
+  "errors": []
+}
