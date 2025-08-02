@@ -24,63 +24,63 @@ export async function GET(req) {
             return NextResponse.json({ error: 'Bot not found or not active' }, { status: 404 });
         }
 
-        // Flatten the configuration for the widget
+        // Return the configuration directly since it's already flattened
         const config = bot.config || {};
         const flatConfig = {
             // Bot Identity
-            botName: config.botName || 'Chatrio AI',
-            greetingMessage: config.greetingMessage || 'Hi there! How can I help you today?',
-            inputPlaceholder: config.inputPlaceholder || 'Type a message...',
+            botName: config.Identity?.botName || 'Chatrio AI',
+            greetingMessage: config.Identity?.greetingMessage || 'Hi there! How can I help you today?',
+            inputPlaceholder: config.Identity?.inputPlaceholder || 'Type a message...',
             
             // Branding
-            logoUrl: config.branding?.logoUrl || '',
-            launcherIcon: config.branding?.launcherIcon || '💬',
-            launcherIconUrl: config.branding?.launcherIconUrl || '',
-            sendButtonIcon: config.branding?.sendButtonIcon || 'Send',
+            logoUrl: config.Branding?.logoUrl || '',
+            launcherIcon: config.Branding?.launcherIcon || '💬',
+            launcherIconUrl: config.Branding?.launcherIconUrl || '',
+            sendButtonIcon: config.Branding?.sendButtonIcon || 'Send',
             
-            // Colors (flattened for widget CSS variables)
-            headerBg: config.colors?.headerBg || '#000000',
-            headerText: config.colors?.headerText || '#ffffff',
-            backgroundColor: config.colors?.backgroundColor || '#ffffff',
-            textColor: config.colors?.textColor || '#000000',
-            borderColor: config.colors?.borderColor || '#e5e5e5',
-            messagesBg: config.colors?.messagesBg || '#fafbfc',
-            inputBg: config.colors?.inputBg || '#ffffff',
-            userBg: config.colors?.userBg || '#e6f0ff',
-            userText: config.colors?.userText || '#222222',
-            assistantBg: config.colors?.assistantBg || '#f3f3f3',
-            assistantText: config.colors?.assistantText || '#444444',
-            sendButtonBg: config.colors?.sendButtonBg || '#000000',
-            sendButtonText: config.colors?.sendButtonText || '#ffffff',
-            launcherBg: config.colors?.launcherBg || '#000000',
-            launcherText: config.colors?.launcherText || '#ffffff',
+            // Colors
+            headerBg: config.Colors?.headerBg || '#000000',
+            headerText: config.Colors?.headerText || '#ffffff',
+            backgroundColor: config.Colors?.backgroundColor || '#ffffff',
+            textColor: config.Colors?.textColor || '#000000',
+            borderColor: config.Colors?.borderColor || '#e5e5e5',
+            messagesBg: config.Colors?.messagesBg || '#fafbfc',
+            inputBg: config.Colors?.inputBg || '#ffffff',
+            userBg: config.Colors?.userBg || '#e6f0ff',
+            userText: config.Colors?.userText || '#222222',
+            assistantBg: config.Colors?.assistantBg || '#f3f3f3',
+            assistantText: config.Colors?.assistantText || '#444444',
+            sendButtonBg: config.Colors?.sendButtonBg || '#000000',
+            sendButtonText: config.Colors?.sendButtonText || '#ffffff',
+            launcherBg: config.Colors?.launcherBg || '#000000',
+            launcherText: config.Colors?.launcherText || '#ffffff',
             
             // Typography
-            fontFamily: config.typography?.fontFamily || 'Inter',
-            fontSize: config.typography?.fontSize || '14px',
-            headerFontSize: config.typography?.headerFontSize || '16px',
-            messageFontSize: config.typography?.messageFontSize || '14px',
-            fontWeight: config.typography?.fontWeight || '400',
+            fontFamily: config.Typography?.fontFamily || 'Inter',
+            fontSize: config.Typography?.fontSize || '14px',
+            headerFontSize: config.Typography?.headerFontSize || '16px',
+            messageFontSize: config.Typography?.messageFontSize || '14px',
+            fontWeight: config.Typography?.fontWeight || '400',
             
             // Sizing
-            widgetWidth: config.sizing?.widgetWidth || '350px',
-            widgetHeight: config.sizing?.widgetHeight || '500px',
-            borderRadius: config.sizing?.borderRadius || '16px',
-            messageBorderRadius: config.sizing?.messageBorderRadius || '12px',
-            launcherSize: config.sizing?.launcherSize || '60px',
+            widgetWidth: config.Sizing?.widgetWidth || '350px',
+            widgetHeight: config.Sizing?.widgetHeight || '500px',
+            borderRadius: config.Sizing?.borderRadius || '16px',
+            messageBorderRadius: config.Sizing?.messageBorderRadius || '12px',
+            launcherSize: config.Sizing?.launcherSize || '60px',
             
             // Behavior
-            opacity: config.behavior?.opacity || 1,
-            autoOpen: config.behavior?.autoOpen || false,
-            autoOpenDelay: config.behavior?.autoOpenDelay || 3000,
-            showTypingIndicator: config.behavior?.showTypingIndicator !== false,
-            soundEnabled: config.behavior?.soundEnabled || false,
+            opacity: config.Behavior?.opacity || 1,
+            autoOpen: config.Behavior?.autoOpen || false,
+            autoOpenDelay: config.Behavior?.autoOpenDelay || 3000,
+            showTypingIndicator: config.Behavior?.showTypingIndicator !== false,
+            soundEnabled: config.Behavior?.soundEnabled || false,
             
             // Animation
-            animationType: config.animation?.type || 'scale',
-            animationDuration: config.animation?.duration || '0.3s',
-            animationEasing: config.animation?.easing || 'ease-out',
-            slideDirection: config.animation?.slideDirection || 'bottom-right',
+            animationType: config.Animation?.animationType || 'scale',
+            animationDuration: config.Animation?.animationDuration || '0.3s',
+            animationEasing: config.Animation?.animationEasing || 'ease-out',
+            slideDirection: config.Animation?.slideDirection || 'bottom-right',
             
             // Legacy fields for backward compatibility
             colorTheme: config.colorTheme,

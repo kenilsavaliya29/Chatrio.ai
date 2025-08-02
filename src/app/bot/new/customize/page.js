@@ -10,7 +10,7 @@ const TextInput = ({ label, value, onChange, placeholder }) => (
         <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
         <input 
             type="text" 
-            value={value} 
+            value={value || ''} 
             onChange={onChange} 
             placeholder={placeholder} 
             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background" 
@@ -22,7 +22,7 @@ const SelectInput = ({ label, value, onChange, options }) => (
     <div>
         <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
         <select 
-            value={value} 
+            value={value || ''} 
             onChange={onChange} 
             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
         >
@@ -37,13 +37,13 @@ const ColorInput = ({ label, value, onChange }) => (
         <div className="relative">
             <input 
                 type="text" 
-                value={value} 
+                value={value || '#000000'} 
                 onChange={onChange} 
                 className="w-full pl-10 pr-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
             />
             <input 
                 type="color" 
-                value={value} 
+                value={value || '#000000'} 
                 onChange={onChange}
                 className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 p-0 border-none cursor-pointer"
             />
@@ -59,16 +59,14 @@ export default function SimpleCustomizePage() {
     const handleCreateBot = async () => {
         setIsProcessing(true);
         try {
-            // We only send the essential data, the rest will be default
+
             const finalBotData = {
                 botId: processedData.botId,
                 botName: botData.botName,
                 greetingMessage: botData.greetingMessage,
                 tone: botData.tone,
-                colors: {
-                    headerBg: botData.colors.headerBg,
-                    launcherBg: botData.colors.launcherBg,
-                }
+                headerBg: botData.headerBg,
+                launcherBg: botData.launcherBg,
             };
 
             const res = await fetch('/api/bot/create', {
@@ -121,10 +119,10 @@ export default function SimpleCustomizePage() {
 
                 <ColorInput
                     label="Primary Color"
-                    value={botData.colors.headerBg}
+                    value={botData.headerBg}
                     onChange={(e) => {
-                        handleInputChange('colors', 'headerBg', e.target.value);
-                        handleInputChange('colors', 'launcherBg', e.target.value);
+                        handleInputChange('headerBg', null, e.target.value);
+                        handleInputChange('launcherBg', null, e.target.value);
                     }}
                 />
             </div>

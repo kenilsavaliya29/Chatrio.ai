@@ -2,19 +2,26 @@ import { useState, useEffect } from 'react';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export function NumberInput({ label, value, onChange, min, max, step = 1, unit = '' }) {
-    const [localValue, setLocalValue] = useState(value);
+    // localValue should always be a number
+    const [localValue, setLocalValue] = useState(() => parseFloat(value) || 0);
 
     useEffect(() => {
-        setLocalValue(value);
+        // When the external value prop changes, update localValue, ensuring it's a number
+        setLocalValue(parseFloat(value) || 0);
     }, [value]);
 
     const handleChange = (newValue) => {
         const parsed = parseFloat(newValue);
-        if (isNaN(parsed)) return;
+        // Only proceed if it's a valid number
+        if (isNaN(parsed)) {
+            // Optionally, set localValue to an empty string or previous valid number
+            // to clear the input if invalid text is typed. For now, we'll just return.
+            return;
+        }
         
         const clamped = Math.min(Math.max(parsed, min), max);
-        setLocalValue(clamped);
-        onChange(clamped);
+        setLocalValue(clamped); // Update internal state with the number
+        onChange(clamped); // Pass the number back to the parent
     };
 
     const increment = () => handleChange(parseFloat(localValue) + step);
@@ -26,6 +33,7 @@ export function NumberInput({ label, value, onChange, min, max, step = 1, unit =
             <div className="relative flex items-center">
                 <input
                     type="number"
+                    // Display localValue (which is always a number)
                     value={localValue}
                     onChange={(e) => handleChange(e.target.value)}
                     min={min}

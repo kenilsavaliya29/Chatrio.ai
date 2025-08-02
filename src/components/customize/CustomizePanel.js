@@ -275,48 +275,48 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                                 label="Company Logo"
                                 accept="image/*"
                                 onChange={(file) => handleFileUpload('logo', file)}
-                                preview={botData.branding.logoUrl}
+                                preview={botData.logoUrl}
                             />
                             <FileUpload
                                 label="Launcher Icon"
                                 accept="image/*"
                                 onChange={(file) => handleFileUpload('launcher', file)}
-                                preview={botData.branding.launcherIconUrl}
+                                preview={botData.launcherIconUrl}
                             />
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium">Send Button</label>
                                 <div className="flex gap-4">
                                     <button
                                         className={`px-3 py-1 rounded ${
-                                            !botData.branding.sendButtonIsImage
+                                            !botData.sendButtonIsImage
                                                 ? 'bg-primary text-primary-foreground'
                                                 : 'bg-muted'
                                         }`}
-                                        onClick={() => handleInputChange('branding', 'sendButtonIsImage', false)}
+                                        onClick={() => handleInputChange('sendButtonIsImage', null, false)}
                                     >
                                         Text
                                     </button>
                                     <button
                                         className={`px-3 py-1 rounded ${
-                                            botData.branding.sendButtonIsImage
+                                            botData.sendButtonIsImage
                                                 ? 'bg-primary text-primary-foreground'
                                                 : 'bg-muted'
                                         }`}
-                                        onClick={() => handleInputChange('branding', 'sendButtonIsImage', true)}
+                                        onClick={() => handleInputChange('sendButtonIsImage', null, true)}
                                     >
                                         Image
                                     </button>
                                 </div>
-                                {botData.branding.sendButtonIsImage ? (
+                                {botData.sendButtonIsImage ? (
                                     <FileUpload
                                         accept="image/*"
                                         onChange={(file) => handleFileUpload('sendButton', file)}
-                                        preview={botData.branding.sendButtonIcon}
+                                        preview={botData.sendButtonIcon}
                                     />
                                 ) : (
                                     <TextInput
-                                        value={botData.branding.sendButtonIcon}
-                                        onChange={(e) => handleInputChange('branding', 'sendButtonIcon', e.target.value)}
+                                        value={botData.sendButtonIcon}
+                                        onChange={(e) => handleInputChange('sendButtonIcon', null, e.target.value)}
                                         placeholder="Send"
                                     />
                                 )}
@@ -326,16 +326,32 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
 
                     {activeTab === 'colors' && (
                         <ColorPalette
-                            colors={botData.colors}
-                            onChange={(key, value) => handleInputChange('colors', key, value)}
+                            colors={{
+                                headerBg: botData.headerBg,
+                                headerText: botData.headerText,
+                                backgroundColor: botData.backgroundColor,
+                                textColor: botData.textColor,
+                                borderColor: botData.borderColor,
+                                messagesBg: botData.messagesBg,
+                                inputBg: botData.inputBg,
+                                userBg: botData.userBg,
+                                userText: botData.userText,
+                                assistantBg: botData.assistantBg,
+                                assistantText: botData.assistantText,
+                                sendButtonBg: botData.sendButtonBg,
+                                sendButtonText: botData.sendButtonText,
+                                launcherBg: botData.launcherBg,
+                                launcherText: botData.launcherText,
+                            }}
+                            onChange={(key, value) => handleInputChange(key, null, value)}
                         />
                     )}
 
                     {activeTab === 'typography' && (
                         <div className="space-y-4">
                             <FontSelect
-                                value={botData.typography.fontFamily}
-                                onChange={(font) => handleInputChange('typography', 'fontFamily', font)}
+                                value={botData.fontFamily}
+                                onChange={(font) => handleInputChange('fontFamily', null, font)}
                             />
                         </div>
                     )}
@@ -344,8 +360,8 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                         <div className="space-y-4">
                             <NumberInput
                                 label="Widget Width"
-                                value={botData.sizing.widgetWidth}
-                                onChange={(value) => handleInputChange('sizing', 'widgetWidth', value)}
+                                value={botData.widgetWidth}
+                                onChange={(value) => handleInputChange('widgetWidth', null, value)}
                                 min={200}
                                 max={500}
                                 step={10}
@@ -353,8 +369,8 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             />
                             <NumberInput
                                 label="Widget Height"
-                                value={botData.sizing.widgetHeight}
-                                onChange={(value) => handleInputChange('sizing', 'widgetHeight', value)}
+                                value={botData.widgetHeight}
+                                onChange={(value) => handleInputChange('widgetHeight', null, value)}
                                 min={300}
                                 max={800}
                                 step={10}
@@ -362,8 +378,8 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             />
                             <NumberInput
                                 label="Border Radius"
-                                value={botData.sizing.borderRadius}
-                                onChange={(value) => handleInputChange('sizing', 'borderRadius', value)}
+                                value={botData.borderRadius}
+                                onChange={(value) => handleInputChange('borderRadius', null, value)}
                                 min={0}
                                 max={24}
                                 step={1}
@@ -371,8 +387,8 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             />
                             <NumberInput
                                 label="Message Border Radius"
-                                value={botData.sizing.messageBorderRadius}
-                                onChange={(value) => handleInputChange('sizing', 'messageBorderRadius', value)}
+                                value={botData.messageBorderRadius}
+                                onChange={(value) => handleInputChange('messageBorderRadius', null, value)}
                                 min={0}
                                 max={20}
                                 step={1}
@@ -380,8 +396,8 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             />
                             <NumberInput
                                 label="Launcher Size"
-                                value={botData.sizing.launcherSize}
-                                onChange={(value) => handleInputChange('sizing', 'launcherSize', value)}
+                                value={botData.launcherSize}
+                                onChange={(value) => handleInputChange('launcherSize', null, value)}
                                 min={40}
                                 max={80}
                                 step={4}
@@ -394,13 +410,13 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                         <div className="space-y-4">
                             <SwitchInput
                                 label="Auto-open on page load"
-                                checked={botData.behavior.autoOpen}
-                                onChange={(e) => handleInputChange('behavior', 'autoOpen', e.target.checked)}
+                                checked={botData.autoOpen}
+                                onChange={(e) => handleInputChange('autoOpen', null, e.target.checked)}
                             />
                             <NumberInput
                                 label="Auto-open delay"
-                                value={botData.behavior.autoOpenDelay}
-                                onChange={(value) => handleInputChange('behavior', 'autoOpenDelay', value)}
+                                value={botData.autoOpenDelay}
+                                onChange={(value) => handleInputChange('autoOpenDelay', null, value)}
                                 min={0}
                                 max={10000}
                                 step={500}
@@ -408,9 +424,9 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             />
                             <SwitchInput
                                 label="Show typing indicator"
-                                checked={botData.behavior.showTypingIndicator}
+                                checked={botData.showTypingIndicator}
                                 onChange={(e) => {
-                                    handleInputChange('behavior', 'showTypingIndicator', e.target.checked);
+                                    handleInputChange('showTypingIndicator', null, e.target.checked);
                                     setShowTypingPreview(e.target.checked);
                                 }}
                             />
@@ -422,9 +438,9 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium text-foreground">Animation Type</label>
                                 <select
-                                    value={botData.animation.type}
+                                    value={botData.animationType}
                                     onChange={(e) => {
-                                        handleInputChange('animation', 'type', e.target.value);
+                                        handleInputChange('animationType', null, e.target.value);
                                         // Trigger animation in preview
                                         const event = new CustomEvent('triggerChatbotAnimation', {
                                             detail: { type: e.target.value }
@@ -460,7 +476,7 @@ export default function CustomizePanel({ botData, handleInputChange, onBack, onD
                         disabled={isProcessing}
                         className="flex-1 py-2 px-3 bg-primary text-background hover:text-white rounded-md disabled:opacity-50 text-sm font-medium btn-primary-gradient-hover"
                     >
-                        {isProcessing ? 'Creating...' : 'Deploy'}
+                        {isProcessing ? 'Saving...' : 'Save Changes'}
                     </button>
                 </div>
             </div>

@@ -1,21 +1,21 @@
 'use client';
 
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowsPointingOutIcon, DevicePhoneMobileIcon } from '@heroicons/react/24/outline';
 import CustomizePanel from '@/components/customize/CustomizePanel';
 import { Loader2 } from 'lucide-react';
+import { ShadowChatbotWidget } from '@/components/customize/ShadowChatbotWidget';
 
-// This is the full ChatbotPreview component, now co-located with the editor that uses it.
+
 const ChatbotPreview = memo(({ botData }) => {
     const [isOpen, setIsOpen] = useState(true);
+    const [iframeLoadFailed, setIframeLoadFailed] = useState(false);
     const previewUrl = botData?.url || '';
 
-    if (!botData) {
-        return <div className="w-full h-full flex items-center justify-center bg-gray-100"><Loader2 className="w-6 h-6 animate-spin" /></div>;
-    }
-    
+    // Debug: Log the botData in the preview component
+    console.log('ChatbotPreview botData:', botData);
+
     return (
         <div className="relative w-full h-full bg-gray-100 rounded-xl overflow-hidden">
             <div className="absolute inset-0">
@@ -24,56 +24,17 @@ const ChatbotPreview = memo(({ botData }) => {
                 ) : (
                     <div className="w-full h-full flex items-center justify-center"><p className="text-muted-foreground">No URL provided</p></div>
                 )}
+                {iframeLoadFailed && previewUrl && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white text-center p-4">
+                        <p>
+                            Could not load "{previewUrl}". This might be due to security restrictions (e.g., Content Security Policy). <br />
+                            Displaying <a href="https://example.com" target="_blank" rel="noopener noreferrer" className="underline">example.com</a> instead.
+                        </p>
+                    </div>
+                )}
             </div>
             <div className="absolute inset-0 bg-black/5 pointer-events-none" />
-            <motion.div
-                className="absolute flex items-center justify-center shadow-lg cursor-pointer transition-transform hover:scale-105"
-                style={{
-                    bottom: '24px', right: '24px',
-                    width: botData.sizing?.launcherSize || '60px', height: botData.sizing?.launcherSize || '60px',
-                    background: botData.colors?.launcherBg, color: botData.colors?.launcherText,
-                    borderRadius: '50%', fontFamily: botData.typography?.fontFamily, zIndex: 50
-                }}
-                onClick={() => setIsOpen(true)}
-                animate={isOpen ? "closed" : "open"}
-                variants={{ open: { opacity: 1, scale: 1 }, closed: { opacity: 0, scale: 0 } }}
-            >
-                {botData.branding?.launcherIconUrl ? <img src={botData.branding.launcherIconUrl} alt="Launcher" className="w-3/5 h-3/5 object-contain" /> : (botData.branding?.launcherIcon || '💬')}
-            </motion.div>
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        className="absolute shadow-2xl flex flex-col"
-                        style={{
-                            bottom: '24px', right: '24px', maxWidth: '90vw',
-                            width: botData.sizing?.widgetWidth, height: botData.sizing?.widgetHeight,
-                            fontFamily: botData.typography?.fontFamily, opacity: botData.behavior?.opacity,
-                            borderRadius: botData.sizing?.borderRadius, border: `1px solid ${botData.colors?.borderColor}`,
-                            background: botData.colors?.backgroundColor, zIndex: 50
-                        }}
-                        initial={{ scale: 0, opacity: 0, y: 50 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0, opacity: 0, y: 50 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                    >
-                        <div className="p-3 flex items-center justify-between flex-shrink-0" style={{ background: botData.colors?.headerBg, color: botData.colors?.headerText, fontSize: botData.typography?.headerFontSize, fontWeight: 'bold' }}>
-                            <div className="flex items-center gap-2 truncate">
-                                {botData.branding?.logoUrl && <img src={botData.branding.logoUrl} alt="Logo" className="w-7 h-7 rounded-full" />}
-                                <span className="truncate">{botData.botName}</span>
-                            </div>
-                            <button onClick={() => setIsOpen(false)} className="text-xl leading-none opacity-80 hover:opacity-100">&times;</button>
-                        </div>
-                        <div className="flex-1 p-3 space-y-3 overflow-y-auto" style={{ background: botData.colors?.messagesBg }}>
-                            <div className="flex justify-start"><div className="px-3 py-2" style={{ background: botData.colors?.assistantBg, color: botData.colors?.assistantText, borderRadius: botData.sizing?.messageBorderRadius, fontSize: botData.typography?.messageFontSize }}>{botData.greetingMessage || "Hello! How can I help?"}</div></div>
-                            <div className="flex justify-end"><div className="px-3 py-2" style={{ background: botData.colors?.userBg, color: botData.colors?.userText, borderRadius: botData.sizing?.messageBorderRadius, fontSize: botData.typography?.messageFontSize }}>This is a sample message!</div></div>
-                        </div>
-                        <div className="flex border-t" style={{ borderColor: botData.colors?.borderColor, background: botData.colors?.inputBg }}>
-                            <input className="flex-1 px-4 py-3 outline-none bg-transparent" placeholder={botData.inputPlaceholder} style={{ color: botData.colors?.textColor, fontSize: botData.typography?.fontSize }} disabled />
-                            <button className="px-4 py-3 font-medium" style={{ background: botData.colors?.sendButtonBg, color: botData.colors?.sendButtonText }}>{botData.branding?.sendButtonIcon}</button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <ShadowChatbotWidget botData={botData} isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
     );
 });
@@ -83,7 +44,7 @@ export default function EditBotPage() {
     const router = useRouter();
     const params = useParams();
     const { botId } = params;
-    
+
     const [botData, setBotData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -96,7 +57,79 @@ export default function EditBotPage() {
                 const res = await fetch(`/api/bot/${botId}`);
                 if (res.ok) {
                     const data = await res.json();
-                    setBotData({ ...data.config, botName: data.name, url: data.url });
+
+                    const convertOldToNew = (oldConfig) => {
+                        if (!oldConfig) return {};
+
+                        
+                        return {
+                            // Bot Identity
+                            botName: oldConfig.Identity?.botName || 'Chatrio AI',
+                            greetingMessage: oldConfig.Identity?.greetingMessage || 'Hi there! How can I help you today?',
+                            inputPlaceholder: oldConfig.Identity?.inputPlaceholder || 'Type a message...',
+                            
+                            // Branding
+                            logoUrl: oldConfig.Branding?.logoUrl || '',
+                            launcherIcon: oldConfig.Branding?.launcherIcon || '💬',
+                            launcherIconUrl: oldConfig.Branding?.launcherIconUrl || '',
+                            sendButtonIcon: oldConfig.Branding?.sendButtonIcon || 'Send',
+                            
+                            // Colors
+                            headerBg: oldConfig.Colors?.headerBg || '#000000',
+                            headerText: oldConfig.Colors?.headerText || '#ffffff',
+                            backgroundColor: oldConfig.Colors?.backgroundColor || '#ffffff',
+                            textColor: oldConfig.Colors?.textColor || '#000000',
+                            borderColor: oldConfig.Colors?.borderColor || '#e5e5e5',
+                            messagesBg: oldConfig.Colors?.messagesBg || '#fafbfc',
+                            inputBg: oldConfig.Colors?.inputBg || '#ffffff',
+                            userBg: oldConfig.Colors?.userBg || '#e6f0ff',
+                            userText: oldConfig.Colors?.userText || '#222222',
+                            assistantBg: oldConfig.Colors?.assistantBg || '#f3f3f3',
+                            assistantText: oldConfig.Colors?.assistantText || '#444444',
+                            sendButtonBg: oldConfig.Colors?.sendButtonBg || '#000000',
+                            sendButtonText: oldConfig.Colors?.sendButtonText || '#fff',
+                            launcherBg: oldConfig.Colors?.launcherBg || '#000000',
+                            launcherText: oldConfig.Colors?.launcherText || '#fff',
+                            
+                            // Typography
+                            fontFamily: oldConfig.Typography?.fontFamily || 'Inter',
+                            fontSize: oldConfig.Typography?.fontSize || '14px',
+                            headerFontSize: oldConfig.Typography?.headerFontSize || '16px',
+                            messageFontSize: oldConfig.Typography?.messageFontSize || '14px',
+                            fontWeight: oldConfig.Typography?.fontWeight || '400',
+                            
+                            // Sizing
+                            widgetWidth: oldConfig.Sizing?.widgetWidth || '350px',
+                            widgetHeight: oldConfig.Sizing?.widgetHeight || '500px',
+                            borderRadius: oldConfig.Sizing?.borderRadius || '16px',
+                            messageBorderRadius: oldConfig.Sizing?.messageBorderRadius || '12px',
+                            launcherSize: oldConfig.Sizing?.launcherSize || '60px',
+                            
+                            // Behavior
+                            opacity: oldConfig.Behavior?.opacity || 1,
+                            autoOpen: oldConfig.Behavior?.autoOpen || false,
+                            autoOpenDelay: oldConfig.Behavior?.autoOpenDelay || 3000,
+                            showTypingIndicator: oldConfig.Behavior?.showTypingIndicator !== false,
+                            soundEnabled: oldConfig.Behavior?.soundEnabled || false,
+                            
+                            // Animation
+                            animationType: oldConfig.Animation?.animationType || 'scale',
+                            animationDuration: oldConfig.Animation?.animationDuration || '0.3s',
+                            animationEasing: oldConfig.Animation?.animationEasing || 'ease-out',
+                            slideDirection: oldConfig.Animation?.slideDirection || 'bottom-right',
+                        };
+                    };
+
+                    // Convert the config and ensure all required fields have default values
+                    const convertedConfig = convertOldToNew(data.config);
+                    const botDataWithDefaults = {
+                        ...convertedConfig,
+                        // Additional data
+                        url: data.url,
+                    };
+
+                    console.log('Converted config:', convertedConfig);
+                    setBotData(botDataWithDefaults);
                 } else {
                     router.push('/dashboard?tab=customize');
                 }
@@ -113,15 +146,16 @@ export default function EditBotPage() {
     const handleInputChange = (field, key, value) => {
         setBotData(prev => {
             const newState = { ...prev };
-            if (key) {
-                newState[field] = { ...(newState[field] || {}), [key]: value };
+            // Ensure sizing properties always have 'px' unit if they are numeric
+            if (['widgetWidth', 'widgetHeight', 'borderRadius', 'messageBorderRadius', 'launcherSize'].includes(field) && typeof value === 'number') {
+                newState[field] = `${value}px`;
             } else {
                 newState[field] = value;
             }
             return newState;
         });
     };
-    
+
     const handleSaveChanges = async () => {
         setIsSaving(true);
         try {
@@ -131,11 +165,15 @@ export default function EditBotPage() {
                 body: JSON.stringify(botData),
             });
             if (res.ok) {
-                router.push('/dashboard?tab=customize');
+                router.push('/dashboard?tab=customize&message=Changes saved successfully!&type=success');
             } else {
-                console.error("Failed to save bot changes");
+                // For errors, stay on the page and show a temporary message
+                const errorData = await res.json();
+                alert(errorData.error || 'Failed to save bot changes.'); // Use alert for now, can be replaced by a local message box if needed
+                console.error("Failed to save bot changes", errorData);
             }
         } catch (error) {
+            alert('An unexpected error occurred.'); // Use alert for now
             console.error("Error saving bot:", error);
         } finally {
             setIsSaving(false);
@@ -146,10 +184,12 @@ export default function EditBotPage() {
         return <div className="flex h-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
     }
 
+    console.log('BotData for preview:', botData);
+
     return (
-        <div className="flex h-full w-full " style={{ height: 'calc(100vh - 90px)'}}>
+        <div className="flex h-full w-full " style={{ height: 'calc(100vh - 90px)' }}>
             <div className="w-[75%] h-full relative">
-               <ChatbotPreview botData={botData} />
+                <ChatbotPreview botData={botData} />
             </div>
             <CustomizePanel
                 botData={botData}

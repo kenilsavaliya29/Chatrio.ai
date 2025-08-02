@@ -32,6 +32,9 @@ export async function POST(req) {
 
     const { ragContext } = bot;
 
+    // Check if this is the first message in the conversation
+    const isFirstMessage = conversationHistory.length === 0;
+    
     // Build a simplified prompt for the MVP
     const prompt = `
       You are an AI assistant for "${ragContext.BUSINESS_PROFILE?.company_name}".
@@ -39,8 +42,13 @@ export async function POST(req) {
       
       Strictly use the following information to answer the user's question. Do not use any other knowledge.
       If the answer is not in the provided information, use one of the fallback responses.
-      Greet the user once only in starting, no need to greet in every message. You must provide every detail regarding the context you have bein given. If user asks same question again and again which you don't know you can deny rather than speaking lie.
-      Never speak lie to user in any case ever.
+      
+      IMPORTANT RULES:
+      - ${isFirstMessage ? 'This is the first message. Greet the user warmly and introduce yourself briefly.' : 'Do NOT greet the user. This is not the first message.'}
+      - You must provide every detail regarding the context you have been given.
+      - If user asks the same question again and again which you don't know, you can deny rather than speaking lies.
+      - Never speak lies to user in any case ever.
+      - Keep responses concise and helpful.
 
       ---
       CONTEXT:

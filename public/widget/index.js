@@ -63,8 +63,8 @@
     --chatrio-opacity: ${config.opacity || 1};
     
     /* Animation */
-    --chatrio-animation-duration: ${config.animationDuration || '0.3s'};
-    --chatrio-animation-easing: ${config.animationEasing || 'ease-out'};
+    --chatrio-animation-duration: ${config.animationDuration || '0.4s'};
+    --chatrio-animation-easing: ${config.animationEasing || 'cubic-bezier(0.25, 0.8, 0.25, 1)'};
   }`;
   shadow.appendChild(themeVars);
 
@@ -142,46 +142,46 @@
   widget.appendChild(inputArea);
 
   /* ---------------- Helpers ---------------- */
+  // Track conversation history
+  let conversationHistory = [];
+  
   const addMessage = (role, text) => {
     const m = document.createElement('div');
     m.className = `chatrio-message chatrio-message-${role}`;
     m.textContent = text;
     messages.appendChild(m);
     messages.scrollTop = messages.scrollHeight;
+    
+    // Add to conversation history
+    conversationHistory.push({ role, content: text });
   };
 
   /* ---------------- Animation Logic ---------------- */
-  const getAnimationClass = (isOpen) => {
-    const animationType = config.animationType || 'scale';
-    switch (animationType) {
-      case 'slide':
-        return isOpen ? 'chatrio-slide-in' : 'chatrio-slide-out';
-      case 'fade':
-        return isOpen ? 'chatrio-fade-in' : 'chatrio-fade-out';
-      case 'bounce':
-        return isOpen ? 'chatrio-bounce-in' : 'chatrio-bounce-out';
-      case 'scale':
-      default:
-        return isOpen ? 'chatrio-scale-in' : 'chatrio-scale-out';
-    }
-  };
+  // Removed getAnimationClass as animations will be purely CSS-driven
 
   /* ---------------- Events ---------------- */
   const toggle = open => {
     if (open) {
-      widget.classList.remove('chatrio-scale-out', 'chatrio-slide-out', 'chatrio-fade-out', 'chatrio-bounce-out');
-      widget.classList.add('open', getAnimationClass(true));
-      launcher.style.display = 'none';
+      widget.classList.add('open');
+      launcher.style.opacity = '0'; // Fade out launcher immediately
+      launcher.style.pointerEvents = 'none'; // Disable interaction during fade
+      launcher.style.visibility = 'hidden'; // Hide launcher after fade out
     } else {
-      widget.classList.remove('open', 'chatrio-scale-in', 'chatrio-slide-in', 'chatrio-fade-in', 'chatrio-bounce-in');
-      widget.classList.add(getAnimationClass(false));
+      widget.classList.remove('open');
+      // Delay showing the launcher until the widget animation is complete
       setTimeout(() => {
-        launcher.style.display = 'flex';
-      }, parseInt(config.animationDuration) || 300);
+        launcher.style.opacity = '1'; // Fade in launcher
+        launcher.style.pointerEvents = 'auto'; // Enable interaction
+        launcher.style.visibility = 'visible'; // Show launcher after fade in
+      }, parseFloat(config.animationDuration) * 1000 + 50 || 450); // Match widget closing animation duration + buffer
     }
   };
 
-  launcher.onclick = () => toggle(true);
+  launcher.onclick = () => {
+    toggle(true);
+    // Reset conversation when opening widget
+    resetConversation();
+  };
   closeBtn.onclick = () => toggle(false);
   input.addEventListener('keydown', e => { if (e.key === 'Enter') sendBtn.click(); });
 
@@ -200,19 +200,26 @@
       const res = await fetch(window.chatrioConfig.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, botId: window.chatrioConfig.botId })
+        body: JSON.stringify({ 
+          message: msg, 
+          botId: window.chatrioConfig.botId,
+          conversationHistory: conversationHistory
+        })
       });
       const data = await res.json();
       
       // Replace typing indicator or add new message
       if (config.showTypingIndicator !== false && messages.lastChild) {
         messages.lastChild.textContent = data.response || 'No response';
+        // Update conversation history for assistant response
+        conversationHistory.push({ role: 'assistant', content: data.response || 'No response' });
       } else {
         addMessage('assistant', data.response || 'No response');
       }
     } catch (err) {
       if (config.showTypingIndicator !== false && messages.lastChild) {
         messages.lastChild.textContent = 'Error contacting AI bot.';
+        conversationHistory.push({ role: 'assistant', content: 'Error contacting AI bot.' });
       } else {
         addMessage('assistant', 'Error contacting AI bot.');
       }
@@ -232,6 +239,17 @@
       addMessage('assistant', config.greetingMessage);
     }, 500);
   }
+  
+  // Reset conversation history when widget is closed and reopened
+  const resetConversation = () => {
+    conversationHistory = [];
+    messages.innerHTML = '';
+    if (config.greetingMessage) {
+      setTimeout(() => {
+        addMessage('assistant', config.greetingMessage);
+      }, 500);
+    }
+  };
 
   // Init closed
   toggle(false);

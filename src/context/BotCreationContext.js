@@ -18,66 +18,54 @@ const initialBotData = {
     additionalContent: '',
     
     // Branding
-    branding: {
-        logoUrl: '',
-        launcherIcon: '💬',
-        launcherIconUrl: '',
-        sendButtonIcon: 'Send',
-    },
+    logoUrl: '',
+    launcherIcon: '💬',
+    launcherIconUrl: '',
+    sendButtonIcon: 'Send',
     
     // Colors
-    colors: {
-        headerBg: '#000000',
-        headerText: '#ffffff',
-        backgroundColor: '#ffffff',
-        textColor: '#000000',
-        borderColor: '#e5e5e5',
-        messagesBg: '#fafbfc',
-        inputBg: '#ffffff',
-        userBg: '#e6f0ff',
-        userText: '#222222',
-        assistantBg: '#f3f3f3',
-        assistantText: '#444444',
-        sendButtonBg: '#000000',
-        sendButtonText: '#ffffff',
-        launcherBg: '#000000',
-        launcherText: '#ffffff',
-    },
+    headerBg: '#000000',
+    headerText: '#ffffff',
+    backgroundColor: '#ffffff',
+    textColor: '#000000',
+    borderColor: '#e5e5e5',
+    messagesBg: '#fafbfc',
+    inputBg: '#ffffff',
+    userBg: '#e6f0ff',
+    userText: '#222222',
+    assistantBg: '#f3f3f3',
+    assistantText: '#444444',
+    sendButtonBg: '#000000',
+    sendButtonText: '#ffffff',
+    launcherBg: '#000000',
+    launcherText: '#ffffff',
     
     // Typography
-    typography: {
-        fontFamily: 'Inter',
-        fontSize: '14px',
-        headerFontSize: '16px',
-        messageFontSize: '14px',
-        fontWeight: '400',
-    },
+    fontFamily: 'Inter',
+    fontSize: '14px',
+    headerFontSize: '16px',
+    messageFontSize: '14px',
+    fontWeight: '400',
     
     // Sizing
-    sizing: {
-        widgetWidth: '350px',
-        widgetHeight: '500px',
-        borderRadius: '16px',
-        messageBorderRadius: '12px',
-        launcherSize: '60px',
-    },
+    widgetWidth: '350px',
+    widgetHeight: '500px',
+    borderRadius: '16px',
+    messageBorderRadius: '12px',
+    launcherSize: '60px',
     
     // Behavior
-    behavior: {
-        opacity: 1,
-        autoOpen: false,
-        autoOpenDelay: 3000,
-        showTypingIndicator: true,
-        soundEnabled: false,
-    },
+    opacity: 1,
+    autoOpen: false,
+    autoOpenDelay: 3000,
+    showTypingIndicator: true,
+    soundEnabled: false,
     
     // Animation
-    animation: {
-        type: 'scale',
-        duration: '0.3s',
-        easing: 'ease-out',
-        slideDirection: 'bottom-right',
-    },
+    animationType: 'scale',
+    animationDuration: '0.3s',
+    animationEasing: 'ease-out',
+    slideDirection: 'bottom-right',
 };
 
 export function BotCreationProvider({ children }) {

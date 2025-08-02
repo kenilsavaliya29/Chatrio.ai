@@ -36,79 +36,8 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
         }
 
-        // Structure the configuration from the request data
-        const config = {
-            // Bot Identity
-            botName: requestData.botName || 'Chatrio AI',
-            greetingMessage: requestData.greetingMessage || 'Hi there! How can I help you today?',
-            tone: requestData.tone || 'helpful',
-            inputPlaceholder: requestData.inputPlaceholder || 'Type a message...',
-            additionalContent: requestData.additionalContent || '',
-            
-            // Nested configurations
-            branding: requestData.branding || {
-                logoUrl: '',
-                launcherIcon: '💬',
-                launcherIconUrl: '',
-                sendButtonIcon: 'Send',
-            },
-            
-            colors: requestData.colors || {
-                headerBg: '#000000',
-                headerText: '#ffffff',
-                backgroundColor: '#ffffff',
-                textColor: '#000000',
-                borderColor: '#e5e5e5',
-                messagesBg: '#fafbfc',
-                inputBg: '#ffffff',
-                userBg: '#e6f0ff',
-                userText: '#222222',
-                assistantBg: '#f3f3f3',
-                assistantText: '#444444',
-                sendButtonBg: '#000000',
-                sendButtonText: '#ffffff',
-                launcherBg: '#000000',
-                launcherText: '#ffffff',
-            },
-            
-            typography: requestData.typography || {
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                headerFontSize: '16px',
-                messageFontSize: '14px',
-                fontWeight: '400',
-            },
-            
-            sizing: requestData.sizing || {
-                widgetWidth: '350px',
-                widgetHeight: '500px',
-                borderRadius: '16px',
-                messageBorderRadius: '12px',
-                launcherSize: '60px',
-            },
-            
-            behavior: requestData.behavior || {
-                opacity: 1,
-                autoOpen: false,
-                autoOpenDelay: 3000,
-                showTypingIndicator: true,
-                soundEnabled: false,
-            },
-            
-            animation: requestData.animation || {
-                type: 'scale',
-                duration: '0.3s',
-                easing: 'ease-out',
-                slideDirection: 'bottom-right',
-            },
-            
-            // Legacy fields for backward compatibility
-            colorTheme: requestData.colorTheme,
-            darkMode: requestData.darkMode,
-        };
-
         // Update bot with final configuration
-        bot.config = config;
+        bot.config = requestData;
         bot.status = 'active';
 
         await user.save();

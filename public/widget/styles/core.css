@@ -4,248 +4,341 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: var(--chatrio-widget-width, 350px);
-  height: var(--chatrio-widget-height, 500px);
-  border: 1px solid var(--chatrio-border-color, #e5e5e5);
+  width: var(--chatrio-widget-width, 380px);
+  height: var(--chatrio-widget-height, 400px); /* Reduced height */
+  border: none;
   border-radius: var(--chatrio-border-radius, 16px);
-  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.15);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 9999;
-  background: var(--chatrio-bg, #fff);
-  color: var(--chatrio-text, #000);
-  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  background: var(--chatrio-bg, #ffffff);
+  color: var(--chatrio-text, #1a1a1a);
+  font-family: var(--chatrio-font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
   font-size: var(--chatrio-font-size, 14px);
   font-weight: var(--chatrio-font-weight, 400);
-  opacity: var(--chatrio-opacity, 1);
+  opacity: 0; /* Start hidden */
   transform: scale(0);
   transform-origin: bottom right;
-  transition: transform var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
+  transition: transform var(--chatrio-animation-duration, 0.4s) var(--chatrio-animation-easing, cubic-bezier(0.25, 0.8, 0.25, 1)), 
+              opacity var(--chatrio-animation-duration, 0.4s) var(--chatrio-animation-easing, cubic-bezier(0.25, 0.8, 0.25, 1)),
+              visibility 0s linear var(--chatrio-animation-duration, 0.4s); /* Hide after transition */
+  visibility: hidden; /* Start hidden */
 }
 
 .chatrio-widget.open {
   transform: scale(1);
+  opacity: 1;
+  visibility: visible; /* Show immediately */
+  transition-delay: 0s; /* No delay when opening */
 }
 
-/* Animation Classes */
-.chatrio-scale-in {
-  transform: scale(1) !important;
+.chatrio-widget.scale {
+  animation: chatrio-scale-in var(--chatrio-animation-duration) var(--chatrio-animation-easing);
+}
+.chatrio-widget.slide {
+  animation: chatrio-slide-in var(--chatrio-animation-duration) var(--chatrio-animation-easing);
+}
+.chatrio-widget.fade {
+  animation: chatrio-fade-in var(--chatrio-animation-duration) var(--chatrio-animation-easing);
+}
+.chatrio-widget.bounce {
+  animation: chatrio-bounce-in var(--chatrio-animation-duration) var(--chatrio-animation-easing);
 }
 
-.chatrio-scale-out {
-  transform: scale(0) !important;
+@keyframes chatrio-scale-in {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
-.chatrio-slide-in {
-  transform: translateY(0) !important;
-  opacity: 1 !important;
+@keyframes chatrio-slide-in {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.chatrio-slide-out {
-  transform: translateY(100%) !important;
-  opacity: 0 !important;
+@keyframes chatrio-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.chatrio-fade-in {
-  opacity: 1 !important;
-  transform: scale(1) !important;
-}
-
-.chatrio-fade-out {
-  opacity: 0 !important;
-  transform: scale(1) !important;
-}
-
-.chatrio-bounce-in {
-  animation: bounceIn var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
-  transform: scale(1) !important;
-}
-
-.chatrio-bounce-out {
-  animation: bounceOut var(--chatrio-animation-duration, 0.3s) var(--chatrio-animation-easing, ease-out);
-  transform: scale(0) !important;
-}
-
-@keyframes bounceIn {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes bounceOut {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(0.3); opacity: 0; }
+@keyframes chatrio-bounce-in {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-15px); }
+  60% { transform: translateY(-5px); }
 }
 
 .chatrio-launcher {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: var(--chatrio-launcher-size, 60px);
-  height: var(--chatrio-launcher-size, 60px);
-  background: var(--chatrio-launcher-bg, #000);
+  width: var(--chatrio-launcher-size, 64px);
+  height: var(--chatrio-launcher-size, 64px);
+  background: linear-gradient(135deg, var(--chatrio-launcher-bg, #667eea) 0%, var(--chatrio-launcher-bg, #764ba2) 100%);
   color: var(--chatrio-launcher-text, #fff);
-  border-radius: 50%;
+  border-radius: var(--chatrio-border-radius, 20px);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(var(--chatrio-launcher-size, 60px) * 0.4);
+  font-size: calc(var(--chatrio-launcher-size, 64px) * 0.4);
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   z-index: 10000;
-  transition: transform 0.2s ease-in-out;
-  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              opacity 0.3s ease-out, 
+              visibility 0s linear 0.3s; /* Hide after transition */
+  font-family: var(--chatrio-font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  opacity: 1; /* Ensure launcher is visible by default */
+  pointer-events: auto; /* Ensure launcher is interactive by default */
+  visibility: visible; /* Ensure launcher is visible by default */
 }
 
 .chatrio-launcher:hover { 
-  transform: scale(1.05); 
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .chatrio-header {
-  background: var(--chatrio-header-bg, #000);
+  background: linear-gradient(135deg, var(--chatrio-header-bg, #667eea) 0%, var(--chatrio-header-bg, #764ba2) 100%);
   color: var(--chatrio-header-text, #fff);
-  padding: 12px;
-  font-weight: var(--chatrio-font-weight, 500);
+  padding: 10px 24px;
+  font-weight: 600;
   font-size: var(--chatrio-header-font-size, 16px);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   justify-content: space-between;
   cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.chatrio-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+.chatrio-header > * {
+  position: relative;
+  z-index: 1;
 }
 
 .chatrio-header img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--chatrio-border-radius, 8px);
   object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chatrio-close-btn {
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   color: var(--chatrio-header-text, #fff);
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   cursor: pointer;
   line-height: 1;
-  padding: 0 5px;
-  transition: opacity 0.2s ease;
+  padding: 8px;
+  border-radius: var(--chatrio-border-radius, 8px);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .chatrio-close-btn:hover {
-  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .chatrio-messages {
   flex: 1;
-  padding: 12px;
+  padding: 20px;
   overflow-y: auto;
-  background: var(--chatrio-messages-bg, #fafbfc);
+  background: var(--chatrio-messages-bg, #f8fafc);
   cursor: default;
+  position: relative;
+}
+
+.chatrio-messages::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
 }
 
 .chatrio-input-area {
   display: flex;
-  border-top: 1px solid var(--chatrio-border-color, #e5e5e5);
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
   background: var(--chatrio-input-bg, #fff);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  cursor: default;
+}
+
+.chatrio-input-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
 }
 
 .chatrio-input {
   flex: 1;
-  border: none;
-  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--chatrio-border-radius, 12px);
+  padding: 12px 16px;
   outline: none;
   font-size: var(--chatrio-font-size, 14px);
-  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  font-family: var(--chatrio-font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
   font-weight: var(--chatrio-font-weight, 400);
-  background: transparent;
+  background: rgba(0, 0, 0, 0.02);
   color: inherit;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.chatrio-input:focus {
+  border-color: var(--chatrio-send-button-bg, #667eea);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .chatrio-input::placeholder {
-  color: var(--chatrio-text, #000);
-  opacity: 0.6;
+  color: var(--chatrio-text, #1a1a1a);
+  opacity: 0.5;
 }
 
 .chatrio-send-btn {
-  background: var(--chatrio-send-button-bg, #000);
+  background: linear-gradient(135deg, var(--chatrio-send-button-bg, #667eea) 0%, var(--chatrio-send-button-bg, #764ba2) 100%);
   color: var(--chatrio-send-button-text, #fff);
   border: none;
-  padding: 0 16px;
+  padding: 12px 16px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   font-size: var(--chatrio-font-size, 14px);
-  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
-  border-radius: 0 0 var(--chatrio-border-radius, 16px) 0;
-  transition: opacity 0.2s ease;
+  font-family: var(--chatrio-font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  border-radius: var(--chatrio-border-radius, 12px);
+  transition: all 0.2s ease;
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .chatrio-send-btn:hover { 
-  opacity: 0.9; 
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .chatrio-message {
-  margin: 8px 0;
-  padding: 8px 12px;
-  border-radius: var(--chatrio-message-border-radius, 12px);
-  max-width: 80%;
+  margin: 12px 0;
+  padding: 12px 16px;
+  border-radius: var(--chatrio-message-border-radius, 18px);
+  max-width: 85%;
   word-break: break-word;
   font-size: var(--chatrio-message-font-size, 14px);
-  font-family: var(--chatrio-font-family, 'Inter', Arial, sans-serif);
+  font-family: var(--chatrio-font-family, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
   font-weight: var(--chatrio-font-weight, 400);
   line-height: 1.5;
-  animation: messageSlideIn 0.3s ease-out;
+  animation: messageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 @keyframes messageSlideIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .chatrio-message-user {
-  background: var(--chatrio-user-bg, #e6f0ff);
-  color: var(--chatrio-user-text, #222);
+  background: linear-gradient(135deg, var(--chatrio-user-bg, #667eea) 0%, var(--chatrio-user-bg, #764ba2) 100%);
+  color: var(--chatrio-user-text, #fff);
   align-self: flex-end;
-  text-align: right;
+  text-align: left;
   margin-left: auto;
+  border-bottom-right-radius: calc(var(--chatrio-message-border-radius, 12px) / 2);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .chatrio-message-assistant {
-  background: var(--chatrio-assistant-bg, #f3f3f3);
-  color: var(--chatrio-assistant-text, #444);
+  background: var(--chatrio-assistant-bg, #ffffff);
+  color: var(--chatrio-assistant-text, #1a1a1a);
   align-self: flex-start;
   text-align: left;
   margin-right: auto;
+  border-bottom-left-radius: calc(var(--chatrio-message-border-radius, 12px) / 2);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
   .chatrio-widget {
     width: calc(100vw - 32px);
-    height: calc(100vh - 100px);
+    height: calc(100vh - 120px);
     bottom: 16px;
     right: 16px;
     left: 16px;
     max-width: none;
+    border-radius: var(--chatrio-border-radius, 20px);
   }
   
   .chatrio-launcher {
     bottom: 16px;
     right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .chatrio-messages {
+    padding: 16px;
+  }
+  
+  .chatrio-input-area {
+    padding: 16px;
   }
 }
 
 /* Scrollbar styling */
 .chatrio-messages::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .chatrio-messages::-webkit-scrollbar-track {
@@ -253,11 +346,11 @@
 }
 
 .chatrio-messages::-webkit-scrollbar-thumb {
-  background: var(--chatrio-border-color, #e5e5e5);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  transition: background 0.2s ease;
 }
 
 .chatrio-messages::-webkit-scrollbar-thumb:hover {
-  background: var(--chatrio-text, #000);
-  opacity: 0.3;
+  background: rgba(0, 0, 0, 0.2);
 } 

@@ -26,6 +26,9 @@ export async function GET(request, { params }) {
     const bot = user.bots.find(b => b.botId === botId);
     if (!bot) return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
 
+    // Debug: Log the actual bot config from database
+    console.log('Bot config from database:', bot.config);
+
     // Return all necessary bot data for editing
     return NextResponse.json({
         id: bot.botId,
@@ -65,7 +68,72 @@ export async function PUT(request, { params }) {
       if (botIndex === -1) return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
   
       // Update the bot's config
-      user.bots[botIndex].config = { ...user.bots[botIndex].config, ...updatedConfig };
+      // Convert flattened config from frontend back to nested structure for DB
+      const newNestedConfig = {
+          Identity: {
+              botName: updatedConfig.botName,
+              greetingMessage: updatedConfig.greetingMessage,
+              tone: updatedConfig.tone,
+              inputPlaceholder: updatedConfig.inputPlaceholder,
+              additionalContent: updatedConfig.additionalContent,
+          },
+          Branding: {
+              logoUrl: updatedConfig.logoUrl,
+              launcherIcon: updatedConfig.launcherIcon,
+              launcherIconUrl: updatedConfig.launcherIconUrl,
+              sendButtonIcon: updatedConfig.sendButtonIcon,
+          },
+          Colors: {
+              headerBg: updatedConfig.headerBg,
+              headerText: updatedConfig.headerText,
+              backgroundColor: updatedConfig.backgroundColor,
+              textColor: updatedConfig.textColor,
+              borderColor: updatedConfig.borderColor,
+              messagesBg: updatedConfig.messagesBg,
+              inputBg: updatedConfig.inputBg,
+              userBg: updatedConfig.userBg,
+              userText: updatedConfig.userText,
+              assistantBg: updatedConfig.assistantBg,
+              assistantText: updatedConfig.assistantText,
+              sendButtonBg: updatedConfig.sendButtonBg,
+              sendButtonText: updatedConfig.sendButtonText,
+              launcherBg: updatedConfig.launcherBg,
+              launcherText: updatedConfig.launcherText,
+          },
+          Typography: {
+              fontFamily: updatedConfig.fontFamily,
+              fontSize: updatedConfig.fontSize,
+              headerFontSize: updatedConfig.headerFontSize,
+              messageFontSize: updatedConfig.messageFontSize,
+              fontWeight: updatedConfig.fontWeight,
+          },
+          Sizing: {
+              widgetWidth: updatedConfig.widgetWidth,
+              widgetHeight: updatedConfig.widgetHeight,
+              borderRadius: updatedConfig.borderRadius,
+              messageBorderRadius: updatedConfig.messageBorderRadius,
+              launcherSize: updatedConfig.launcherSize,
+          },
+          Behavior: {
+              opacity: updatedConfig.opacity,
+              autoOpen: updatedConfig.autoOpen,
+              autoOpenDelay: updatedConfig.autoOpenDelay,
+              showTypingIndicator: updatedConfig.showTypingIndicator,
+              soundEnabled: updatedConfig.soundEnabled,
+          },
+          Animation: {
+              animationType: updatedConfig.animationType,
+              animationDuration: updatedConfig.animationDuration,
+              animationEasing: updatedConfig.animationEasing,
+              slideDirection: updatedConfig.slideDirection,
+          },
+          // Include legacy fields if they exist and are needed
+          colorTheme: updatedConfig.colorTheme,
+          darkMode: updatedConfig.darkMode,
+      };
+      
+      // Merge with existing config to preserve any fields not sent from frontend
+      user.bots[botIndex].config = { ...user.bots[botIndex].config, ...newNestedConfig };
       user.bots[botIndex].name = updatedConfig.botName || user.bots[botIndex].name;
       
       await user.save();

@@ -13,72 +13,75 @@ const botSchema = new mongoose.Schema({
   },
   config: {
     // Bot Identity
-    botName: { type: String, default: 'Chatrio AI' },
-    greetingMessage: { type: String, default: 'Hi there! How can I help you today?' },
-    tone: { type: String, default: 'helpful' },
-    inputPlaceholder: { type: String, default: 'Type a message...' },
-    additionalContent: { type: String, default: '' },
+    Identity: {
+      botName: { type: String },
+      greetingMessage: { type: String },
+      tone: { type: String },
+      inputPlaceholder: { type: String },
+      additionalContent: { type: String },
+    },
 
     // Branding
-    branding: {
-      logoUrl: { type: String, default: '' },
-      launcherIcon: { type: String, default: '💬' },
-      launcherIconUrl: { type: String, default: '' },
-      sendButtonIcon: { type: String, default: 'Send' },
+    Branding: {
+      logoUrl: { type: String },
+      launcherIcon: { type: String },
+      launcherIconUrl: { type: String },
+      sendButtonIcon: { type: String },
     },
 
     // Colors
-    colors: {
-      headerBg: { type: String, default: '#000000' },
-      headerText: { type: String, default: '#ffffff' },
-      backgroundColor: { type: String, default: '#ffffff' },
-      textColor: { type: String, default: '#000000' },
-      borderColor: { type: String, default: '#e5e5e5' },
-      messagesBg: { type: String, default: '#fafbfc' },
-      inputBg: { type: String, default: '#ffffff' },
-      userBg: { type: String, default: '#e6f0ff' },
-      userText: { type: String, default: '#222222' },
-      assistantBg: { type: String, default: '#f3f3f3' },
-      assistantText: { type: String, default: '#444444' },
-      sendButtonBg: { type: String, default: '#000000' },
-      sendButtonText: { type: String, default: '#ffffff' },
-      launcherBg: { type: String, default: '#000000' },
-      launcherText: { type: String, default: '#ffffff' },
+    Colors: {
+      headerBg: { type: String },
+      headerText: { type: String },
+      backgroundColor: { type: String },
+      textColor: { type: String },
+      borderColor: { type: String },
+      messagesBg: { type: String },
+      inputBg: { type: String },
+      userBg: { type: String },
+      userText: { type: String },
+      assistantBg: { type: String },
+      assistantText: { type: String },
+      sendButtonBg: { type: String },
+      sendButtonText: { type: String },
+      launcherBg: { type: String },
+      launcherText: { type: String },
     },
 
     // Typography
-    typography: {
-      fontFamily: { type: String, default: 'Inter' },
-      fontSize: { type: String, default: '14px' },
-      headerFontSize: { type: String, default: '16px' },
-      messageFontSize: { type: String, default: '14px' },
-      fontWeight: { type: String, default: '400' },
+    Typography: {
+      fontFamily: { type: String },
+      fontSize: { type: String },
+      headerFontSize: { type: String },
+      messageFontSize: { type: String },
+      fontWeight: { type: String },
     },
 
+
     // Sizing & Shape
-    sizing: {
-      widgetWidth: { type: String, default: '350px' },
-      widgetHeight: { type: String, default: '500px' },
-      borderRadius: { type: String, default: '16px' },
-      messageBorderRadius: { type: String, default: '12px' },
-      launcherSize: { type: String, default: '60px' },
+    Sizing: {
+      widgetWidth: { type: String },
+      widgetHeight: { type: String },
+      borderRadius: { type: String },
+      messageBorderRadius: { type: String },
+      launcherSize: { type: String },
     },
 
     // Behavior
-    behavior: {
-      opacity: { type: Number, default: 1, min: 0.1, max: 1 },
-      autoOpen: { type: Boolean, default: false },
-      autoOpenDelay: { type: Number, default: 3000 },
-      showTypingIndicator: { type: Boolean, default: true },
-      soundEnabled: { type: Boolean, default: false },
+    Behavior: {
+      opacity: { type: Number, min: 0.1, max: 1 },
+      autoOpen: { type: Boolean },
+      autoOpenDelay: { type: Number },
+      showTypingIndicator: { type: Boolean },
+      soundEnabled: { type: Boolean },
     },
 
     // Animation
-    animation: {
-      type: { type: String, default: 'scale' }, // scale, slide, fade, bounce
-      duration: { type: String, default: '0.3s' },
-      easing: { type: String, default: 'ease-out' },
-      slideDirection: { type: String, default: 'bottom-right' }, // for slide animation
+    Animation: {
+      animationType: { type: String },
+      animationDuration: { type: String },
+      animationEasing: { type: String },
+      slideDirection: { type: String },
     },
 
     // Legacy fields (for backward compatibility)
