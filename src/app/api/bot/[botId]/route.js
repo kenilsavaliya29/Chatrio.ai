@@ -34,6 +34,7 @@ export async function GET(request, { params }) {
         id: bot.botId,
         name: bot.name,
         url: bot.url,
+        status: bot.status, 
         config: bot.config,
     });
 

@@ -11,6 +11,13 @@
   try {
     const res = await fetch(`${baseUrl}/api/bot/config?botId=${window.chatrioConfig.botId}`);
     config = await res.json();
+
+   
+    if (config.status !== 'active') {
+      console.warn(`Chatrio: Bot is ${config.status}. Widget will not load.`);
+      return; 
+    }
+
   } catch (err) {
     console.warn('Chatrio: Could not fetch config, using defaults.', err);
   }

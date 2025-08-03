@@ -5,7 +5,7 @@ const botSchema = new mongoose.Schema({
   botId: { type: String },
   name: { type: String, required: true },
   url: { type: String, required: true },
-  status: { type: String, default: 'processing' },
+  status: { type: String, enum: ['active', 'inactive', 'processing'], default: 'processing' },
   process: {
     reports: Boolean,
     customization: Boolean,

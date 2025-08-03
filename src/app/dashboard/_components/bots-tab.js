@@ -22,7 +22,7 @@ export default function BotsTab() {
       const data = await response.json();
       if (response.ok) {
         setBots(data.bots);
-        console.log(bots);
+        console.log(data.bots);
       }
     } catch (error) {
       console.error('Error fetching bots:', error);
@@ -41,17 +41,14 @@ export default function BotsTab() {
         },
         body: JSON.stringify({
           botId,
-          status: !currentStatus,
+          status: currentStatus ? 'inactive' : 'active',
         }),
       });
 
+      console.log(response);
+      
       if (response.ok) {
-        // Update local state
-        setBots(bots.map(bot => 
-          bot.id === botId 
-            ? { ...bot, active: !currentStatus }
-            : bot
-        ));
+        fetchBots(); 
       }
     } catch (error) {
       console.error('Error toggling bot status:', error);

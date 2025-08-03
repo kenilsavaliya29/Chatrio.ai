@@ -5,7 +5,7 @@ export function MessageBox({ type, message, onClose, duration = 5000 }) {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        if (type === 'success' && duration > 0) {
+        if (duration > 0) {
             const timer = setTimeout(() => {
                 setIsVisible(false);
                 if (onClose) onClose();

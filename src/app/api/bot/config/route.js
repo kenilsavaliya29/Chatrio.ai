@@ -31,6 +31,7 @@ export async function GET(req) {
             botName: config.Identity?.botName || 'Chatrio AI',
             greetingMessage: config.Identity?.greetingMessage || 'Hi there! How can I help you today?',
             inputPlaceholder: config.Identity?.inputPlaceholder || 'Type a message...',
+            status: bot.status, 
             
             // Branding
             logoUrl: config.Branding?.logoUrl || '',
