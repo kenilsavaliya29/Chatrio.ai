@@ -14,7 +14,7 @@ export async function GET(req) {
         }
 
         // Find the bot by botId across all users
-        const user = await User.findOne({ 'bots.botId': botId });
+        const user = await User.findOne({ _id: decoded.id, 'bots.botId': botId }); // CRITICAL: Scopes the query to the authenticated user
         if (!user) {
             return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
         }

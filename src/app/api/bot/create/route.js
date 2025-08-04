@@ -42,32 +42,23 @@ export async function POST(req) {
 
         await user.save();
 
-        // After user.save();
         const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-        const botsDir = path.join(process.cwd(), 'public', 'bots');
-        if (!fs.existsSync(botsDir)) {
-          fs.mkdirSync(botsDir, { recursive: true });
-        }
-        const botScriptPath = path.join(botsDir, `${botId}.js`);
-        const botScriptContent = `
+        
+        // Simplified embed code: directly sets config and loads the main widget script
+        const embedCode = `
+            <script>
             window.chatrioConfig = {
-            botId: '${botId}',
-            apiUrl: '${baseUrl}/api/bot/chat'
+                botId: '${botId}',
+                apiUrl: '${baseUrl}/api/bot/chat'
             };
             (function(){
-            var s = document.createElement('script');
-            s.src = '${baseUrl}/widget/index.js';
-            s.async = true;
-            document.body.appendChild(s);
+                var s = document.createElement('script');
+                s.src = '${baseUrl}/widget/index.js';
+                s.async = true;
+                document.body.appendChild(s);
             })();
+            </script>
         `;
-        fs.writeFileSync(botScriptPath, botScriptContent, 'utf8');
-
-        // Remove trailing slash
-        const botScriptUrl = `${baseUrl}/bots/${botId}.js`;
-
-        // Option 1: Just the short script
-        const embedCode = `<script src="${botScriptUrl}" async></script>`;
 
         return NextResponse.json({
             success: true,

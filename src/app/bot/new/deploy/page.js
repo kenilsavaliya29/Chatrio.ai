@@ -100,7 +100,7 @@ export default function DeployPage() {
                                     onClick={copyToClipboard}
                                     className={`absolute top-4 right-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
                                         copied 
-                                            ? 'bg-green-500 text-white/10 shadow-lg' 
+                                            ? 'bg-green-500 text-white shadow-lg' 
                                             : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md'
                                     }`}
                                 >

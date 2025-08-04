@@ -7,7 +7,7 @@ import User from '@/server/models/user.model';
 // GET a specific bot's configuration
 export async function GET(request, { params }) {
   try {
-    const { botId } = params;
+    const { botId } = await params; 
     if (!botId) {
       return NextResponse.json({ error: 'Bot ID is required' }, { status: 400 });
     }
@@ -47,7 +47,7 @@ export async function GET(request, { params }) {
 // PUT (update) a specific bot's configuration
 export async function PUT(request, { params }) {
     try {
-      const { botId } = params;
+      const { botId } = await params; 
       if (!botId) {
         return NextResponse.json({ error: 'Bot ID is required' }, { status: 400 });
       }

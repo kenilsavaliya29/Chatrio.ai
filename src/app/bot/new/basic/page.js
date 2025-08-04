@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 import { useBotCreation } from '@/context/BotCreationContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { AlertDialog } from '@/components/ui/AlertDialog'; 
 
 export default function BasicInfoPage() {
     const router = useRouter();
     const { botData, handleInputChange, setProcessedData } = useBotCreation();
     const [errors, setErrors] = useState({});
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false); 
+    const [existingBotData, setExistingBotData] = useState(null); 
 
 
     const validate = () => {
@@ -58,43 +61,66 @@ export default function BasicInfoPage() {
 
             if (checkRes.ok) {
                 if (checkData.reportsExist) {
-                    const proceed = window.confirm(
-                        "A bot with processed data for this URL already exists. Do you want to proceed to the customization page with this data?"
-                    );
-                    if (proceed) {
-                        handleInputChange('url', null, correctedUrl);
-                        setProcessedData(checkData);
-                        router.push('/bot/new/customize');
-                    } else {
-                        // User chose not to proceed, so we stop processing
-                        setIsProcessing(false);
-                    }
-                    return;
+                    setExistingBotData(checkData); // Store existing bot data
+                    setIsAlertDialogOpen(true); // Open the AlertDialog
+                    return; // Stop further processing here, wait for dialog confirmation
                 }
             }
 
-            // If no reports exist, proceed with scraping using the botId from check-reports
+            // If no reports exist, or user chose to proceed with new processing (handled by dialog confirm)
+            await initiateProcessing(correctedUrl, botData.name, checkData.botId);
+
+        } catch (error) {
+            setErrors({ general: 'An error occurred. Please try again.' });
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    // New function to handle confirmation from AlertDialog
+    const handleConfirmExistingBot = () => {
+        setIsAlertDialogOpen(false); // Close dialog
+        if (existingBotData) {
+            handleInputChange('url', null, existingBotData.url); // Ensure URL is correct in context
+            setProcessedData(existingBotData); // Set processed data from existing bot
+            router.push('/bot/new/customize');
+        }
+    };
+
+    // New function to handle starting new processing after dialog cancel
+    const handleCancelExistingBot = async () => {
+        setIsAlertDialogOpen(false); // Close dialog
+        // User chose not to proceed with existing data, initiate new processing
+        await initiateProcessing(botData.url, botData.name, null); // Pass null for botId to create new
+    };
+
+    // Centralized function to initiate processing (either new or re-processing)
+    const initiateProcessing = async (urlToProcess, nameToProcess, botIdToUse) => {
+        setIsProcessing(true);
+        setErrors({});
+        try {
             const res = await fetch('/api/bot/process-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    url: correctedUrl, 
-                    name: botData.name,
-                    botId: checkData.botId // Pass the botId from check-reports
+                body: JSON.stringify({
+                    url: urlToProcess,
+                    name: nameToProcess,
+                    botId: botIdToUse // Pass botId if re-processing existing draft
                 }),
             });
             const data = await res.json();
 
             if (res.ok && data.success) {
                 // Update context with corrected URL before navigating
-                handleInputChange('url', null, correctedUrl);
-                setProcessedData(data);
-                router.push('/bot/new/customize');
+                handleInputChange('url', null, urlToProcess);
+                // We no longer set processedData here, as it's async
+                // Instead, we pass the botId and status to the customize page
+                router.push(`/bot/new/customize?botId=${data.botId}&status=${data.status}`);
             } else {
-                setErrors({ general: data.error || 'Failed to process URL.' });
+                setErrors({ general: data.error || 'Failed to initiate processing.' });
             }
         } catch (error) {
-            setErrors({ general: 'An error occurred. Please try again.' });
+            setErrors({ general: 'An error occurred while initiating processing. Please try again.' });
         } finally {
             setIsProcessing(false);
         }
@@ -174,6 +200,17 @@ export default function BasicInfoPage() {
             >
                 {isProcessing ? 'Processing...' : 'Next Step'}
             </motion.button>
+
+            {/* AlertDialog for existing reports */}
+            <AlertDialog
+                isOpen={isAlertDialogOpen}
+                onClose={() => setIsAlertDialogOpen(false)}
+                onConfirm={handleConfirmExistingBot}
+                title="Existing Bot Data Found"
+                message="A bot with processed data for this URL already exists. Do you want to proceed to the customization page with this data?"
+                confirmText="Proceed with Existing Data"
+                cancelText="Start New Processing"
+            />
         </motion.div>
     );
 } 

@@ -17,9 +17,9 @@ export async function POST(request) {
     await connectDB();
     const User = mongoose.models.User || mongoose.model('User');
 
-    
+
     const result = await User.updateOne(
-      { 'bots.botId': botId },
+      { _id: decoded.id, 'bots.botId': botId }, 
       { $set: { 'bots.$.status': status } }
     );
 

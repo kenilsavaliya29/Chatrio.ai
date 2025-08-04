@@ -78,7 +78,7 @@ export async function POST(req) {
             botId: newBotId,
             name: name,
             url: url,
-            status: 'draft',
+            status: 'processing', 
             process: {
                 reports: false,
                 customization: false,

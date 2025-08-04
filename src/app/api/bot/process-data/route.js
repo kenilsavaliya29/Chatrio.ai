@@ -32,6 +32,12 @@ export async function POST(req) {
     }
     console.log(`[API /process-data] Token verified for user: ${decoded.id}`);
 
+    // Fetch the user document here so it's available for bot operations
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
     const body = await req.json();
     console.log('[API /process-data] Request body:', body);
 
@@ -47,95 +53,108 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 });
     }
 
-    console.log(`[API /process-data] Starting processing for URL: ${url}`);
-
-    // --- MVP Step 1: Scrape website ---
-    console.log('[API /process-data] Step 1: Starting web scraper...');
-    const scrapingReport = await scrapeWebsite(url);
-    
-    if (scrapingReport.error) {
-      console.error('[API /process-data] Scraping failed:', scrapingReport.error);
-      return NextResponse.json({ 
-        error: `Failed to scrape website: ${scrapingReport.error}`,
-        details: scrapingReport.errors 
-      }, { status: 500 });
-    }
-    console.log('[API /process-data] Scraping completed successfully.');
-
-    // --- MVP Step 2: Generate RAG context ---
-    console.log('[API /process-data] Step 2: Starting RAG processing...');
-    const ragContext = await processScrapingReport(scrapingReport);
-    if (!ragContext) {
-      throw new Error('RAG context generation failed');
-    }
-    console.log('[API /process-data] RAG context generated successfully.');
-
-    // --- MVP Step 3: Store in MongoDB ---
-    console.log(`[API /process-data] Step 3: Finding user ${decoded.id} in DB...`);
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
     let finalBotId;
-    
+    let botExists = false;
+
     if (botId) {
-      // Bot already exists as draft, update it
-      console.log(`[API /process-data] Updating existing bot: ${botId}`);
-      const existingBot = user.bots.find(bot => bot.botId === botId);
-      if (existingBot) {
-        existingBot.ragContext = ragContext;
-        existingBot.scrapingReport = scrapingReport;
-        // Initialize process object if it doesn't exist
-        if (!existingBot.process) {
-          existingBot.process = {
-            reports: false,
-            customization: false,
-            deployed: false
-          };
-        }
-        existingBot.process.reports = true;
-        existingBot.updatedAt = new Date();
+      // Attempt to find and update an existing bot for this user
+      const existingBotIndex = user.bots.findIndex(b => b.botId === botId);
+      if (existingBotIndex !== -1) {
+        user.bots[existingBotIndex].status = 'processing';
+        user.bots[existingBotIndex].url = url; // Update URL if changed
+        user.bots[existingBotIndex].name = name || user.bots[existingBotIndex].name; // Update name if changed
+        user.bots[existingBotIndex].updatedAt = new Date();
         finalBotId = botId;
+        botExists = true;
+        console.log(`[API /process-data] Updating existing bot ${botId} to processing status.`);
       } else {
-        return NextResponse.json({ error: 'Bot draft not found' }, { status: 404 });
+        // If botId was provided but not found for this user, it's an error
+        return NextResponse.json({ error: 'Bot not found for this user' }, { status: 404 });
       }
     } else {
-      // Create new bot
+      // Create a new bot entry
       finalBotId = uuidv4();
-      console.log(`[API /process-data] Generated new bot ID: ${finalBotId}`);
-
-    const newBotData = {
+      const newBotData = {
         botId: finalBotId,
-      name: name || 'My New Bot',
-      url: url,
-      status: 'processing',
-      ragContext: ragContext,
-      scrapingReport: scrapingReport,
+        name: name || 'My New Bot',
+        url: url,
+        status: 'processing',
         process: {
-          reports: true,
+          reports: false,
           customization: false,
           deployed: false
         },
-      createdAt: new Date(),
-    };
-    
-    if (!user.bots) {
-      user.bots = [];
-    }
-    user.bots.push(newBotData);
+        createdAt: new Date(),
+      };
+      if (!user.bots) {
+        user.bots = [];
+      }
+      user.bots.push(newBotData);
+      console.log(`[API /process-data] Created new bot ${finalBotId} with processing status.`);
     }
 
-    console.log('[API /process-data] Saving bot data to database...');
-    await user.save();
-    console.log('[API /process-data] Bot data saved successfully.');
+    await user.save(); // Save the user document with the updated/new bot status
 
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Website processed successfully!',
+    // --- TEMPORARY: Synchronous Processing for Local Testing ---
+    // In production, this entire block (scraping and RAG) MUST be moved to a background worker.
+    console.log(`[API /process-data] Starting background processing for bot ${finalBotId} (TEMPORARY SYNC).`);
+
+    let processingSuccess = true;
+    let processingMessage = 'Bot processing initiated.';
+
+    try {
+      // Step 1: Scrape website
+      console.log('[API /process-data] Step 1: Starting web scraper...');
+      const scrapingReport = await scrapeWebsite(url);
+      
+      if (scrapingReport.error) {
+        throw new Error(`Failed to scrape website: ${scrapingReport.error}`);
+      }
+      console.log('[API /process-data] Scraping completed successfully.');
+
+      // Step 2: Generate RAG context
+      console.log('[API /process-data] Step 2: Starting RAG processing...');
+      const ragContext = await processScrapingReport(scrapingReport);
+      if (!ragContext) {
+        throw new Error('RAG context generation failed');
+      }
+      console.log('[API /process-data] RAG context generated successfully.');
+
+      // Update bot with processed data and set status to active
+      const botToUpdate = user.bots.find(b => b.botId === finalBotId);
+      if (botToUpdate) {
+        botToUpdate.ragContext = ragContext;
+        botToUpdate.scrapingReport = scrapingReport;
+        botToUpdate.process.reports = true;
+        botToUpdate.status = 'active'; // Set to active after successful processing
+        botToUpdate.updatedAt = new Date();
+        await user.save(); // Save user with updated bot data
+        console.log(`[API /process-data] Bot ${finalBotId} successfully processed and set to active.`);
+        processingMessage = 'Bot processed successfully!';
+      } else {
+        throw new Error('Bot not found in user document after processing.');
+      }
+
+    } catch (processingError) {
+      processingSuccess = false;
+      processingMessage = `Bot processing failed: ${processingError.message}`;
+      console.error('[API /process-data] Processing failed:', processingError);
+      // Set bot status to inactive or error if processing fails
+      const botToUpdate = user.bots.find(b => b.botId === finalBotId);
+      if (botToUpdate) {
+        botToUpdate.status = 'inactive'; // Or 'error' status
+        botToUpdate.updatedAt = new Date();
+        await user.save();
+      }
+    }
+    // --- END TEMPORARY SYNC PROCESSING ---
+
+    return NextResponse.json({
+      success: processingSuccess,
+      message: processingMessage,
       botId: finalBotId,
-      ragContext: ragContext
-    });
+      status: processingSuccess ? 'active' : 'inactive' // Return final status
+    }, { status: processingSuccess ? 200 : 500 }); // Return 200 on success, 500 on failure
 
   } catch (error) {
     console.error('[API /process-data] Critical error:', error);
