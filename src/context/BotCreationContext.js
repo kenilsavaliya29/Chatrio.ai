@@ -66,6 +66,7 @@ const initialBotData = {
     animationDuration: '0.3s',
     animationEasing: 'ease-out',
     slideDirection: 'bottom-right',
+    scriptCode: '', 
 };
 
 export function BotCreationProvider({ children }) {
@@ -137,7 +138,7 @@ export function BotCreationProvider({ children }) {
     };
 
     const handleInputChange = (category, field, value) => {
-        if (field) { // Nested object
+        if (field) { 
             setBotData(prev => ({
                 ...prev,
                 [category]: {
@@ -145,7 +146,7 @@ export function BotCreationProvider({ children }) {
                     [field]: value
                 }
             }));
-        } else { // Top-level property
+        } else { 
             setBotData(prev => ({
                 ...prev,
                 [category]: value

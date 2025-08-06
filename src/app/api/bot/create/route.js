@@ -3,8 +3,6 @@ import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
 import User from '@/server/models/user.model';
-import fs from 'fs';
-import path from 'path';
 
 export async function POST(req) {
     try {

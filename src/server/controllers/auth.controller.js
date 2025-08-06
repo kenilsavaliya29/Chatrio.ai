@@ -95,6 +95,7 @@ export const getMe = async (req) => {
     }
 
     const decoded = verifyToken(token);
+
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }

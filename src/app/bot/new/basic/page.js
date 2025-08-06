@@ -61,13 +61,12 @@ export default function BasicInfoPage() {
 
             if (checkRes.ok) {
                 if (checkData.reportsExist) {
-                    setExistingBotData(checkData); // Store existing bot data
-                    setIsAlertDialogOpen(true); // Open the AlertDialog
-                    return; // Stop further processing here, wait for dialog confirmation
+                    setExistingBotData(checkData);
+                    setIsAlertDialogOpen(true); 
+                    return; 
                 }
             }
 
-            // If no reports exist, or user chose to proceed with new processing (handled by dialog confirm)
             await initiateProcessing(correctedUrl, botData.name, checkData.botId);
 
         } catch (error) {
@@ -77,9 +76,8 @@ export default function BasicInfoPage() {
         }
     };
 
-    // New function to handle confirmation from AlertDialog
     const handleConfirmExistingBot = () => {
-        setIsAlertDialogOpen(false); // Close dialog
+        setIsAlertDialogOpen(false);
         if (existingBotData) {
             handleInputChange('url', null, existingBotData.url); // Ensure URL is correct in context
             setProcessedData(existingBotData); // Set processed data from existing bot
@@ -87,14 +85,6 @@ export default function BasicInfoPage() {
         }
     };
 
-    // New function to handle starting new processing after dialog cancel
-    const handleCancelExistingBot = async () => {
-        setIsAlertDialogOpen(false); // Close dialog
-        // User chose not to proceed with existing data, initiate new processing
-        await initiateProcessing(botData.url, botData.name, null); // Pass null for botId to create new
-    };
-
-    // Centralized function to initiate processing (either new or re-processing)
     const initiateProcessing = async (urlToProcess, nameToProcess, botIdToUse) => {
         setIsProcessing(true);
         setErrors({});
@@ -105,16 +95,13 @@ export default function BasicInfoPage() {
                 body: JSON.stringify({
                     url: urlToProcess,
                     name: nameToProcess,
-                    botId: botIdToUse // Pass botId if re-processing existing draft
+                    botId: botIdToUse 
                 }),
             });
             const data = await res.json();
 
             if (res.ok && data.success) {
-                // Update context with corrected URL before navigating
                 handleInputChange('url', null, urlToProcess);
-                // We no longer set processedData here, as it's async
-                // Instead, we pass the botId and status to the customize page
                 router.push(`/bot/new/customize?botId=${data.botId}&status=${data.status}`);
             } else {
                 setErrors({ general: data.error || 'Failed to initiate processing.' });
@@ -201,7 +188,6 @@ export default function BasicInfoPage() {
                 {isProcessing ? 'Processing...' : 'Next Step'}
             </motion.button>
 
-            {/* AlertDialog for existing reports */}
             <AlertDialog
                 isOpen={isAlertDialogOpen}
                 onClose={() => setIsAlertDialogOpen(false)}

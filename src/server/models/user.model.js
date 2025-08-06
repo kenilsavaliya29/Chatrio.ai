@@ -88,6 +88,7 @@ const botSchema = new mongoose.Schema({
     colorTheme: String,
     darkMode: Boolean,
   },
+  scriptCode: { type: String },
   ragContext: { type: Object }, // NOT SCALABLE: For MVP only
   scrapingReport: { type: Object }, // NOT SCALABLE: For MVP only
   createdAt: { type: Date, default: Date.now },

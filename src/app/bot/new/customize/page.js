@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBotCreation } from '@/context/BotCreationContext';
 import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation'; // Import useSearchParams
-import { useEffect } from 'react'; // Ensure useEffect is imported
-import { Loader2 } from 'lucide-react'; // For loading spinner
+import { useSearchParams } from 'next/navigation'; 
+import { useEffect } from 'react';  
+import { Loader2 } from 'lucide-react'; 
 
 const TextInput = ({ label, value, onChange, placeholder }) => (
     <div>
@@ -56,13 +56,13 @@ const ColorInput = ({ label, value, onChange }) => (
 
 export default function SimpleCustomizePage() {
     const router = useRouter();
-    const searchParams = useSearchParams(); // Get search params
-    const { botData, handleInputChange, setEmbedCode, processedData, clearBotData } = useBotCreation();
+    const searchParams = useSearchParams(); 
+    const { botData, handleInputChange } = useBotCreation();
     const [isProcessing, setIsProcessing] = useState(false);
 
     const [botId, setBotId] = useState(null);
-    const [botStatus, setBotStatus] = useState('loading'); // 'loading', 'processing', 'active', 'inactive', 'error'
-    const [currentBotConfig, setCurrentBotConfig] = useState(null); // Full bot config from DB
+    const [botStatus, setBotStatus] = useState('loading'); 
+    // const [currentBotConfig, setCurrentBotConfig] = useState(null); 
     const [fetchError, setFetchError] = useState(null);
 
     useEffect(() => {
@@ -76,7 +76,7 @@ export default function SimpleCustomizePage() {
         }
 
         setBotId(id);
-        setBotStatus(status || 'loading'); // Set initial status from URL or 'loading'
+        setBotStatus(status || 'loading'); 
 
         const fetchBotConfig = async () => {
             try {
@@ -84,15 +84,13 @@ export default function SimpleCustomizePage() {
                 const data = await res.json();
 
                 if (res.ok) {
-                    setCurrentBotConfig(data.config); // Set the full config
-                    setBotStatus(data.status); // Update status from DB
-                    // Pre-fill botData context with fetched config for customization
+                    // setCurrentBotConfig(data.config); 
+                    setBotStatus(data.status); 
                     handleInputChange('botName', null, data.name);
                     handleInputChange('greetingMessage', null, data.config.Identity?.greetingMessage);
                     handleInputChange('tone', null, data.config.Identity?.tone);
                     handleInputChange('headerBg', null, data.config.Colors?.headerBg);
                     handleInputChange('launcherBg', null, data.config.Colors?.launcherBg);
-                    // ... and other fields as needed
                 } else {
                     setFetchError(data.error || 'Failed to fetch bot configuration.');
                     setBotStatus('error');
@@ -110,27 +108,24 @@ export default function SimpleCustomizePage() {
                 const data = await res.json();
                 if (res.ok && data.status !== 'processing') {
                     clearInterval(pollInterval);
-                    setBotStatus(data.status); // Update to active/inactive
-                    setCurrentBotConfig(data.config); // Set the full config
-                    // Pre-fill botData context with fetched config for customization
+                    setBotStatus(data.status); 
+                    // setCurrentBotConfig(data.config); 
                     handleInputChange('botName', null, data.name);
                     handleInputChange('greetingMessage', null, data.config.Identity?.greetingMessage);
                     handleInputChange('tone', null, data.config.Identity?.tone);
                     handleInputChange('headerBg', null, data.config.Colors?.headerBg);
                     handleInputChange('launcherBg', null, data.config.Colors?.launcherBg);
-                    // ... and other fields as needed
                 } else if (!res.ok) {
                     clearInterval(pollInterval);
                     setFetchError(data.error || 'Failed to poll bot status.');
                     setBotStatus('error');
                 }
-            }, 5000); // Poll every 5 seconds
-            return () => clearInterval(pollInterval); // Cleanup on unmount
+            }, 5000); 
+            return () => clearInterval(pollInterval); 
         } else if (id) {
-            // If not processing, fetch config immediately
             fetchBotConfig();
         }
-    }, [botId, searchParams]); // Re-run if botId or searchParams change
+    }, [botId, searchParams]); 
 
     const handleUpdateBotConfig = async () => {
         setIsProcessing(true);
@@ -141,6 +136,7 @@ export default function SimpleCustomizePage() {
                 tone: botData.tone,
                 headerBg: botData.headerBg,
                 launcherBg: botData.launcherBg,
+                scriptCode: botData.scriptCode, 
             };
 
             const res = await fetch(`/api/bot/${botId}`, {
@@ -164,7 +160,6 @@ export default function SimpleCustomizePage() {
         }
     };
 
-    // Conditional rendering based on botStatus
     if (botStatus === 'loading') {
         return (
             <div className="flex items-center justify-center h-64">
@@ -194,7 +189,6 @@ export default function SimpleCustomizePage() {
         );
     }
 
-    // Render customization form only if bot is active/inactive
     return (
         <motion.div
             initial={{ x: 20, opacity: 0 }}

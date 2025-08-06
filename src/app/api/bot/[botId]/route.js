@@ -36,6 +36,7 @@ export async function GET(request, { params }) {
         url: bot.url,
         status: bot.status, 
         config: bot.config,
+        scriptCode: bot.scriptCode, 
     });
 
   } catch (error) {
@@ -136,6 +137,7 @@ export async function PUT(request, { params }) {
       // Merge with existing config to preserve any fields not sent from frontend
       user.bots[botIndex].config = { ...user.bots[botIndex].config, ...newNestedConfig };
       user.bots[botIndex].name = updatedConfig.botName || user.bots[botIndex].name;
+      user.bots[botIndex].scriptCode = updatedConfig.scriptCode || user.bots[botIndex].scriptCode; 
       
       await user.save();
   

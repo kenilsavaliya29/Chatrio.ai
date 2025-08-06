@@ -6,13 +6,15 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function DeployPage() {
-    const { embedCode, clearBotData } = useBotCreation();
+    const { embedCode, clearBotData, handleInputChange } = useBotCreation();
     const router = useRouter();
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         if (!embedCode) {
             router.push('/bot/new/basic');
+        } else {
+            handleInputChange('scriptCode', null, embedCode);
         }
     }, [embedCode, router]);
 

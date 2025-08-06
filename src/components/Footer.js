@@ -65,7 +65,6 @@ const Footer = () => {
                             <ul className="space-y-3">
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">About</Link></li>
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Blog</Link></li>
-                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Careers</Link></li>
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Contact</Link></li>
                             </ul>
                         </div>
@@ -73,7 +72,7 @@ const Footer = () => {
                             <h4 className="font-semibold text-foreground mb-4">Resources</h4>
                             <ul className="space-y-3">
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Documentation</Link></li>
-                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">API Status</Link></li>
+                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Guides</Link></li>
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Support</Link></li>
                             </ul>
                         </div>

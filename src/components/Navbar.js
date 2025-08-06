@@ -50,6 +50,11 @@ const Navbar = () => {
                         {/* Navigation Links - Center */}
                         <ul className='hidden lg:flex items-center justify-center space-x-6 lg:space-x-8 font-jost'>
                             <li className="nav-item">
+                                <Link href="/dashboard" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    Dashboard
+                                </Link>
+                            </li>
+                            <li className="nav-item">
                                 <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Chat Agent
                                 </Link>
