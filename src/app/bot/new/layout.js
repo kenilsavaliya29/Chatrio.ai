@@ -28,9 +28,9 @@ const ProgressBar = () => {
                                     opacity: 1
                                 }}
                                 className={`w-10 h-10 rounded-full flex items-center justify-center ${currentStepId > step.id
-                                        ? 'bg-red text-background'
+                                        ? 'bg-red text-primary border-2 border-primary'
                                         : currentStepId === step.id
-                                            ? 'bg-white text-primary border-2 border-primary'
+                                            ? 'bg-background text-primary border-2 border-primary'
                                             : 'bg-primary border-2 border-border text-background'
                                     }`}
                             >
@@ -42,7 +42,7 @@ const ProgressBar = () => {
                                 transition={{ delay: 0.2 }}
                                 className="mt-2 text-center"
                             >
-                                <div className={`font-medium text-background`}>
+                                <div className={`font-medium text-primary`}>
                                     {step.title}
                                 </div>
                             </motion.div>

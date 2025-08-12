@@ -37,7 +37,7 @@ export async function POST(req) {
     
     // Build a simplified prompt for the MVP
     const prompt = `
-      You are an AI assistant for "${ragContext.BUSINESS_PROFILE?.company_name}".
+      You are an AI assistant for "${ragContext.BUSINESS_PROFILE?.name}".
       Your personality should be: ${JSON.stringify(ragContext.CHATBOT_PERSONALITY, null, 2)}.
       
       Strictly use the following information to answer the user's question. Do not use any other knowledge.

@@ -55,7 +55,7 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                <Link href="/" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Chat Agent
                                 </Link>
                             </li>

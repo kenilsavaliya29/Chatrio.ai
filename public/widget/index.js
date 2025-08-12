@@ -3,16 +3,17 @@
     console.error('Chatrio: Missing configuration.');
     return;
   }
-
+  
   const baseUrl = (window.chatrioConfig.apiUrl.split('/api/bot/chat')[0] || window.location.origin).replace(/\/$/, '');
-
+  
   // Fetch bot configuration
   let config = {};
   try {
+    console.log('here')
+    console.log(window.chatrioConfig.botId)
     const res = await fetch(`${baseUrl}/api/bot/config?botId=${window.chatrioConfig.botId}`);
     config = await res.json();
-
-   
+    console.log(config.status)
     if (config.status !== 'active') {
       console.warn(`Chatrio: Bot is ${config.status}. Widget will not load.`);
       return; 

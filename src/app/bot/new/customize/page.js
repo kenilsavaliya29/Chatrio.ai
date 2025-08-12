@@ -1,241 +1,227 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, memo, useRef } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import CustomizePanel from '@/components/customize/CustomizePanel';
+import { Loader2 } from 'lucide-react';
+import { ShadowChatbotWidget } from '@/components/customize/ShadowChatbotWidget';
 import { useBotCreation } from '@/context/BotCreationContext';
-import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation'; 
-import { useEffect } from 'react';  
-import { Loader2 } from 'lucide-react'; 
 
-const TextInput = ({ label, value, onChange, placeholder }) => (
-    <div>
-        <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
-        <input 
-            type="text" 
-            value={value || ''} 
-            onChange={onChange} 
-            placeholder={placeholder} 
-            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background" 
-        />
-    </div>
-);
 
-const SelectInput = ({ label, value, onChange, options }) => (
-    <div>
-        <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
-        <select 
-            value={value || ''} 
-            onChange={onChange} 
-            className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
-        >
-            {options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-        </select>
-    </div>
-);
+const ChatbotPreview = memo(({ botData }) => {
+    const [isOpen, setIsOpen] = useState(true);
+    const [iframeLoadFailed, setIframeLoadFailed] = useState(false);
+    const previewUrl = botData?.url || '';
+    
+    // Debug: Log the botData in the preview component
+    console.log('ChatbotPreview botData:', botData);
 
-const ColorInput = ({ label, value, onChange }) => (
-    <div>
-        <label className="block text-sm font-medium text-foreground mb-1">{label}</label>
-        <div className="relative">
-            <input 
-                type="text" 
-                value={value || '#000000'} 
-                onChange={onChange} 
-                className="w-full pl-10 pr-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
-            />
-            <input 
-                type="color" 
-                value={value || '#000000'} 
-                onChange={onChange}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 p-0 border-none cursor-pointer"
-            />
+    return (
+        <div className="relative w-full h-full bg-gray-100 rounded-xl overflow-hidden">
+            <div className="absolute inset-0">
+                {previewUrl ? (
+                    <iframe src={previewUrl} title="Website Preview" className="w-full h-full" sandbox="allow-scripts allow-same-origin" />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center"><p className="text-muted-foreground">No URL provided</p></div>
+                )}
+                {iframeLoadFailed && previewUrl && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white text-center p-4">
+                        <p>
+                            Could not load "{previewUrl}". This might be due to security restrictions (e.g., Content Security Policy). <br />
+                            Displaying <a href="https://example.com" target="_blank" rel="noopener noreferrer" className="underline">example.com</a> instead.
+                        </p>
+                    </div>
+                )}
+            </div>
+            <div className="absolute inset-0 bg-black/5 pointer-events-none" />
+            <ShadowChatbotWidget botData={botData} isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
-    </div>
-);
+    );
+});
+ChatbotPreview.displayName = 'ChatbotPreview';
 
-export default function SimpleCustomizePage() {
+export default function EditBotPage() {
     const router = useRouter();
-    const searchParams = useSearchParams(); 
-    const { botData, handleInputChange } = useBotCreation();
-    const [isProcessing, setIsProcessing] = useState(false);
+    const params = useParams();
+    const { botId } = params;
+    // Destructure embedCode (renamed to latestEmbedCode to avoid conflict) and setEmbedCode from useBotCreation
+    const { embedCode: latestEmbedCode, setEmbedCode } = useBotCreation(); 
 
-    const [botId, setBotId] = useState(null);
-    const [botStatus, setBotStatus] = useState('loading'); 
-    // const [currentBotConfig, setCurrentBotConfig] = useState(null); 
-    const [fetchError, setFetchError] = useState(null);
+    const [botData, setBotData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        const id = searchParams.get('botId');
-        const status = searchParams.get('status');
+        if (!botId) return;
 
-        if (!id) {
-            setFetchError('Bot ID is missing from URL.');
-            setBotStatus('error');
-            return;
-        }
-
-        setBotId(id);
-        setBotStatus(status || 'loading'); 
-
-        const fetchBotConfig = async () => {
+        const fetchBotData = async () => {
             try {
-                const res = await fetch(`/api/bot/${id}`);
-                const data = await res.json();
-
+                setLoading(true);
+                const res = await fetch(`/api/bot/${botId}`);
                 if (res.ok) {
-                    // setCurrentBotConfig(data.config); 
-                    setBotStatus(data.status); 
-                    handleInputChange('botName', null, data.name);
-                    handleInputChange('greetingMessage', null, data.config.Identity?.greetingMessage);
-                    handleInputChange('tone', null, data.config.Identity?.tone);
-                    handleInputChange('headerBg', null, data.config.Colors?.headerBg);
-                    handleInputChange('launcherBg', null, data.config.Colors?.launcherBg);
+                    const data = await res.json();
+                    const convertOldToNew = (oldConfig) => {
+                        if (!oldConfig) return {};
+
+                        return {
+                            // Bot Identity
+                            botName: oldConfig.Identity?.botName || 'Chatrio AI',
+                            greetingMessage: oldConfig.Identity?.greetingMessage || 'Hi there! How can I help you today?',
+                            inputPlaceholder: oldConfig.Identity?.inputPlaceholder || 'Type a message...',
+                            
+                            // Branding
+                            logoUrl: oldConfig.Branding?.logoUrl || '',
+                            launcherIcon: oldConfig.Branding?.launcherIcon || '💬',
+                            launcherIconUrl: oldConfig.Branding?.launcherIconUrl || '',
+                            sendButtonIcon: oldConfig.Branding?.sendButtonIcon || 'Send',
+                            
+                            // Colors
+                            headerBg: oldConfig.Colors?.headerBg || '#000000',
+                            headerText: oldConfig.Colors?.headerText || '#ffffff',
+                            backgroundColor: oldConfig.Colors?.backgroundColor || '#ffffff',
+                            textColor: oldConfig.Colors?.textColor || '#000000',
+                            borderColor: oldConfig.Colors?.borderColor || '#e5e5e5',
+                            messagesBg: oldConfig.Colors?.messagesBg || '#fafbfc',
+                            inputBg: oldConfig.Colors?.inputBg || '#ffffff',
+                            userBg: oldConfig.Colors?.userBg || '#e6f0ff',
+                            userText: oldConfig.Colors?.userText || '#222222',
+                            assistantBg: oldConfig.Colors?.assistantBg || '#f3f3f3',
+                            assistantText: oldConfig.Colors?.assistantText || '#444444',
+                            sendButtonBg: oldConfig.Colors?.sendButtonBg || '#000000',
+                            sendButtonText: oldConfig.Colors?.sendButtonText || '#fff',
+                            launcherBg: oldConfig.Colors?.launcherBg || '#000000',
+                            launcherText: oldConfig.Colors?.launcherText || '#fff',
+                            
+                            // Typography
+                            fontFamily: oldConfig.Typography?.fontFamily || 'Inter',
+                            fontSize: oldConfig.Typography?.fontSize || '14px',
+                            headerFontSize: oldConfig.Typography?.headerFontSize || '16px',
+                            messageFontSize: oldConfig.Typography?.messageFontSize || '14px',
+                            fontWeight: oldConfig.Typography?.fontWeight || '400',
+                            
+                            // Sizing
+                            widgetWidth: oldConfig.Sizing?.widgetWidth || '350px',
+                            widgetHeight: oldConfig.Sizing?.widgetHeight || '500px',
+                            borderRadius: oldConfig.Sizing?.borderRadius || '16px',
+                            messageBorderRadius: oldConfig.Sizing?.messageBorderRadius || '12px',
+                            launcherSize: oldConfig.Sizing?.launcherSize || '60px',
+                            
+                            // Behavior
+                            opacity: oldConfig.Behavior?.opacity || 1,
+                            autoOpen: oldConfig.Behavior?.autoOpen || false,
+                            autoOpenDelay: oldConfig.Behavior?.autoOpenDelay || 3000,
+                            showTypingIndicator: oldConfig.Behavior?.showTypingIndicator !== false,
+                            soundEnabled: oldConfig.Behavior?.soundEnabled || false,
+                            
+                            // Animation
+                            animationType: oldConfig.Animation?.animationType || 'scale',
+                            animationDuration: oldConfig.Animation?.animationDuration || '0.3s',
+                            animationEasing: oldConfig.Animation?.animationEasing || 'ease-out',
+                            slideDirection: oldConfig.Animation?.slideDirection || 'bottom-right',
+                        };
+                    };
+
+                    // Convert the config and ensure all required fields have default values
+                    const convertedConfig = convertOldToNew(data.config);
+                    const botDataWithDefaults = {
+                        ...convertedConfig,
+
+                        url: data.url,
+                        // CRITICAL: Override scriptCode with the latest from context if available
+                        scriptCode: latestEmbedCode || data.scriptCode, // Use latestEmbedCode if it exists, otherwise use the one from the database
+                    };
+
+                    console.log('Bot data being set for customization:', botDataWithDefaults); // Add this for debugging
+                    setBotData(botDataWithDefaults);
                 } else {
-                    setFetchError(data.error || 'Failed to fetch bot configuration.');
-                    setBotStatus('error');
+                    router.push('/dashboard?tab=customize');
                 }
-            } catch (err) {
-                setFetchError('Network error or failed to fetch bot config.');
-                setBotStatus('error');
+            } catch (error) {
+                console.error("Failed to fetch bot data:", error);
+                router.push('/dashboard?tab=customize');
+            } finally {
+                setLoading(false);
             }
         };
+        fetchBotData();
+    }, [botId, router, latestEmbedCode]); // Add latestEmbedCode to dependency array
 
-        if (status === 'processing') {
-            // Start polling for status updates
-            const pollInterval = setInterval(async () => {
-                const res = await fetch(`/api/bot/${id}`);
-                const data = await res.json();
-                if (res.ok && data.status !== 'processing') {
-                    clearInterval(pollInterval);
-                    setBotStatus(data.status); 
-                    // setCurrentBotConfig(data.config); 
-                    handleInputChange('botName', null, data.name);
-                    handleInputChange('greetingMessage', null, data.config.Identity?.greetingMessage);
-                    handleInputChange('tone', null, data.config.Identity?.tone);
-                    handleInputChange('headerBg', null, data.config.Colors?.headerBg);
-                    handleInputChange('launcherBg', null, data.config.Colors?.launcherBg);
-                } else if (!res.ok) {
-                    clearInterval(pollInterval);
-                    setFetchError(data.error || 'Failed to poll bot status.');
-                    setBotStatus('error');
-                }
-            }, 5000); 
-            return () => clearInterval(pollInterval); 
-        } else if (id) {
-            fetchBotConfig();
-        }
-    }, [botId, searchParams]); 
+    const handleInputChange = (field, key, value) => {
+        setBotData(prev => {
+            const newState = { ...prev };
+            // Ensure sizing properties always have 'px' unit if they are numeric
+            if (['widgetWidth', 'widgetHeight', 'borderRadius', 'messageBorderRadius', 'launcherSize'].includes(field) && typeof value === 'number') {
+                newState[field] = `${value}px`;
+            } else {
+                newState[field] = value;
+            }
+            return newState;
+        });
+    };
 
-    const handleUpdateBotConfig = async () => {
-        setIsProcessing(true);
+    const handleSaveChanges = async () => {
+        setIsSaving(true);
         try {
-            const finalBotData = {
-                botName: botData.botName,
-                greetingMessage: botData.greetingMessage,
-                tone: botData.tone,
-                headerBg: botData.headerBg,
-                launcherBg: botData.launcherBg,
-                scriptCode: botData.scriptCode, 
-            };
-
-            const res = await fetch(`/api/bot/${botId}`, {
+            // First, save the updated bot configuration
+            const resUpdate = await fetch(`/api/bot/${botId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(finalBotData),
+                body: JSON.stringify(botData),
             });
 
-            const data = await res.json();
-           
-            if (res.ok) {
+            if (resUpdate.ok) {
                 console.log("Bot configuration updated successfully!");
-                router.push(`/bot/new/deploy?botId=${botId}`);
+
+                // Second, call the /api/bot/create endpoint to get the latest embed code
+                const resCreate = await fetch('/api/bot/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ botId: botId, ...botData }), // Send botId and current botData
+                });
+
+                const dataCreate = await resCreate.json();
+
+                if (resCreate.ok && dataCreate.success) {
+                    console.log("New embed code generated:", dataCreate.embedCode);
+                    setEmbedCode(dataCreate.embedCode); // Update embedCode in context
+                    router.push('/dashboard?tab=customize&message=Changes saved successfully!&type=success');
+                } else {
+                    console.error("Failed to generate new embed code:", dataCreate.error);
+                    alert(dataCreate.error || 'Failed to generate new embed code.');
+                }
             } else {
-                console.error("Failed to update bot configuration:", data.error);
+                const errorData = await resUpdate.json();
+                alert(errorData.error || 'Failed to save bot changes.'); 
+                console.error("Failed to save bot changes", errorData);
             }
         } catch (error) {
-            console.error("Error updating bot configuration:", error);
+            alert('An unexpected error occurred.'); 
+            console.error("Error saving bot:", error);
         } finally {
-            setIsProcessing(false);
+            setIsSaving(false);
         }
     };
 
-    if (botStatus === 'loading') {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <Loader2 className="w-6 h-6 animate-spin" />
-                <p className="ml-2 text-muted-foreground">Loading bot configuration...</p>
-            </div>
-        );
+    if (loading || !botData) {
+        return <div className="flex h-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
     }
 
-    if (botStatus === 'processing') {
-        return (
-            <div className="flex items-center justify-center h-64 flex-col">
-                <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-                <h2 className="text-2xl font-bold text-foreground mb-2">Processing Your Bot...</h2>
-                <p className="text-muted-foreground text-center">This may take a few minutes as we scrape your website and train the AI.</p>
-                <p className="text-muted-foreground text-center text-sm mt-2">You can customize basic settings now, or come back later.</p>
-            </div>
-        );
-    }
-
-    if (botStatus === 'error') {
-        return (
-            <div className="flex items-center justify-center h-64 flex-col text-destructive">
-                <p className="text-lg font-medium">Error: {fetchError || 'Could not load bot.'}</p>
-                <p className="text-sm text-muted-foreground mt-2">Please go back to the dashboard and try again.</p>
-            </div>
-        );
-    }
+    console.log('BotData for preview:', botData);
 
     return (
-        <motion.div
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            className="space-y-6 max-w-lg mx-auto p-6 sm:p-8"
-        >
-            <div className="bg-card rounded-lg p-6 border border-border shadow-sm space-y-4">
-                <h2 className="text-2xl font-bold text-foreground">Quick Customize</h2>
-                <p className="text-muted-foreground">Just a few details to get your bot ready. You can change everything else later from your dashboard.</p>
-                
-                <TextInput
-                    label="Greeting Message"
-                    value={botData.greetingMessage}
-                    onChange={(e) => handleInputChange('greetingMessage', null, e.target.value)}
-                    placeholder="Hi there! How can I help?"
-                />
-                
-                <SelectInput
-                    label="Bot Tone"
-                    value={botData.tone}
-                    onChange={(e) => handleInputChange('tone', null, e.target.value)}
-                    options={[
-                        { value: 'helpful', label: 'Helpful & Supportive' },
-                        { value: 'friendly', label: 'Friendly & Casual' },
-                        { value: 'professional', label: 'Professional & Formal' }
-                    ]}
-                />
-
-                <ColorInput
-                    label="Primary Color"
-                    value={botData.headerBg}
-                    onChange={(e) => {
-                        handleInputChange('headerBg', null, e.target.value);
-                        handleInputChange('launcherBg', null, e.target.value);
-                    }}
-                />
+        <div className="flex h-full w-full " style={{ height: 'calc(100vh - 90px)' }}>
+            <div className="w-[75%] h-full relative">
+                <ChatbotPreview botData={botData} />
             </div>
-
-            <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleUpdateBotConfig} 
-                disabled={isProcessing}
-                className="w-full flex justify-center items-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50"
-            >
-                {isProcessing ? 'Saving...' : 'Save & Deploy'}
-            </motion.button>
-        </motion.div>
+            <CustomizePanel
+                botData={botData}
+                handleInputChange={handleInputChange}
+                onBack={() => router.push('/dashboard?tab=customize')}
+                onDeploy={handleSaveChanges}
+                isProcessing={isSaving}
+                deployButtonText="Save Changes"
+            />
+        </div>
     );
 } 

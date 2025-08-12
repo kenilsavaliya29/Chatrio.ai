@@ -9,7 +9,7 @@ import { AlertDialog } from '@/components/ui/AlertDialog';
 
 export default function BasicInfoPage() {
     const router = useRouter();
-    const { botData, handleInputChange, setProcessedData } = useBotCreation();
+    const { botData = {}, handleInputChange, setProcessedData } = useBotCreation(); // Provide default empty object
     const [errors, setErrors] = useState({});
     const [isProcessing, setIsProcessing] = useState(false);
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false); 
@@ -58,6 +58,7 @@ export default function BasicInfoPage() {
                 }),
             });
             const checkData = await checkRes.json();
+            // console.log(checkData)
 
             if (checkRes.ok) {
                 if (checkData.reportsExist) {
@@ -79,9 +80,9 @@ export default function BasicInfoPage() {
     const handleConfirmExistingBot = () => {
         setIsAlertDialogOpen(false);
         if (existingBotData) {
-            handleInputChange('url', null, existingBotData.url); // Ensure URL is correct in context
-            setProcessedData(existingBotData); // Set processed data from existing bot
-            router.push('/bot/new/customize');
+            handleInputChange('url', null, existingBotData.url || ''); 
+            setProcessedData(existingBotData); 
+            router.push(`/bot/new/customize?botId=${existingBotData.botId}&status=${existingBotData.status}`);
         }
     };
 
@@ -148,7 +149,7 @@ export default function BasicInfoPage() {
                         id="bot-url-input"
                         type="url"
                         value={botData.url}
-                        onChange={(e) => handleInputChange('url', null, e.target.value)}
+                        onChange={(e) => handleInputChange('url', null, String(e.target.value || ''))}
                         className={`peer mt-1 block w-full px-3 py-2 border ${errors.url ? 'border-destructive' : 'border-border'} rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background`}
                         placeholder=" "
                         required

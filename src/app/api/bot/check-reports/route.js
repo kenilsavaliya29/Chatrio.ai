@@ -58,7 +58,8 @@ export async function POST(req) {
                 ragContext: existingBotWithReports.ragContext,
                 message: 'Reports already exist for this URL!',
                 // Include any other data that customize page expects
-                scrapingReport: existingBotWithReports.scrapingReport
+                scrapingReport: existingBotWithReports.scrapingReport,
+                status: existingBotWithReports.status
             });
         }
 

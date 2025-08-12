@@ -2,19 +2,21 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import User from '@/server/models/user.model';
 
+
 export async function GET(req) {
     try {
         await connectDB();
 
         const { searchParams } = new URL(req.url);
         const botId = searchParams.get('botId');
-        
+        console.log(botId)
+
         if (!botId) {
             return NextResponse.json({ error: 'Bot ID is required' }, { status: 400 });
         }
 
         // Find the bot by botId across all users
-        const user = await User.findOne({ _id: decoded.id, 'bots.botId': botId }); // CRITICAL: Scopes the query to the authenticated user
+        const user = await User.findOne({ 'bots.botId': botId }); 
         if (!user) {
             return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
         }
@@ -31,14 +33,14 @@ export async function GET(req) {
             botName: config.Identity?.botName || 'Chatrio AI',
             greetingMessage: config.Identity?.greetingMessage || 'Hi there! How can I help you today?',
             inputPlaceholder: config.Identity?.inputPlaceholder || 'Type a message...',
-            status: bot.status, 
-            
+            status: bot.status,
+
             // Branding
             logoUrl: config.Branding?.logoUrl || '',
             launcherIcon: config.Branding?.launcherIcon || '💬',
             launcherIconUrl: config.Branding?.launcherIconUrl || '',
             sendButtonIcon: config.Branding?.sendButtonIcon || 'Send',
-            
+
             // Colors
             headerBg: config.Colors?.headerBg || '#000000',
             headerText: config.Colors?.headerText || '#ffffff',
@@ -55,34 +57,34 @@ export async function GET(req) {
             sendButtonText: config.Colors?.sendButtonText || '#ffffff',
             launcherBg: config.Colors?.launcherBg || '#000000',
             launcherText: config.Colors?.launcherText || '#ffffff',
-            
+
             // Typography
             fontFamily: config.Typography?.fontFamily || 'Inter',
             fontSize: config.Typography?.fontSize || '14px',
             headerFontSize: config.Typography?.headerFontSize || '16px',
             messageFontSize: config.Typography?.messageFontSize || '14px',
             fontWeight: config.Typography?.fontWeight || '400',
-            
+
             // Sizing
             widgetWidth: config.Sizing?.widgetWidth || '350px',
             widgetHeight: config.Sizing?.widgetHeight || '500px',
             borderRadius: config.Sizing?.borderRadius || '16px',
             messageBorderRadius: config.Sizing?.messageBorderRadius || '12px',
             launcherSize: config.Sizing?.launcherSize || '60px',
-            
+
             // Behavior
             opacity: config.Behavior?.opacity || 1,
             autoOpen: config.Behavior?.autoOpen || false,
             autoOpenDelay: config.Behavior?.autoOpenDelay || 3000,
             showTypingIndicator: config.Behavior?.showTypingIndicator !== false,
             soundEnabled: config.Behavior?.soundEnabled || false,
-            
+
             // Animation
             animationType: config.Animation?.animationType || 'scale',
             animationDuration: config.Animation?.animationDuration || '0.3s',
             animationEasing: config.Animation?.animationEasing || 'ease-out',
             slideDirection: config.Animation?.slideDirection || 'bottom-right',
-            
+
             // Legacy fields for backward compatibility
             colorTheme: config.colorTheme,
             darkMode: config.darkMode,

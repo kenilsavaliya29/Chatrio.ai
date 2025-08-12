@@ -2,7 +2,7 @@ import { verifyToken } from '../utils/jwt.utils';
 
 export const protect = async (req) => {
   try {
-    // Get token from cookie
+
     const token = req.cookies.get('token');
 
     if (!token) {
@@ -15,7 +15,7 @@ export const protect = async (req) => {
       return new Response('Not authorized', { status: 401 });
     }
 
-    // Add user to request
+    
     req.user = decoded;
     return null;
   } catch (error) {

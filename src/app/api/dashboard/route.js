@@ -39,7 +39,7 @@ export async function GET(request) {
             activeBots,
             // Keeping total chats as dummy data for now
             // Would need to implement chat logging system first
-            totalChats: 2345
+            totalChats: 0
           }
         };
         break;

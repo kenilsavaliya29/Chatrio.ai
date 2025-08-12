@@ -21,7 +21,7 @@ export async function POST(req) {
     // Get and await the cookie store
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-    
+
     if (!token) {
       return NextResponse.json({ error: 'User not authenticated' }, { status: 401 });
     }
@@ -106,7 +106,7 @@ export async function POST(req) {
       // Step 1: Scrape website
       console.log('[API /process-data] Step 1: Starting web scraper...');
       const scrapingReport = await scrapeWebsite(url);
-      
+
       if (scrapingReport.error) {
         throw new Error(`Failed to scrape website: ${scrapingReport.error}`);
       }
@@ -126,7 +126,7 @@ export async function POST(req) {
         botToUpdate.ragContext = ragContext;
         botToUpdate.scrapingReport = scrapingReport;
         botToUpdate.process.reports = true;
-        botToUpdate.status = 'active'; // Set to active after successful processing
+        botToUpdate.status = 'active';
         botToUpdate.updatedAt = new Date();
         await user.save(); // Save user with updated bot data
         console.log(`[API /process-data] Bot ${finalBotId} successfully processed and set to active.`);
@@ -159,9 +159,9 @@ export async function POST(req) {
   } catch (error) {
     console.error('[API /process-data] Critical error:', error);
     console.error('Error stack trace:', error.stack);
-    
+
     // Send a more detailed error response
-    return NextResponse.json({ 
+    return NextResponse.json({
       error: error.message || 'Failed to process website',
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }, { status: 500 });

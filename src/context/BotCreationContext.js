@@ -74,8 +74,14 @@ export function BotCreationProvider({ children }) {
         // Try to load from localStorage on initial render
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('botCreationData');
-            if (saved) {
-                return JSON.parse(saved);
+            if (saved && saved !== 'null') { // Add check for 'null' string
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error("Error parsing botCreationData from localStorage:", e);
+                    // Fallback to initialBotData if parsing fails
+                    return initialBotData;
+                }
             }
         }
         return initialBotData;

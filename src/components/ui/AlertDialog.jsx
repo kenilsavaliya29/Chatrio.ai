@@ -15,7 +15,7 @@ export function AlertDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-out" style={{ opacity: isOpen ? 1 : 0 }}>
-      <Card className="w-full max-w-md p-6 animate-fade-in">
+      <Card className="w-full max-w-md animate-fade-in">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>

@@ -10,6 +10,7 @@ export default function DeployPage() {
     const router = useRouter();
     const [copied, setCopied] = useState(false);
 
+    // console.log(embedCode)
     useEffect(() => {
         if (!embedCode) {
             router.push('/bot/new/basic');
