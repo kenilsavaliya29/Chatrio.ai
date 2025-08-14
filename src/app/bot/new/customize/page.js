@@ -15,6 +15,7 @@ export default function CustomizePage() {
 
     const [isProcessing, setIsProcessing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(null);
+    const [mounted, setMounted] = useState(false);
 
     // Tone options for the chatbot
     const toneOptions = [
@@ -24,6 +25,10 @@ export default function CustomizePage() {
         { value: 'enthusiastic', label: 'Enthusiastic & Energetic' },
         { value: 'empathetic', label: 'Empathetic & Caring' }
     ];
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         if (!botId || !botData) {
@@ -73,9 +78,12 @@ export default function CustomizePage() {
         }
     };
 
-    if (!botData) {
+    if (!botData || !mounted) {
         return null;
     }
+
+    // Get the header color with a safe fallback
+    const headerColor = botData.headerBg || '#000000';
 
     return (
         <div className="max-w-2xl mx-auto p-6">
@@ -146,10 +154,10 @@ export default function CustomizePage() {
                                 <button
                                     onClick={() => setShowColorPicker('headerBg')}
                                     className="w-full h-12 border border-border rounded-md flex items-center justify-center hover:border-primary transition-colors"
-                                    style={{ backgroundColor: botData.headerBg || '#000000' }}
+                                    style={{ backgroundColor: headerColor }}
                                 >
                                     <span className="text-white text-sm font-medium">
-                                        {botData.headerBg || '#000000'}
+                                        {headerColor}
                                     </span>
                                 </button>
                                 {showColorPicker === 'headerBg' && (
@@ -157,12 +165,12 @@ export default function CustomizePage() {
                                         <div className="fixed inset-0" onClick={() => setShowColorPicker(null)} />
                                         <div className="relative bg-background rounded-lg shadow-xl p-4">
                                             <HexColorPicker
-                                                color={botData.headerBg || '#000000'}
+                                                color={headerColor}
                                                 onChange={(color) => handleColorChange('headerBg', color)}
                                             />
                                             <input
                                                 type="text"
-                                                value={botData.headerBg || '#000000'}
+                                                value={headerColor}
                                                 onChange={(e) => handleColorChange('headerBg', e.target.value)}
                                                 className="mt-2 w-full px-2 py-1 text-sm border rounded"
                                             />
