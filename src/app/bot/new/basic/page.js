@@ -9,7 +9,7 @@ import { AlertDialog } from '@/components/ui/AlertDialog';
 
 export default function BasicInfoPage() {
     const router = useRouter();
-    const { botData = {}, handleInputChange, setProcessedData } = useBotCreation(); // Provide default empty object
+    const { botData = {}, handleInputChange, setProcessedData } = useBotCreation(); 
     const [errors, setErrors] = useState({});
     const [isProcessing, setIsProcessing] = useState(false);
     const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false); 
@@ -100,7 +100,8 @@ export default function BasicInfoPage() {
                 }),
             });
             const data = await res.json();
-
+            // console.log(data)
+            
             if (res.ok && data.success) {
                 handleInputChange('url', null, urlToProcess);
                 router.push(`/bot/new/customize?botId=${data.botId}&status=${data.status}`);

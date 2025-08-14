@@ -11,7 +11,7 @@ export default function CustomizePage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const botId = searchParams.get('botId');
-    const { botData, handleInputChange, setEmbedCode } = useBotCreation();
+    const { botData, handleInputChange, setEmbedCode, setActiveBotId, setBotData } = useBotCreation();
 
     const [isProcessing, setIsProcessing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(null);
@@ -31,13 +31,40 @@ export default function CustomizePage() {
     }, []);
 
     useEffect(() => {
-        if (!botId || !botData) {
+        if (!botId) {
             router.push('/bot/new/basic');
+            return;
         }
-    }, [botId, botData, router]);
+        // Set active botId for namespaced draft storage
+        setActiveBotId(botId);
+
+        // Hydrate from server so DB is source of truth when botId exists
+        let aborted = false;
+        (async () => {
+            try {
+                const res = await fetch(`/api/bot/${botId}`);
+                if (!res.ok) return; // fallback to local draft if needed
+                const data = await res.json();
+                if (aborted) return;
+                const cfg = data?.config || {};
+                // Merge nested config and also mirror a few flat keys used by this page
+                setBotData(prev => ({
+                    ...prev,
+                    ...cfg,
+                    botName: cfg.Identity?.botName ?? prev.botName,
+                    greetingMessage: cfg.Identity?.greetingMessage ?? prev.greetingMessage,
+                    inputPlaceholder: cfg.Identity?.inputPlaceholder ?? prev.inputPlaceholder,
+                    tone: cfg.Identity?.tone ?? prev.tone,
+                }));
+            } catch (e) {
+                // Ignore and keep local state
+            }
+        })();
+        return () => { aborted = true; };
+    }, [botId, setActiveBotId, setBotData]);
 
     const handleColorChange = (colorKey, value) => {
-        handleInputChange(colorKey, null, value);
+        handleInputChange('Colors', colorKey, value);
     };
 
     const handleSaveAndDeploy = async () => {
@@ -83,7 +110,8 @@ export default function CustomizePage() {
     }
 
     // Get the header color with a safe fallback
-    const headerColor = botData.headerBg || '#000000';
+    console.log(botData)
+    const headerColor = botData.Colors.headerBg || '#fff';
 
     return (
         <div className="max-w-2xl mx-auto p-6">
