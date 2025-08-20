@@ -98,6 +98,7 @@ const Navbar = () => {
                                     </div>
                                 </div>
                             </li>
+
                             <li className="nav-item">
                                 <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Pricing
@@ -106,6 +107,11 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     FAQ's
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link href="/embed-guide" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    Embed Guide
                                 </Link>
                             </li>
                         </ul>

@@ -4,6 +4,7 @@ import { useBotCreation } from '@/context/BotCreationContext';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export default function DeployPage() {
     const { embedCode, clearBotData, handleInputChange } = useBotCreation();
@@ -24,7 +25,7 @@ export default function DeployPage() {
     }
 
     const handleNavigation = (path) => {
-        clearBotData();
+        // clearBotData();
         router.push(path);
     };
 
@@ -101,7 +102,7 @@ export default function DeployPage() {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={copyToClipboard}
-                                    className={`absolute top-4 right-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
+                                    className={`absolute bottom-2 right-4 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 flex items-center gap-2 ${
                                         copied 
                                             ? 'bg-green-500 text-white shadow-lg' 
                                             : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md'
@@ -213,7 +214,7 @@ export default function DeployPage() {
                     className="mt-12 text-center"
                 >
                     <p className="text-sm text-muted-foreground">
-                        Need help? Check out our <a href="#" className="text-primary hover:underline">documentation</a> or <a href="#" className="text-primary hover:underline">contact support</a>
+                        Need help? Check out our <Link href="/embed-guide" className="text-primary underline">documentation</Link> or <Link href="#" className="text-primary underline">contact support</Link>
                     </p>
                 </motion.div>
             </motion.div>
