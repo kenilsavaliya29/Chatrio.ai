@@ -100,7 +100,7 @@ const Navbar = () => {
                             </li>
 
                             <li className="nav-item">
-                                <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                <Link href="/pricing" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Pricing
                                 </Link>
                             </li>
@@ -209,7 +209,7 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link href="/pricing" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                         Pricing
                                     </Link>
                                 </li>
