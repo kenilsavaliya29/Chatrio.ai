@@ -30,6 +30,11 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Bot configuration or RAG context not found' }, { status: 404 });
     }
 
+    // Check if bot is active
+    if (bot.status !== 'active') {
+      return NextResponse.json({ error: 'Bot is not active' }, { status: 403 });
+    }
+
     const { ragContext } = bot;
 
     // Check if this is the first message in the conversation

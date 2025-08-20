@@ -98,6 +98,7 @@ const Navbar = () => {
                                     </div>
                                 </div>
                             </li>
+
                             <li className="nav-item">
                                 <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Pricing
@@ -106,6 +107,11 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     FAQ's
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link href="/embed-guide" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    Embed Guide
                                 </Link>
                             </li>
                         </ul>
@@ -188,7 +194,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu */}
-                <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? ' opacity-100' : 'max-h-0 opacity-0'}`}>
                     <div className="glass-effect-darker px-4 py-6 rounded-b-2xl space-y-6 rounded-2xl mt-2">
                         <nav>
                             <ul className="space-y-4 font-[family-name:var(--font-jost)]">

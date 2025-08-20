@@ -18,8 +18,8 @@ export default function Home() {
           <div className="hero-left space-y-4 flex-1/2 w-full">
             <h1 className="f-geist-mono text-5xl sm:text-7xl font-bold capitalize ">The ultimate AI automation</h1>
             <p className="text-xl opacity-80">Transform your website with AI. Build intelligent chatbots in minutes, not months.</p>
-            <p className="opacity-60">Tired of missed leads due to slow responses? ItsBot Chat
-              Agent is your 24/7 assistant trained to convert, support, and
+            <p className="opacity-60">Tired of missed leads due to slow responses? Chatrio Bot
+              is your 24/7 assistant trained to convert, support, and
               qualify, all while sounding like part of your team.
             </p>
             <div className="hero-buttons space-x-3">
@@ -46,19 +46,19 @@ export default function Home() {
                 <div className="chatbox-body flex-1 p-4 overflow-y-auto flex flex-col gap-4">
                   <div className="max-w-[80%] p-3 rounded-xl bg-muted text-foreground self-start">
                     <p className="text-sm leading-relaxed">Hello, I'm Chatrio bot! I'm your personal sport assistant. How can I help you?</p>
-                    <div className="text-xs opacity-60 mt-1">8:21 AM</div>
+                    {/* <div className="text-xs opacity-60 mt-1">8:21 AM</div> */}
                   </div>
                   <div className="max-w-[80%] p-3 rounded-xl bg-primary text-primary-foreground self-end">
                     <p className="text-sm leading-relaxed">Hello I am James</p>
-                    <div className="text-xs opacity-60 mt-1">8:21 AM</div>
+                    {/* <div className="text-xs opacity-60 mt-1">8:21 AM</div> */}
                   </div>
                   <div className="max-w-[80%] p-3 rounded-xl bg-muted text-foreground self-start">
                     <p className="text-sm leading-relaxed">Hello! I'm here to assist you with your tech queries. What issue are you facing with your laptop?</p>
-                    <div className="text-xs opacity-60 mt-1">8:22 AM</div>
+                    {/* <div className="text-xs opacity-60 mt-1">8:22 AM</div> */}
                   </div>
                   <div className="max-w-[80%] p-3 rounded-xl bg-primary text-primary-foreground self-end">
                     <p className="text-sm leading-relaxed">Hi, I need help with my laptop.</p>
-                    <div className="text-xs opacity-60 mt-1">8:22 AM</div>
+                    {/* <div className="text-xs opacity-60 mt-1">8:22 AM</div> */}
                   </div>
                 </div>
                 <div className="chatbox-footer">

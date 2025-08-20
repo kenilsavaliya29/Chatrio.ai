@@ -42,21 +42,8 @@ export async function POST(req) {
 
         const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
         
-        // Simplified embed code: directly sets config and loads the main widget script
-        const embedCode = `
-            <script>
-            window.chatrioConfig = {
-                botId: '${botId}',
-                apiUrl: '${baseUrl}/api/bot/chat'
-            };
-            (function(){
-                var s = document.createElement('script');
-                s.src = '${baseUrl}/widget/index.js';
-                s.async = true;
-                document.body.appendChild(s);
-            })();
-            </script>
-        `;
+        // Generate simple one-line script tag that loads the bot-specific script
+        const embedCode = `<script src="${baseUrl}/api/bot/${botId}/script" async></script>`;
 
         return NextResponse.json({
             success: true,

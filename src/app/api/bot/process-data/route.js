@@ -62,7 +62,7 @@ export async function POST(req) {
       if (existingBotIndex !== -1) {
         user.bots[existingBotIndex].status = 'processing';
         user.bots[existingBotIndex].url = url; // Update URL if changed
-        user.bots[existingBotIndex].name = name || user.bots[existingBotIndex].name; // Update name if changed
+        user.bots[existingBotIndex].name = name || user.bots[existingBotIndex].name;
         user.bots[existingBotIndex].updatedAt = new Date();
         finalBotId = botId;
         botExists = true;

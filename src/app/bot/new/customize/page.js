@@ -1,169 +1,76 @@
 'use client';
 
-import { useState, useEffect, memo, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import CustomizePanel from '@/components/customize/CustomizePanel';
-import { Loader2 } from 'lucide-react';
-import { ShadowChatbotWidget } from '@/components/customize/ShadowChatbotWidget';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { useBotCreation } from '@/context/BotCreationContext';
+import { useSearchParams } from 'next/navigation';
+import { HexColorPicker } from 'react-colorful';
 
-
-const ChatbotPreview = memo(({ botData }) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const [iframeLoadFailed, setIframeLoadFailed] = useState(false);
-    const previewUrl = botData?.url || '';
-    
-    // Debug: Log the botData in the preview component
-    console.log('ChatbotPreview botData:', botData);
-
-    return (
-        <div className="relative w-full h-full bg-gray-100 rounded-xl overflow-hidden">
-            <div className="absolute inset-0">
-                {previewUrl ? (
-                    <iframe src={previewUrl} title="Website Preview" className="w-full h-full" sandbox="allow-scripts allow-same-origin" />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center"><p className="text-muted-foreground">No URL provided</p></div>
-                )}
-                {iframeLoadFailed && previewUrl && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white text-center p-4">
-                        <p>
-                            Could not load "{previewUrl}". This might be due to security restrictions (e.g., Content Security Policy). <br />
-                            Displaying <a href="https://example.com" target="_blank" rel="noopener noreferrer" className="underline">example.com</a> instead.
-                        </p>
-                    </div>
-                )}
-            </div>
-            <div className="absolute inset-0 bg-black/5 pointer-events-none" />
-            <ShadowChatbotWidget botData={botData} isOpen={isOpen} setIsOpen={setIsOpen} />
-        </div>
-    );
-});
-ChatbotPreview.displayName = 'ChatbotPreview';
-
-export default function EditBotPage() {
+export default function CustomizePage() {
     const router = useRouter();
-    const params = useParams();
-    const { botId } = params;
-    // Destructure embedCode (renamed to latestEmbedCode to avoid conflict) and setEmbedCode from useBotCreation
-    const { embedCode: latestEmbedCode, setEmbedCode } = useBotCreation(); 
+    const searchParams = useSearchParams();
+    const botId = searchParams.get('botId');
+    const { botData, handleInputChange, setEmbedCode, setActiveBotId, setBotData } = useBotCreation();
 
-    const [botData, setBotData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [showColorPicker, setShowColorPicker] = useState(null);
+    const [mounted, setMounted] = useState(false);
+
+    // Tone options for the chatbot
+    const toneOptions = [
+        { value: 'helpful', label: 'Helpful & Supportive' },
+        { value: 'friendly', label: 'Friendly & Casual' },
+        { value: 'professional', label: 'Professional & Formal' },
+        { value: 'enthusiastic', label: 'Enthusiastic & Energetic' },
+        { value: 'empathetic', label: 'Empathetic & Caring' }
+    ];
 
     useEffect(() => {
-        if (!botId) return;
+        setMounted(true);
+    }, []);
 
-        const fetchBotData = async () => {
+    useEffect(() => {
+        if (!botId) {
+            router.push('/bot/new/basic');
+            return;
+        }
+        // Set active botId for namespaced draft storage
+        setActiveBotId(botId);
+
+        // Hydrate from server so DB is source of truth when botId exists
+        let aborted = false;
+        (async () => {
             try {
-                setLoading(true);
                 const res = await fetch(`/api/bot/${botId}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    const convertOldToNew = (oldConfig) => {
-                        if (!oldConfig) return {};
-
-                        return {
-                            // Bot Identity
-                            botName: oldConfig.Identity?.botName || 'Chatrio AI',
-                            greetingMessage: oldConfig.Identity?.greetingMessage || 'Hi there! How can I help you today?',
-                            inputPlaceholder: oldConfig.Identity?.inputPlaceholder || 'Type a message...',
-                            
-                            // Branding
-                            logoUrl: oldConfig.Branding?.logoUrl || '',
-                            launcherIcon: oldConfig.Branding?.launcherIcon || '💬',
-                            launcherIconUrl: oldConfig.Branding?.launcherIconUrl || '',
-                            sendButtonIcon: oldConfig.Branding?.sendButtonIcon || 'Send',
-                            
-                            // Colors
-                            headerBg: oldConfig.Colors?.headerBg || '#000000',
-                            headerText: oldConfig.Colors?.headerText || '#ffffff',
-                            backgroundColor: oldConfig.Colors?.backgroundColor || '#ffffff',
-                            textColor: oldConfig.Colors?.textColor || '#000000',
-                            borderColor: oldConfig.Colors?.borderColor || '#e5e5e5',
-                            messagesBg: oldConfig.Colors?.messagesBg || '#fafbfc',
-                            inputBg: oldConfig.Colors?.inputBg || '#ffffff',
-                            userBg: oldConfig.Colors?.userBg || '#e6f0ff',
-                            userText: oldConfig.Colors?.userText || '#222222',
-                            assistantBg: oldConfig.Colors?.assistantBg || '#f3f3f3',
-                            assistantText: oldConfig.Colors?.assistantText || '#444444',
-                            sendButtonBg: oldConfig.Colors?.sendButtonBg || '#000000',
-                            sendButtonText: oldConfig.Colors?.sendButtonText || '#fff',
-                            launcherBg: oldConfig.Colors?.launcherBg || '#000000',
-                            launcherText: oldConfig.Colors?.launcherText || '#fff',
-                            
-                            // Typography
-                            fontFamily: oldConfig.Typography?.fontFamily || 'Inter',
-                            fontSize: oldConfig.Typography?.fontSize || '14px',
-                            headerFontSize: oldConfig.Typography?.headerFontSize || '16px',
-                            messageFontSize: oldConfig.Typography?.messageFontSize || '14px',
-                            fontWeight: oldConfig.Typography?.fontWeight || '400',
-                            
-                            // Sizing
-                            widgetWidth: oldConfig.Sizing?.widgetWidth || '350px',
-                            widgetHeight: oldConfig.Sizing?.widgetHeight || '500px',
-                            borderRadius: oldConfig.Sizing?.borderRadius || '16px',
-                            messageBorderRadius: oldConfig.Sizing?.messageBorderRadius || '12px',
-                            launcherSize: oldConfig.Sizing?.launcherSize || '60px',
-                            
-                            // Behavior
-                            opacity: oldConfig.Behavior?.opacity || 1,
-                            autoOpen: oldConfig.Behavior?.autoOpen || false,
-                            autoOpenDelay: oldConfig.Behavior?.autoOpenDelay || 3000,
-                            showTypingIndicator: oldConfig.Behavior?.showTypingIndicator !== false,
-                            soundEnabled: oldConfig.Behavior?.soundEnabled || false,
-                            
-                            // Animation
-                            animationType: oldConfig.Animation?.animationType || 'scale',
-                            animationDuration: oldConfig.Animation?.animationDuration || '0.3s',
-                            animationEasing: oldConfig.Animation?.animationEasing || 'ease-out',
-                            slideDirection: oldConfig.Animation?.slideDirection || 'bottom-right',
-                        };
-                    };
-
-                    // Convert the config and ensure all required fields have default values
-                    const convertedConfig = convertOldToNew(data.config);
-                    const botDataWithDefaults = {
-                        ...convertedConfig,
-
-                        url: data.url,
-                        // CRITICAL: Override scriptCode with the latest from context if available
-                        scriptCode: latestEmbedCode || data.scriptCode, // Use latestEmbedCode if it exists, otherwise use the one from the database
-                    };
-
-                    console.log('Bot data being set for customization:', botDataWithDefaults); // Add this for debugging
-                    setBotData(botDataWithDefaults);
-                } else {
-                    router.push('/dashboard?tab=customize');
-                }
-            } catch (error) {
-                console.error("Failed to fetch bot data:", error);
-                router.push('/dashboard?tab=customize');
-            } finally {
-                setLoading(false);
+                if (!res.ok) return; // fallback to local draft if needed
+                const data = await res.json();
+                if (aborted) return;
+                const cfg = data?.config || {};
+                // Merge nested config and also mirror a few flat keys used by this page
+                setBotData(prev => ({
+                    ...prev,
+                    ...cfg,
+                    botName: cfg.Identity?.botName ?? prev.botName,
+                    greetingMessage: cfg.Identity?.greetingMessage ?? prev.greetingMessage,
+                    inputPlaceholder: cfg.Identity?.inputPlaceholder ?? prev.inputPlaceholder,
+                    tone: cfg.Identity?.tone ?? prev.tone,
+                }));
+            } catch (e) {
+                // Ignore and keep local state
             }
-        };
-        fetchBotData();
-    }, [botId, router, latestEmbedCode]); // Add latestEmbedCode to dependency array
+        })();
+        return () => { aborted = true; };
+    }, [botId, setActiveBotId, setBotData]);
 
-    const handleInputChange = (field, key, value) => {
-        setBotData(prev => {
-            const newState = { ...prev };
-            // Ensure sizing properties always have 'px' unit if they are numeric
-            if (['widgetWidth', 'widgetHeight', 'borderRadius', 'messageBorderRadius', 'launcherSize'].includes(field) && typeof value === 'number') {
-                newState[field] = `${value}px`;
-            } else {
-                newState[field] = value;
-            }
-            return newState;
-        });
+    const handleColorChange = (colorKey, value) => {
+        handleInputChange('Colors', colorKey, value);
     };
 
-    const handleSaveChanges = async () => {
-        setIsSaving(true);
+    const handleSaveAndDeploy = async () => {
+        setIsProcessing(true);
         try {
-            // First, save the updated bot configuration
+            // Save the bot configuration
             const resUpdate = await fetch(`/api/bot/${botId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -171,57 +78,162 @@ export default function EditBotPage() {
             });
 
             if (resUpdate.ok) {
-                console.log("Bot configuration updated successfully!");
-
-                // Second, call the /api/bot/create endpoint to get the latest embed code
+                // Generate embed code
                 const resCreate = await fetch('/api/bot/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ botId: botId, ...botData }), // Send botId and current botData
+                    body: JSON.stringify({ botId: botId, ...botData }),
                 });
 
                 const dataCreate = await resCreate.json();
 
                 if (resCreate.ok && dataCreate.success) {
-                    console.log("New embed code generated:", dataCreate.embedCode);
-                    setEmbedCode(dataCreate.embedCode); // Update embedCode in context
-                    router.push('/dashboard?tab=customize&message=Changes saved successfully!&type=success');
+                    setEmbedCode(dataCreate.embedCode);
+                    router.push('/bot/new/deploy');
                 } else {
-                    console.error("Failed to generate new embed code:", dataCreate.error);
-                    alert(dataCreate.error || 'Failed to generate new embed code.');
+                    alert(dataCreate.error || 'Failed to generate embed code.');
                 }
             } else {
                 const errorData = await resUpdate.json();
-                alert(errorData.error || 'Failed to save bot changes.'); 
-                console.error("Failed to save bot changes", errorData);
+                alert(errorData.error || 'Failed to save bot configuration.');
             }
         } catch (error) {
-            alert('An unexpected error occurred.'); 
+            alert('An unexpected error occurred.');
             console.error("Error saving bot:", error);
         } finally {
-            setIsSaving(false);
+            setIsProcessing(false);
         }
     };
 
-    if (loading || !botData) {
-        return <div className="flex h-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    if (!botData || !mounted) {
+        return null;
     }
 
-    console.log('BotData for preview:', botData);
+    // Get the header color with a safe fallback
+    console.log(botData)
+    const headerColor = botData.Colors.headerBg || '#fff';
 
     return (
-        <div className="flex h-full w-full " style={{ height: 'calc(100vh - 90px)' }}>
-            <div className="w-[75%] h-full relative">
-                <ChatbotPreview botData={botData} />
-            </div>
-            <CustomizePanel
-                botData={botData}
-                handleInputChange={handleInputChange}
-                onBack={() => router.push('/dashboard?tab=customize')}
-                onDeploy={handleSaveChanges}
-                isProcessing={isSaving}
-                deployButtonText="Save Changes"
-            />
+        <div className="max-w-2xl mx-auto p-6">
+            {/* Header */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center mb-8"
+            >
+                <h1 className="text-3xl font-bold text-foreground mb-2">Customize Your Chatbot</h1>
+                <p className="text-muted-foreground">Personalize the appearance and personality of your AI assistant</p>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="space-y-6"
+            >
+                {/* Bot Identity Section */}
+                <div className="bg-card rounded-lg p-6 border border-border">
+                    <h2 className="text-xl font-semibold text-foreground mb-4">Bot Identity</h2>
+                    
+                    <div className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                                Greeting Message
+                            </label>
+                            <textarea
+                                value={botData.greetingMessage || ''}
+                                onChange={(e) => handleInputChange('greetingMessage', null, e.target.value)}
+                                rows={2}
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+                                placeholder="Hi there! How can I help you today?"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                                Tone & Personality
+                            </label>
+                            <select
+                                value={botData.tone || 'helpful'}
+                                onChange={(e) => handleInputChange('tone', null, e.target.value)}
+                                className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+                            >
+                                {toneOptions.map((tone) => (
+                                    <option key={tone.value} value={tone.value}>
+                                        {tone.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Colors Section */}
+                <div className="bg-card rounded-lg p-6 border border-border">
+                    <h2 className="text-xl font-semibold text-foreground mb-4">Colors & Styling</h2>
+                    
+                    <div className="space-y-4">
+                        {/* Single Color Picker */}
+                        <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                                Choose Color
+                            </label>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowColorPicker('headerBg')}
+                                    className="w-full h-12 border border-border rounded-md flex items-center justify-center hover:border-primary transition-colors"
+                                    style={{ backgroundColor: headerColor }}
+                                >
+                                    <span className="text-white text-sm font-medium">
+                                        {headerColor}
+                                    </span>
+                                </button>
+                                {showColorPicker === 'headerBg' && (
+                                    <div className="absolute z-50 mt-2">
+                                        <div className="fixed inset-0" onClick={() => setShowColorPicker(null)} />
+                                        <div className="relative bg-background rounded-lg shadow-xl p-4">
+                                            <HexColorPicker
+                                                color={headerColor}
+                                                onChange={(color) => handleColorChange('headerBg', color)}
+                                            />
+                                            <input
+                                                type="text"
+                                                value={headerColor}
+                                                onChange={(e) => handleColorChange('headerBg', e.target.value)}
+                                                className="mt-2 w-full px-2 py-1 text-sm border rounded"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="bg-card rounded-lg p-6 border border-border">
+                    <div className="space-y-3">
+                        <button
+                            onClick={() => router.push('/bot/new/basic')}
+                            className="w-full py-3 px-4 border border-border rounded-lg text-foreground hover:bg-background/50 transition-colors"
+                        >
+                            Back to Basic Info
+                        </button>
+                        
+                        <button
+                            onClick={handleSaveAndDeploy}
+                            disabled={isProcessing}
+                            className="w-full py-3 px-4 bg-primary text-background rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                        >
+                            {isProcessing ? 'Processing...' : 'Save & Deploy'}
+                        </button>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground text-center mt-3">
+                        Click "Save & Deploy" to generate your chatbot and get the embed code
+                    </p>
+                </div>
+            </motion.div>
         </div>
     );
 } 

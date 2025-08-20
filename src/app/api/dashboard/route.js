@@ -4,8 +4,10 @@ import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
 import User from '@/server/models/user.model';
 
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
+
   const tab = searchParams.get('tab') || 'overview';
 
   try {

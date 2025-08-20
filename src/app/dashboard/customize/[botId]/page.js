@@ -2,7 +2,6 @@
 
 import { useState, useEffect, memo, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import CustomizePanel from '@/components/customize/CustomizePanel';
 import { Loader2 } from 'lucide-react';
 import { ShadowChatbotWidget } from '@/components/customize/ShadowChatbotWidget';
@@ -12,9 +11,6 @@ const ChatbotPreview = memo(({ botData }) => {
     const [isOpen, setIsOpen] = useState(true);
     const [iframeLoadFailed, setIframeLoadFailed] = useState(false);
     const previewUrl = botData?.url || '';
-
-    // Debug: Log the botData in the preview component
-    console.log('ChatbotPreview botData:', botData);
 
     return (
         <div className="relative w-full h-full bg-gray-100 rounded-xl overflow-hidden">
@@ -61,19 +57,21 @@ export default function EditBotPage() {
                     const convertOldToNew = (oldConfig) => {
                         if (!oldConfig) return {};
 
-                        
+                        // Flatten nested DB config into the flat shape used by UI and preview
                         return {
                             // Bot Identity
                             botName: oldConfig.Identity?.botName || 'Chatrio AI',
                             greetingMessage: oldConfig.Identity?.greetingMessage || 'Hi there! How can I help you today?',
                             inputPlaceholder: oldConfig.Identity?.inputPlaceholder || 'Type a message...',
-                            
+                            tone: oldConfig.Identity?.tone || 'helpful',
+                            additionalContent: oldConfig.Identity?.additionalContent || '',
+
                             // Branding
                             logoUrl: oldConfig.Branding?.logoUrl || '',
                             launcherIcon: oldConfig.Branding?.launcherIcon || '💬',
                             launcherIconUrl: oldConfig.Branding?.launcherIconUrl || '',
                             sendButtonIcon: oldConfig.Branding?.sendButtonIcon || 'Send',
-                            
+
                             // Colors
                             headerBg: oldConfig.Colors?.headerBg || '#000000',
                             headerText: oldConfig.Colors?.headerText || '#ffffff',
@@ -90,28 +88,28 @@ export default function EditBotPage() {
                             sendButtonText: oldConfig.Colors?.sendButtonText || '#fff',
                             launcherBg: oldConfig.Colors?.launcherBg || '#000000',
                             launcherText: oldConfig.Colors?.launcherText || '#fff',
-                            
+
                             // Typography
                             fontFamily: oldConfig.Typography?.fontFamily || 'Inter',
                             fontSize: oldConfig.Typography?.fontSize || '14px',
                             headerFontSize: oldConfig.Typography?.headerFontSize || '16px',
                             messageFontSize: oldConfig.Typography?.messageFontSize || '14px',
                             fontWeight: oldConfig.Typography?.fontWeight || '400',
-                            
+
                             // Sizing
                             widgetWidth: oldConfig.Sizing?.widgetWidth || '350px',
                             widgetHeight: oldConfig.Sizing?.widgetHeight || '500px',
                             borderRadius: oldConfig.Sizing?.borderRadius || '16px',
                             messageBorderRadius: oldConfig.Sizing?.messageBorderRadius || '12px',
                             launcherSize: oldConfig.Sizing?.launcherSize || '60px',
-                            
+
                             // Behavior
-                            opacity: oldConfig.Behavior?.opacity || 1,
+                            opacity: typeof oldConfig.Behavior?.opacity === 'number' ? oldConfig.Behavior.opacity : 1,
                             autoOpen: oldConfig.Behavior?.autoOpen || false,
-                            autoOpenDelay: oldConfig.Behavior?.autoOpenDelay || 3000,
+                            autoOpenDelay: typeof oldConfig.Behavior?.autoOpenDelay === 'number' ? oldConfig.Behavior.autoOpenDelay : 3000,
                             showTypingIndicator: oldConfig.Behavior?.showTypingIndicator !== false,
-                            soundEnabled: oldConfig.Behavior?.soundEnabled || false,
-                            
+                            soundEnabled: !!oldConfig.Behavior?.soundEnabled,
+
                             // Animation
                             animationType: oldConfig.Animation?.animationType || 'scale',
                             animationDuration: oldConfig.Animation?.animationDuration || '0.3s',
@@ -184,7 +182,7 @@ export default function EditBotPage() {
         return <div className="flex h-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
     }
 
-    console.log('BotData for preview:', botData);
+    // console.log('BotData for preview:', botData);
 
     return (
         <div className="flex h-full w-full " style={{ height: 'calc(100vh - 90px)' }}>
