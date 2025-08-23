@@ -195,7 +195,7 @@ const PricingPage = () => {
         </div>
       </section>
       {/* Pricing Cards */}
-      <section className="px-4 sm:px-7 md:px-10 pb-20">
+      {/* <section className="px-4 sm:px-7 md:px-10 pb-20">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <PricingCard
@@ -233,29 +233,29 @@ const PricingPage = () => {
             />
           </div>
         </div>
-      </section>
+      </section> */}
       {/* Free Until 2026 Banner */}
       <section className="relative py-16 px-4 sm:px-7 md:px-10">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-green-100/60 to-background/0 dark:from-primary/20 dark:via-green-900/20 dark:to-background/0 animate-gradient-fade" />
-        <div className="container mx-auto text-center text-white relative z-10">
-          <div className="max-w-4xl mx-auto glass-effect-darker p-10 rounded-2xl shadow-xl">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-primary">Everything is FREE Until March 2026</h2>
-            <p className="text-xl opacity-90 mb-8 text-primary/50">We're celebrating our launch by giving you full access to all features, unlimited usage, and premium support - completely free for over a year.</p>
+       
+        <div className="container mx-auto text-center text-white relative z-10 ">
+          <div className="max-w-4xl mx-auto p-10 rounded-2xl shadow-xl bg-primary">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-background">Everything is FREE Until March 2026</h2>
+            <p className="text-xl opacity-90 mb-8 text-background/50">We're celebrating our launch by giving you full access to all features, unlimited usage, and premium support - completely free for over a year.</p>
             <div className="grid sm:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+              <div className="text-background backdrop-blur-sm rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">∞</div>
-                <div className="text-sm">Unlimited Conversations</div>
+                <div className="text-sm ">Unlimited Conversations</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+              <div className="text-background backdrop-blur-sm rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">$0</div>
                 <div className="text-sm">Setup & Monthly Fees</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+              <div className="text-background backdrop-blur-sm rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">24/7</div>
                 <div className="text-sm">Premium Support</div>
               </div>
             </div>
-            <Link href={'/bot/new'} className='w-fit btn-primary-gradient-hover flex items-center justify-center gap-5 hover:text-white px-10 py-3.5 bg-primary text-primary-foreground hover:scale-105 rounded-lg custom-transition duration-300 font-semibold text-lg shadow-lg'>
+            <Link href={'/bot/new'} className='mx-auto w-fit btn-primary-gradient-hover flex items-center justify-center gap-5 hover:text-white px-10 py-3.5 bg-background text-primary hover:scale-105 rounded-lg custom-transition duration-300 font-semibold text-lg shadow-lg'>
               Claim Your Free Access Now
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
                 <path d="M5 12h14" />

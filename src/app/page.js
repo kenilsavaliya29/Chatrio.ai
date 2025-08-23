@@ -2,18 +2,68 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { useTheme } from "@/components/ThemeContext";
+import React from "react";
 
 export default function Home() {
   const { resolvedTheme } = useTheme();
 
+  function FAQAccordion() {
+    const faqs = [
+      {
+        question: "How does Chatrio AI chatbot work?",
+        answer: "Chatrio uses advanced AI to understand your website content and customer queries, providing instant, human-like responses 24/7."
+      },
+      {
+        question: "Is it easy to install on my website?",
+        answer: "Yes! Just copy a single script tag into your website’s HTML. No coding or technical skills required."
+      },
+      {
+        question: "Can I customize the chatbot’s appearance?",
+        answer: "Absolutely. You can change the name, icon, colors, tone, and more to match your brand perfectly."
+      },
+      {
+        question: "What analytics do I get?",
+        answer: "You’ll see conversation volume, user engagement, lead capture rates, and more in your dashboard."
+      },
+      {
+        question: "Is my data secure?",
+        answer: "Yes, all data is encrypted and never shared with third parties. We follow enterprise-grade security standards."
+      },
+    ];
+    const [openIdx, setOpenIdx] = React.useState(null);
+    return (
+      <div className="space-y-4">
+        {faqs.map((faq, idx) => (
+          <div key={idx} className="bg-card border border-border rounded-xl overflow-hidden transition-all duration-300 shadow-sm">
+            <button
+              className="w-full flex items-center justify-between px-6 py-5 text-left focus:outline-none transition-colors duration-300 hover:bg-muted group"
+              onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+              aria-expanded={openIdx === idx}
+              aria-controls={`faq-content-${idx}`}
+            >
+              <span className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">{faq.question}</span>
+              <svg className={`w-5 h-5 ml-4 transition-transform duration-300 ${openIdx === idx ? 'rotate-180 text-primary' : 'text-muted-foreground'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              id={`faq-content-${idx}`}
+              className={`transition-all duration-500 ease-in-out px-6 overflow-hidden ${openIdx === idx ? 'max-h-40 py-2 opacity-100' : 'max-h-0 py-0 opacity-0'}`}
+              style={{ maxHeight: openIdx === idx ? '200px' : '0' }}
+            >
+              <p className="text-muted-foreground leading-relaxed text-base animate-fade-in-slow">{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <main>
-
       {/* hero section */}
-      <section className="mt-32 md:mt-50 px-4 sm:px-7 md:px-10">
+      <section className="pt-32 pb-20 px-4 sm:px-7 md:px-10">
         <div className="container mx-auto flex justify-between items-center gap-20 flex-col lg:flex-row">
           <div className="hero-left space-y-4 flex-1/2 w-full">
             <h1 className="f-geist-mono text-5xl sm:text-7xl font-bold capitalize ">The ultimate AI automation</h1>
@@ -84,8 +134,8 @@ export default function Home() {
       </section>
 
       {/* features-box */}
-      <div className="wrapper mx-auto flex items-center justify-center mt-14  md:mt-20 w-full px-4 sm:px-7 md:px-10">
-        <div className="feature-wrapper container bg-primary rounded-2xl">
+      <section className="py-20 px-4 sm:px-7 md:px-10">
+        <div className="feature-wrapper container bg-primary rounded-2xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="feature-item text-background p-4 sm:p-6 flex items-center gap-3">
               <div className="feature-icon flex-shrink-0">
@@ -124,10 +174,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* steps section */}
-      <section className="steps-sec mt-32 md:mt-50 px-4 sm:px-7 md:px-10 pb-20">
+      <section className="py-20 px-4 sm:px-7 md:px-10">
         <div className="container mx-auto">
           <div className="step-sec-headings text-center space-y-3 md:space-y-5 mb-10 md:mb-16">
             <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold ">Go Live in 3 Simple Steps</h2>
@@ -171,7 +221,7 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-center mt-3 text-muted-foreground">
                   Works with Shopify, Webflow, Framer, and more.
-                  <a href="#" className="text-primary underline ml-1">View guides</a>.
+                  <Link href={'/embed-guide'} className="text-primary underline ml-1">View guides</Link>.
                 </p>
               </div>
             </div>
@@ -229,7 +279,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 md:py-28 px-4 sm:px-7 md:px-10 bg-primary">
+      <section className="py-20 px-4 sm:px-7 md:px-10 bg-primary">
         <div className="container mx-auto text-background">
           <div className="text-center space-y-3 md:space-y-5 mb-10 md:mb-16">
             <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold">Drive Growth with AI Automation</h2>
@@ -261,7 +311,7 @@ export default function Home() {
       </section>
 
       {/* 24/7 feature sec */}
-      <section className="feature-sec p-14 md:pt-32 px-4 sm:px-7 md:px-10">
+      <section className="py-20 px-4 sm:px-7 md:px-10">
         <div className="container mx-auto">
           <div className="feature-sec-headings text-center space-y-3 md:space-y-5 mb-10 md:mb-16">
             <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold">Smart Chatbots, Styled by Your Way</h2>
@@ -323,7 +373,7 @@ export default function Home() {
       </section>
 
       {/* AI Speech Bot */}
-      <section className="ai-speech-bot py-14 md:py-20 px-4 sm:px-7 md:px-10 bg-primary">
+      <section className="py-20 px-4 sm:px-7 md:px-10 bg-primary">
         <div className="container mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
             <div className="ai-speech-bot-texts max-w-xl lg:max-w-2xl space-y-6 text-center lg:text-left">
@@ -402,10 +452,83 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Choose Your Language Section */}
+      <section className="py-20 px-4 sm:px-7 md:px-10">
+        <div className="container mx-auto max-w-3xl text-center">
+          <span className="inline-block bg-gradient-to-r from-primary to-purple-500 text-primary text-xs font-semibold px-3 py-1 rounded-full mb-4 animate-pulse">Coming Soon</span>
+          <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Choose Your Language</h2>
+          <p className="text-lg text-muted-foreground mb-8">Soon, Chatrio will let you select your preferred language for all conversations. Your bot will speak only in the language you choose—perfect for local audiences or global reach.</p>
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-muted text-foreground font-medium shadow-sm border border-border">
+              <span role="img" aria-label="English">🇬🇧</span> English
+            </span>
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-muted text-foreground font-medium shadow-sm border border-border">
+              <span role="img" aria-label="Hindi">🇮🇳</span> Hindi
+            </span>
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-muted text-foreground font-medium shadow-sm border border-border">
+              <span role="img" aria-label="French">🇫🇷</span> French
+            </span>
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-muted text-foreground font-medium shadow-sm border border-border">
+              <span role="img" aria-label="Spanish">🇪🇸</span> Spanish
+            </span>
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-muted text-foreground font-medium shadow-sm border border-border">
+              <span role="img" aria-label="German">🇩🇪</span> German
+            </span>
+          </div>
+          <div className="text-sm text-muted-foreground">Let us know which language you want next!</div>
+        </div>
+      </section>
+
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-7 md:px-10 bg-background" id="faq-section">
+        <div className="container mx-auto flex flex-col md:flex-row gap-10 md:gap-16 ">
+          {/* Sticky Left Heading */}
+          <aside className="w-full md:w-[35%] sticky top-28 self-start hidden md:block space-y-3 md:space-y-5">
+            <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold text-primary">Frequently Asked<br />Questions</h2>
+            <p className="text-lg text-muted-foreground">Everything you need to know about Chatrio and our AI chatbots.</p>
+          </aside>
+          {/* FAQ List */}
+          <div className="w-full md:w-[65%]">
+            <FAQAccordion />
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Us Section */}
+      <section className="py-20 px-4 sm:px-7 md:px-10">
+        <div className="container mx-auto max-w-2xl">
+          <h2 className="f-geist-mono text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3">Contact Us</h2>
+          <p className="text-lg text-muted-foreground text-center mb-8">Have questions or need help? Fill out the form and our team will get back to you soon.</p>
+          <div className="bg-primary rounded-3xl ">
+            <div className="contact-form-wrapper rounded-2xl shadow-xl p-8 md:p-12 bg-contact-form transition-colors duration-300">
+              <form className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2 text-contact-label">Name</label>
+                  <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-lg border border-border bg-transparent text-contact-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary input-gradient-focus" placeholder="Your Name" />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2 text-contact-label">Email</label>
+                  <input type="email" id="email" name="email" required className="w-full px-4 py-3 rounded-lg border border-border bg-transparent text-contact-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary input-gradient-focus" placeholder="you@email.com" />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-2 text-contact-label">Message</label>
+                  <textarea id="message" name="message" rows={5} required className="w-full px-4 py-3 rounded-lg border border-border bg-transparent text-contact-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary input-gradient-focus" placeholder="How can we help you?" />
+                </div>
+                <button type="submit" className="w-full py-3 rounded-lg btn-primary-gradient-hover bg-primary text-primary-foreground font-semibold text-lg shadow-md hover:scale-105 custom-transition hover:text-white">Send Message</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main >
 
   );
 }
+
+
 
 
 

@@ -55,7 +55,7 @@ const Footer = () => {
                             <h4 className="font-semibold text-foreground mb-4">Product</h4>
                             <ul className="space-y-3">
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Features</Link></li>
-                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Pricing</Link></li>
+                                <li><Link href="/pricing" className="text-sm text-muted-foreground hover-text-gradient">Pricing</Link></li>
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Integrations</Link></li>
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Updates</Link></li>
                             </ul>
