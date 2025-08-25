@@ -56,6 +56,23 @@ export async function POST(req) {
     let finalBotId;
     let botExists = false;
 
+    const updateProgress = async (botId, { percent, step, message, status }) => {
+      try {
+        const idx = user.bots.findIndex(b => b.botId === botId);
+        if (idx === -1) return;
+        user.bots[idx].process = user.bots[idx].process || {};
+        user.bots[idx].process.processing = user.bots[idx].process.processing || {};
+        if (typeof percent === 'number') user.bots[idx].process.processing.progressPercent = percent;
+        if (step) user.bots[idx].process.processing.step = step;
+        if (message !== undefined) user.bots[idx].process.processing.message = message;
+        if (status) user.bots[idx].process.processing.status = status;
+        user.bots[idx].process.processing.lastUpdated = new Date();
+        await user.save();
+      } catch (e) {
+        console.error('[API /process-data] Failed to update progress:', e);
+      }
+    };
+
     if (botId) {
       // Attempt to find and update an existing bot for this user
       const existingBotIndex = user.bots.findIndex(b => b.botId === botId);
@@ -82,7 +99,14 @@ export async function POST(req) {
         process: {
           reports: false,
           customization: false,
-          deployed: false
+          deployed: false,
+          processing: {
+            progressPercent: 0,
+            step: 'queued',
+            status: 'processing',
+            message: 'Job queued',
+            lastUpdated: new Date()
+          }
         },
         createdAt: new Date(),
       };
@@ -105,20 +129,24 @@ export async function POST(req) {
     try {
       // Step 1: Scrape website
       console.log('[API /process-data] Step 1: Starting web scraper...');
+      await updateProgress(finalBotId, { percent: 15, step: 'scraping', message: 'Scraping website…' });
       const scrapingReport = await scrapeWebsite(url);
 
       if (scrapingReport.error) {
         throw new Error(`Failed to scrape website: ${scrapingReport.error}`);
       }
       console.log('[API /process-data] Scraping completed successfully.');
+      await updateProgress(finalBotId, { percent: 45, step: 'scraping', message: 'Scraping completed.' });
 
       // Step 2: Generate RAG context
       console.log('[API /process-data] Step 2: Starting RAG processing...');
+      await updateProgress(finalBotId, { percent: 55, step: 'rag', message: 'Generating knowledge base…' });
       const ragContext = await processScrapingReport(scrapingReport);
       if (!ragContext) {
         throw new Error('RAG context generation failed');
       }
       console.log('[API /process-data] RAG context generated successfully.');
+      await updateProgress(finalBotId, { percent: 85, step: 'rag', message: 'Knowledge base generated.' });
 
       // Update bot with processed data and set status to active
       const botToUpdate = user.bots.find(b => b.botId === finalBotId);
@@ -131,6 +159,7 @@ export async function POST(req) {
         await user.save(); // Save user with updated bot data
         console.log(`[API /process-data] Bot ${finalBotId} successfully processed and set to active.`);
         processingMessage = 'Bot processed successfully!';
+        await updateProgress(finalBotId, { percent: 100, step: 'complete', message: 'Completed.', status: 'active' });
       } else {
         throw new Error('Bot not found in user document after processing.');
       }
@@ -146,6 +175,7 @@ export async function POST(req) {
         botToUpdate.updatedAt = new Date();
         await user.save();
       }
+      await updateProgress(finalBotId, { percent: 0, step: 'error', message: processingMessage, status: 'error' });
     }
     // --- END TEMPORARY SYNC PROCESSING ---
 

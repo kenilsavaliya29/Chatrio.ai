@@ -42,6 +42,11 @@ class WebsiteScraper {
       });
 
       const page = await browser.newPage();
+      // Broaden default timeouts to reduce flaky navigations
+      try {
+        page.setDefaultNavigationTimeout(60000);
+        page.setDefaultTimeout(60000);
+      } catch {}
       
       // Add stealth configurations
       await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
@@ -57,6 +62,18 @@ class WebsiteScraper {
         Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
         Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
       });
+
+      // Block heavy assets to improve load reliability and speed
+      try {
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+          const resourceType = req.resourceType();
+          if (['image', 'media', 'font'].includes(resourceType)) {
+            return req.abort();
+          }
+          req.continue();
+        });
+      } catch {}
 
       console.log('📄 Scraping homepage...');
       const homepageData = await this.scrapePage(page, this.targetUrl);
@@ -106,13 +123,38 @@ class WebsiteScraper {
   }
 
   async scrapePage(page, pageUrl) {
-    try {
-      await page.goto(pageUrl, { 
-        waitUntil: 'networkidle2',
-        timeout: 30000 
-      });
+    const maxAttempts = 3;
+    const baseTimeout = 30000;
+    let lastError;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        // Attempt stricter wait first
+        await page.goto(pageUrl, {
+          waitUntil: 'networkidle2',
+          timeout: baseTimeout * (attempt === 1 ? 1 : 2)
+        });
+      } catch (errStrict) {
+        // Fallback to a looser wait to avoid hard timeouts
+        try {
+          await page.goto(pageUrl, {
+            waitUntil: 'domcontentloaded',
+            timeout: baseTimeout * (attempt === 1 ? 1 : 2)
+          });
+        } catch (errLoose) {
+          lastError = errLoose;
+          if (attempt < maxAttempts) {
+            await this.delay(1000 * attempt); // backoff
+            continue;
+          }
+          throw new Error(`Navigation failed after ${maxAttempts} attempts: ${errLoose.message}`);
+        }
+      }
 
-      await this.delay(1000);
+      try {
+        await page.waitForSelector('body', { timeout: 10000 });
+      } catch {}
+
+      await this.delay(800);
 
       const pageData = await page.evaluate(() => {
         const unwantedSelectors = [
@@ -154,10 +196,8 @@ class WebsiteScraper {
         ...pageData,
         scrapedAt: new Date().toISOString()
       };
-
-    } catch (error) {
-      throw new Error(`Failed to scrape ${pageUrl}: ${error.message}`);
     }
+    throw new Error(`Failed to scrape ${pageUrl}: ${lastError ? lastError.message : 'Unknown error'}`);
   }
 
   async discoverLinks(page) {

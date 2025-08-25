@@ -9,7 +9,15 @@ const botSchema = new mongoose.Schema({
   process: {
     reports: Boolean,
     customization: Boolean,
-    deployed: Boolean
+    deployed: Boolean,
+    // Progress tracking for long-running processing
+    processing: {
+      progressPercent: { type: Number, default: 0 },
+      step: { type: String, default: 'queued' },
+      message: { type: String },
+      status: { type: String, enum: ['processing', 'active', 'inactive', 'error'], default: 'processing' },
+      lastUpdated: { type: Date },
+    }
   },
   config: {
     // Bot Identity

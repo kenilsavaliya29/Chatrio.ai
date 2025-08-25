@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useBotCreation } from '@/context/BotCreationContext';
 import { motion } from 'framer-motion';
@@ -12,8 +12,13 @@ export default function BasicInfoPage() {
     const { botData = {}, handleInputChange, setProcessedData } = useBotCreation(); 
     const [errors, setErrors] = useState({});
     const [isProcessing, setIsProcessing] = useState(false);
-    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false); 
-    const [existingBotData, setExistingBotData] = useState(null); 
+    const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+    const [existingBotData, setExistingBotData] = useState(null);
+    // Progress state + SSE
+    const [progress, setProgress] = useState({ percent: 0, step: 'queued', message: '' });
+    const [eventSource, setEventSource] = useState(null);
+    const [displayPercent, setDisplayPercent] = useState(0);
+    const animFrameRef = useRef(null);
 
 
     const validate = () => {
@@ -63,8 +68,14 @@ export default function BasicInfoPage() {
             if (checkRes.ok) {
                 if (checkData.reportsExist) {
                     setExistingBotData(checkData);
-                    setIsAlertDialogOpen(true); 
-                    return; 
+                    setIsAlertDialogOpen(true);
+                    return;
+                } else if (checkData.botId && checkData.progress) {
+                    setProgress({
+                        percent: checkData.progress.percent ?? 0,
+                        step: checkData.progress.step || 'queued',
+                        message: checkData.progress.message || ''
+                    });
                 }
             }
 
@@ -90,6 +101,20 @@ export default function BasicInfoPage() {
         setIsProcessing(true);
         setErrors({});
         try {
+            // If we have an existing draft botId, open SSE to stream progress
+            if (botIdToUse) {
+                const es = new EventSource(`/api/bot/progress/stream?botId=${encodeURIComponent(botIdToUse)}`);
+                es.addEventListener('progress', (e) => {
+                    try {
+                        const data = JSON.parse(e.data || '{}');
+                        setProgress({ percent: data.percent ?? 0, step: data.step || 'queued', message: data.message || '' });
+                    } catch {}
+                });
+                es.addEventListener('error', () => {
+                    // stream may close on completion
+                });
+                setEventSource(es);
+            }
             const res = await fetch('/api/bot/process-data', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -104,6 +129,10 @@ export default function BasicInfoPage() {
             
             if (res.ok && data.success) {
                 handleInputChange('url', null, urlToProcess);
+                if (eventSource) {
+                    try { eventSource.close(); } catch {}
+                    setEventSource(null);
+                }
                 router.push(`/bot/new/customize?botId=${data.botId}&status=${data.status}`);
             } else {
                 setErrors({ general: data.error || 'Failed to initiate processing.' });
@@ -114,6 +143,45 @@ export default function BasicInfoPage() {
             setIsProcessing(false);
         }
     };
+
+    // Cleanup SSE + animations
+    useEffect(() => {
+        return () => {
+            if (eventSource) {
+                try { eventSource.close(); } catch {}
+            }
+            if (animFrameRef.current) {
+                cancelAnimationFrame(animFrameRef.current);
+            }
+        };
+    }, [eventSource]);
+
+    // Smooth progress animation
+    useEffect(() => {
+        const start = displayPercent;
+        const end = Math.max(0, Math.min(100, Number(progress.percent) || 0));
+        if (end === start) return;
+        const duration = 800;
+        let startTs = null;
+        const step = (ts) => {
+            if (startTs === null) startTs = ts;
+            const t = Math.min(1, (ts - startTs) / duration);
+            const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            const value = start + (end - start) * eased;
+            setDisplayPercent(value);
+            if (t < 1) {
+                animFrameRef.current = requestAnimationFrame(step);
+            } else {
+                setDisplayPercent(end);
+            }
+        };
+        if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = requestAnimationFrame(step);
+        return () => {
+            if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [progress.percent]);
 
     return (
         <motion.div
@@ -187,8 +255,22 @@ export default function BasicInfoPage() {
                 disabled={isProcessing}
                 className="w-full flex justify-center items-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50"
             >
-                {isProcessing ? 'Processing...' : 'Next Step'}
+                {isProcessing ? `Processing ${Math.max(0, Math.min(100, Math.round(displayPercent)))}%` : 'Next Step'}
             </motion.button>
+
+            {isProcessing && (
+                <div className="w-full">
+                    <div className="w-full h-2 bg-muted rounded overflow-hidden">
+                        <div
+                            className="h-2 bg-primary rounded transition-[width] duration-500 ease-in-out"
+                            style={{ width: `${Math.max(0, Math.min(100, Math.round(displayPercent)))}%` }}
+                        />
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                        {progress.step}{progress.message ? ` • ${progress.message}` : ''}
+                    </div>
+                </div>
+            )}
 
             <AlertDialog
                 isOpen={isAlertDialogOpen}
