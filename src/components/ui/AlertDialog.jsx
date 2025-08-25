@@ -10,6 +10,7 @@ export function AlertDialog({
   message,
   confirmText = 'Confirm',
   cancelText = 'Cancel',
+  confirmDisabled = false,
 }) {
   if (!isOpen) return null;
 
@@ -26,7 +27,7 @@ export function AlertDialog({
           <Button variant="outline" onClick={onClose}>
             {cancelText}
           </Button>
-          <Button variant="destructive" onClick={onConfirm}>
+          <Button variant="destructive" onClick={onConfirm} disabled={confirmDisabled}>
             {confirmText}
           </Button>
         </CardFooter>

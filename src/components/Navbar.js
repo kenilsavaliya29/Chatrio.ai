@@ -83,29 +83,29 @@ const Navbar = () => {
                                             <div className="text-sm lg:text-base font-medium">AI Chatbots</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Intelligent conversation automation</div>
                                         </Link>
-                                        <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
+                                        {/* <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
                                             <div className="text-sm lg:text-base font-medium">Live Chat</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Real-time customer support</div>
-                                        </Link>
+                                        </Link> */}
                                         <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
                                             <div className="text-sm lg:text-base font-medium">Analytics</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Conversation insights & metrics</div>
                                         </Link>
                                         <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
-                                            <div className="text-sm lg:text-base font-medium">Integrations</div>
-                                            <div className="text-xs lg:text-sm text-muted-foreground">Connect with your tools</div>
+                                            <div className="text-sm lg:text-base font-medium">Templates</div>
+                                            <div className="text-xs lg:text-sm text-muted-foreground">Choose our predefined high quality preset templates of Bot interface</div>
                                         </Link>
                                     </div>
                                 </div>
                             </li>
 
                             <li className="nav-item">
-                                <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                <Link href="/pricing" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     Pricing
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link href="#" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                <Link href="/#faq-section" className="text-sm lg:text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                     FAQ's
                                 </Link>
                             </li>
@@ -209,12 +209,12 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link href="/pricing" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                         Pricing
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link href="/#faq-section" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
                                         FAQ's
                                     </Link>
                                 </li>

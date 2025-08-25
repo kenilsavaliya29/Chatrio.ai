@@ -326,3 +326,22 @@ a{
   }
 }
 
+/* Contact form theme utilities */
+.bg-contact-form {
+  background: #fff;
+}
+.text-contact-label, .text-contact-input {
+  color: #171717;
+}
+
+.dark .bg-contact-form {
+  background: #171717;
+}
+.dark .text-contact-label, .dark .text-contact-input {
+  color: #fff;
+}
+
+.bg-contact-form, .text-contact-label, .text-contact-input {
+  transition: background-color 0.3s, color 0.3s;
+}
+
