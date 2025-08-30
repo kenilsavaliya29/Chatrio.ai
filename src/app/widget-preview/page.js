@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function WidgetPreviewPage() {
+function WidgetPreviewContent() {
   const searchParams = useSearchParams();
   const configParam = searchParams.get('config');
 
@@ -244,4 +244,19 @@ export default function WidgetPreviewPage() {
   }, [configParam]);
 
   return null; // This page will render the widget directly into the body
+}
+
+export default function WidgetPreviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+          <p className="text-muted-foreground">Preparing your widget preview</p>
+        </div>
+      </div>
+    }>
+      <WidgetPreviewContent />
+    </Suspense>
+  );
 }

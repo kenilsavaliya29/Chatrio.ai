@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from '@/components/ThemeContext';
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
-const DashboardLayout = ({ children }) => {
+function DashboardLayoutContent({ children }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -120,182 +120,226 @@ const DashboardLayout = ({ children }) => {
   };
 
   return (
-    <div className="bg-background">
-      {/* Dashboard Navbar */}
-      <nav className="w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-        <div className="px-3 py-3 lg:px-7">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center justify-start">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/svgs/logo.svg"
-                  alt="Logo"
-                  width={30}
-                  height={30}
-                  className={resolvedTheme === 'light' ? 'filter invert' : ''}
-                />
-                <span className="ml-3 text-xl font-bold">Chatrio</span>
-              </Link>
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div className={`fixed left-0 top-0 h-full bg-card border-r border-border z-50 transition-all duration-300 lg:translate-x-0 ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } ${isSidebarCollapsed ? 'w-16' : 'w-64'}`}>
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          {!isSidebarCollapsed && (
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/svgs/logo.svg"
+                alt="Chatrio Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+              <span className="font-bold text-lg">Chatrio</span>
             </div>
+          )}
+          
+          <button
+            onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            className="p-1 rounded-md hover:bg-background/50 transition-colors"
+          >
+            {isSidebarCollapsed ? (
+              <ChevronLeft className="w-4 h-4" />
+            ) : (
+              <ChevronLeft className="w-4 h-4 rotate-180" />
+            )}
+          </button>
+        </div>
 
-            <div className="flex items-center space-x-3">
-              <ThemeToggle />
-              <div className="relative">
-                <button
-                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className=" flex items-center space-x-2 p-2 rounded-full hover:bg-muted transition-colors duration-300"
-                >
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-primary-foreground text-sm font-medium">
-                      {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                    </span>
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentTab === item.tab;
+            
+            return (
+              <Link
+                key={item.tab}
+                href={`/dashboard?tab=${item.tab}`}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
+                  isActive 
+                    ? 'bg-primary text-background' 
+                    : 'hover:bg-background/50'
+                }`}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {!isSidebarCollapsed && (
+                  <span className="font-medium">{item.name}</span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* User Profile Section */}
+        <div className="p-4 border-t border-border">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-background font-semibold text-sm">
+              {user.name?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
+            {!isSidebarCollapsed && (
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium truncate">{user.name}</div>
+                <div className="text-xs text-muted-foreground truncate">{user.email}</div>
+              </div>
+            )}
+          </div>
+          
+          {!isSidebarCollapsed && (
+            <button
+              onClick={handleLogout}
+              className="w-full mt-3 flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-background/50 rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className={`transition-all duration-300 ${
+        isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+      }`}>
+        {/* Top Bar */}
+        <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-md hover:bg-background/50 transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/svgs/logo.svg"
+                alt="Chatrio Logo"
+                width={24}
+                height={24}
+                className="w-6 h-6"
+              />
+              <span className="font-bold text-lg">Chatrio</span>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <ThemeToggle />
+            
+            {/* Profile Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center space-x-2 p-2 rounded-lg hover:bg-background/50 transition-colors"
+              >
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-background font-semibold text-sm">
+                  {user.name?.charAt(0)?.toUpperCase() || 'U'}
+                </div>
+                <span className="hidden sm:block font-medium">{user.name}</span>
+              </button>
+
+              {isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50">
+                  <div className="p-4 border-b border-border">
+                    <div className="font-medium">{user.name}</div>
+                    <div className="text-sm text-muted-foreground">{user.email}</div>
                   </div>
-                </button>
-
-                {/* Profile Dropdown */}
-                {isProfileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 glass-effect-darker rounded-xl shadow-lg py-2 z-50">
-                    <div className="px-4 py-2 border-b border-border">
-                      <p className="text-sm font-medium text-foreground">{user.name}</p>
-                      <p className="text-xs text-muted-foreground">{user.email}</p>
-                    </div>
-                    <Link
-                      href="/dashboard"
-                      className="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors duration-300"
-                      onClick={() => setIsProfileDropdownOpen(false)}
+                  
+                  <div className="p-2">
+                    <button
+                      onClick={() => {
+                        setIsEditingName(true);
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-background/50 rounded-lg transition-colors"
                     >
-                      Dashboard
-                    </Link>
+                      <Pencil className="w-4 h-4" />
+                      <span>Edit Name</span>
+                    </button>
+                    
                     <button
                       onClick={handleLogout}
-                      className=" block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-300"
+                      className="w-full flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-background/50 rounded-lg transition-colors"
                     >
-                      Sign Out
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </nav>
 
-      {/* wrapper */}
-      <div className='container mx-auto flex min-h-screen gap-5  pt-14'>
-        {/* Mobile menu button - Positioned absolutely */}
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="fixed bottom-4 left-4 p-3 rounded-full shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 lg:hidden z-50"
-        >
-          {isSidebarOpen ? (
-            <X className="w-6 h-6 transition-transform duration-300 rotate-90" />
-          ) : (
-            <Menu className="w-6 h-6 transition-transform duration-300" />
-          )}
-        </button>
+        {/* Page Content */}
+        <main className="p-6">
+          {children}
+        </main>
+      </div>
 
-        {/* Sidebar */}
-        <div
-          className={`fixed inset-y-0 left-0 z-40 lg:relative lg:z-0 transform transition-all duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0 lg:opacity-100'
-            } lg:translate-x-0 ${isSidebarCollapsed ? 'lg:w-[90px]' : 'lg:w-1/4'}`}
-        >
-          <div className="h-full px-3 py-4 flex flex-col bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-
-            <div className={`flex flex-col mb-6 space-y-2.5 ${isSidebarCollapsed ? 'items-center' : 'items-start'}`}>
-              {isSidebarCollapsed ? (
-                <div className="w-11 h-11 bg-primary rounded-full flex items-center justify-center my-1.5 cursor-pointer" title={user.name}>
-                  <span className="text-primary-foreground text-lg font-medium">
-                    {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                  </span>
-                </div>
-              ) : (
-                <>
-                  {isEditingName ? (
-                    <div className="flex items-center gap-2 w-full ">
-                      <input
-                        value={editedName}
-                        onChange={(e) => setEditedName(e.target.value)}
-                        className="flex-1 px-2 py-1 rounded-md bg-background border border-input focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-                      />
-                      <button onClick={handleSaveName} disabled={savingName} className="p-1 rounded hover:bg-muted">
-                        <Check className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => { setIsEditingName(false); setEditedName(user.name); }} className="p-1 rounded hover:bg-muted">
-                        <CloseIcon className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-medium truncate max-w-[120px]" title={user.name}>{user.name}</h3>
-                      <button onClick={() => setIsEditingName(true)} className="p-1 rounded hover:bg-muted">
-                        <Pencil className="w-4 h-4 text-muted-foreground" />
-                      </button>
-                    </div>
-                  )}
-                  <p className="text-xs text-muted-foreground max-w-[150px]" title={user.email}>{user.email}</p>
-                  <p className="text-xs text-primary/80 bg-primary/10 px-2 py-0.5 rounded-full">{user.plan || 'Free'} Plan</p>
-                </>
-              )}
-            </div>
-
-            <ul className="space-y-1.5 font-medium flex-grow overflow-y-auto">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentTab === item.tab;
-                return (
-                  <li key={item.name}>
-                    <Link
-                      href={`/dashboard?tab=${item.tab}`}
-                      title={isSidebarCollapsed ? item.name : ''}
-                      className={`flex items-center p-2.5 text-sm rounded-lg group transition-colors ${isActive
-                        ? 'bg-muted text-foreground'
-                        : 'text-foreground hover:bg-muted'
-                        } ${isSidebarCollapsed ? 'justify-center' : ''}`}
-                    >
-                      <Icon className={`w-5 h-5 transition duration-75 ${isActive
-                        ? 'text-foreground'
-                        : 'text-muted-foreground group-hover:text-foreground'
-                        }`} />
-                      {!isSidebarCollapsed && <span className="ml-3">{item.name}</span>}
-                    </Link>
-                  </li>
-                );
-              })}
-
-            </ul>
-
-            <div className="pt-2">
+      {/* Edit Name Modal */}
+      {isEditingName && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+          <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Edit Name</h3>
+            
+            <input
+              type="text"
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+              className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-background"
+              placeholder="Enter your name"
+            />
+            
+            <div className="flex space-x-3 mt-4">
               <button
-                onClick={handleToggleSidebar}
-                title={isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-                className={ `flex items-center w-full p-2.5 text-sm rounded-lg group transition-colors text-foreground hover:bg-muted ${isSidebarCollapsed ? 'justify-center' : ''}`}
+                onClick={() => setIsEditingName(false)}
+                className="flex-1 py-2 px-4 border border-border rounded-lg text-foreground hover:bg-background/50 transition-colors"
               >
-                <ChevronLeft
-                  className={`w-5 h-5 transition-transform duration-300 text-muted-foreground group-hover:text-foreground ${isSidebarCollapsed ? 'rotate-180' : 'rotate-0'}`}
-                />
-                {!isSidebarCollapsed && (
-                  <span className="ml-3">Collapse</span>
-                )}
+                Cancel
+              </button>
+              
+              <button
+                onClick={handleSaveName}
+                disabled={savingName}
+                className="flex-1 py-2 px-4 bg-primary text-background rounded-lg font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+              >
+                {savingName ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
 
-        {/* Overlay for mobile */}
-        <div
-          onClick={() => setIsSidebarOpen(false)}
-          className={`fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            }`}
-        />
-
-        {/* Main Content */}
-        <div className={`flex-1 p-4s transition-all duration-300 ${isSidebarOpen ? 'lg:ml-0' : 'lg:ml-0'}`}>
-          <div className="p-4 rounded-lg pt-0">
-            {children}
-          </div>
+const DashboardLayout = ({ children }) => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+          <p className="text-muted-foreground">Preparing your dashboard</p>
         </div>
       </div>
-    </div>
+    }>
+      <DashboardLayoutContent children={children} />
+    </Suspense>
   );
 };
 
