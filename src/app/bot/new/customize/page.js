@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useBotCreation } from '@/context/BotCreationContext';
 import { useSearchParams } from 'next/navigation';
 import { HexColorPicker } from 'react-colorful';
 
-export default function CustomizePage() {
+function CustomizePageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const botId = searchParams.get('botId');
@@ -235,5 +235,13 @@ export default function CustomizePage() {
                 </div>
             </motion.div>
         </div>
+    );
+}
+
+export default function CustomizePage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading...</div></div>}>
+            <CustomizePageContent />
+        </Suspense>
     );
 } 
