@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
-import { useAuth } from '@/context/AuthContext';
 import { Bot, Loader2, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CustomizePage() {
-  const { user } = useAuth();
   const router = useRouter();
   const [bots, setBots] = useState([]);
   const [loading, setLoading] = useState(true);

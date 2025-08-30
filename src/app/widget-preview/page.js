@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function WidgetPreviewPage() {
+function WidgetPreviewContent() {
   const searchParams = useSearchParams();
   const configParam = searchParams.get('config');
 
@@ -244,4 +244,12 @@ export default function WidgetPreviewPage() {
   }, [configParam]);
 
   return null; // This page will render the widget directly into the body
+}
+
+export default function WidgetPreviewPage() {
+  return (
+    <Suspense fallback={<div>Loading preview...</div>}>
+      <WidgetPreviewContent />
+    </Suspense>
+  );
 }

@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from '@/components/ThemeContext';
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayoutContent = ({ children }) => {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -296,6 +296,14 @@ const DashboardLayout = ({ children }) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const DashboardLayout = ({ children }) => {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading...</div></div>}>
+      <DashboardLayoutContent children={children} />
+    </Suspense>
   );
 };
 
