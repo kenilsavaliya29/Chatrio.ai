@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/server/config/db';
-import * as authController from '@/server/controllers/auth.controller';
+import connectDB from '../../../../server/config/db';
+import * as authController from '../../../../server/controllers/auth.controller';
 
 export async function POST(req, { params }) {
   await connectDB();
