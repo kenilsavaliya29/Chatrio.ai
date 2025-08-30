@@ -50,7 +50,7 @@ export const register = async (req) => {
     }, token);
   } catch (error) {
     console.error('Register error:', error);
-    return NextResponse.json({ error: 'Registration failedsss', field: 'general' }, { status: 500 });
+    return NextResponse.json({ error: 'Registration failed', field: 'general' }, { status: 500 });
   }
 };
 

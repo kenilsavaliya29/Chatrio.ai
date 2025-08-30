@@ -3,7 +3,14 @@ import connectDB from '@/server/config/db';
 import * as authController from '@/server/controllers/auth.controller';
 
 export async function POST(req, { params }) {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    return NextResponse.json({ 
+      error: 'Database connection failed. Please try again later.' 
+    }, { status: 500 });
+  }
   
   const { route } = await params;
   const routePath = Array.isArray(route) ? route.join('/') : route;
@@ -27,7 +34,14 @@ export async function POST(req, { params }) {
 }
 
 export async function GET(req, { params }) {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    return NextResponse.json({ 
+      error: 'Database connection failed. Please try again later.' 
+    }, { status: 500 });
+  }
   
   const { route } = await params;
   const routePath = Array.isArray(route) ? route.join('/') : route;
