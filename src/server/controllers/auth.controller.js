@@ -32,7 +32,7 @@ export const register = async (req) => {
     if (!email) {
       return NextResponse.json({ error: "Email Required", field: "email" }, { status: 400 });
     }
-    
+
     if (!email.includes('@')) {
       return NextResponse.json({ error: "Please enter a valid email", field: "email" }, { status: 400 });
     }
@@ -70,6 +70,11 @@ export const login = async (req) => {
     if (!user) {
       return NextResponse.json({ error: 'Email not found', field: 'email' }, { status: 401 });
     }
+
+    if (!password || !password == null || !password == "") {
+      return NextResponse.json({ error: "Please enter a password", field: 'password' }, { status: 401 })
+    }
+
 
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
