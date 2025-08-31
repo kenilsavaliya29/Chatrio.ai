@@ -4,7 +4,13 @@ import User from '@/server/models/user.model';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const model = genAI.getGenerativeModel(
+  {
+    model: "gemini-2.0-flash",
+    generationConfig: {
+      maxOutputTokens: 50
+    }
+  },);
 
 // This is a simplified chat handler for the MVP.
 // A production system would use WebSockets and a more complex context management strategy.
@@ -39,7 +45,7 @@ export async function POST(req) {
 
     // Check if this is the first message in the conversation
     const isFirstMessage = conversationHistory.length === 0;
-    
+
     // Build a simplified prompt for the MVP
     const prompt = `
       You are an AI assistant for "${ragContext.BUSINESS_PROFILE?.name}".
@@ -54,6 +60,8 @@ export async function POST(req) {
       - If user asks the same question again and again which you don't know, you can deny rather than speaking lies.
       - Never speak lies to user in any case ever.
       - Keep responses concise and helpful.
+      - Keep responses concise (maximum 30 words).
+      - Do not exceed the limit under any circumstance.
 
       ---
       CONTEXT:
@@ -70,7 +78,7 @@ export async function POST(req) {
       RESPONSE:
       assistant:
     `;
-    
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
