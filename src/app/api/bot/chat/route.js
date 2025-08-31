@@ -12,8 +12,6 @@ const model = genAI.getGenerativeModel(
     }
   },);
 
-// This is a simplified chat handler for the MVP.
-// A production system would use WebSockets and a more complex context management strategy.
 export async function POST(req) {
   try {
     await connectDB();
