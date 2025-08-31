@@ -3,6 +3,7 @@ import './styles/responsive.css'
 import { ThemeProvider } from "@/components/ThemeContext";
 import { AuthProvider } from '@/context/AuthContext';
 import NavigationWrapper from "@/components/NavigationWrapper";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
   title: "Chatrio - AI Chatbot Integration",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
           <AuthProvider>
             <NavigationWrapper>
               {children}
+              <Analytics />
             </NavigationWrapper>
           </AuthProvider>
         </ThemeProvider>
