@@ -8,7 +8,7 @@ const model = genAI.getGenerativeModel(
   {
     model: "gemini-2.0-flash",
     generationConfig: {
-      maxOutputTokens: 30
+      maxOutputTokens: 50
     }
   },);
 
