@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium';
 
 class WebsiteScraper {
   constructor(targetUrl) {
@@ -19,26 +20,29 @@ class WebsiteScraper {
   async scrape() {
     console.log('🚀 Starting Website Scraper...');
     console.log(`📍 Target URL: ${this.targetUrl}`);
-    
+
     const startTime = Date.now();
     let browser;
-    
+
     try {
       console.log('🌐 Launching browser...');
+
+      const isVercel = process.env.AWS_REGION || process.env.VERCEL;
+
       browser = await puppeteer.launch({
-        headless: 'new',
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--disable-gpu',
-          '--window-size=1920x1080',
-        ],
-        defaultViewport: {
-          width: 1920,
-          height: 1080
-        }
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: isVercel
+          ? await chromium.executablePath()
+          : undefined,
+        headless: isVercel ? chromium.headless : true,
+      }); browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: isVercel
+          ? await chromium.executablePath()
+          : undefined,
+        headless: isVercel ? chromium.headless : true,
       });
 
       const page = await browser.newPage();
@@ -46,8 +50,8 @@ class WebsiteScraper {
       try {
         page.setDefaultNavigationTimeout(60000);
         page.setDefaultTimeout(60000);
-      } catch {}
-      
+      } catch { }
+
       // Add stealth configurations
       await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
       await page.setExtraHTTPHeaders({
@@ -55,7 +59,7 @@ class WebsiteScraper {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Encoding': 'gzip, deflate, br'
       });
-      
+
       // Modify the navigator object
       await page.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, 'webdriver', { get: () => false });
@@ -73,7 +77,7 @@ class WebsiteScraper {
           }
           req.continue();
         });
-      } catch {}
+      } catch { }
 
       console.log('📄 Scraping homepage...');
       const homepageData = await this.scrapePage(page, this.targetUrl);
@@ -152,7 +156,7 @@ class WebsiteScraper {
 
       try {
         await page.waitForSelector('body', { timeout: 10000 });
-      } catch {}
+      } catch { }
 
       await this.delay(800);
 
@@ -174,12 +178,12 @@ class WebsiteScraper {
         const h1 = document.querySelector('h1')?.textContent || '';
         const h2s = Array.from(document.querySelectorAll('h2')).map(h => h.textContent.trim());
         const h3s = Array.from(document.querySelectorAll('h3')).map(h => h.textContent.trim());
-        
+
         const mainContent = document.querySelector('main') || document.body;
         const textContent = mainContent ? mainContent.innerText : '';
-        
+
         const cleanContent = textContent.replace(/\s+/g, ' ').trim();
-        
+
         return {
           title,
           description,
@@ -224,7 +228,7 @@ class WebsiteScraper {
               /\/admin|\/wp-admin|\/login|\/register/,
               /\/privacy|\/terms|\/cookie/
             ];
-            
+
             return !unwantedPatterns.some(pattern => pattern.test(href));
           });
 
