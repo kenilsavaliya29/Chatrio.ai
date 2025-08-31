@@ -10,17 +10,11 @@ export async function middleware(request) {
     path.startsWith('/favicon.ico') ||
     path.startsWith('/pngs/') ||
     path.startsWith('/svgs/') ||
-    path.includes('.') // This catches all file extensions
+    path.includes('.') 
   ) {
     return NextResponse.next();
   }
 
-  console.log(`[Middleware] Processing path: ${path}`);
-
-  // For now, let's disable the auth checks to see if this is the issue
-  // Just handle the basic redirects without token verification
-  
-  // Get token from cookies
   const token = request.cookies.get('token')?.value;
   
   console.log(`[Middleware] Token exists: ${!!token}`);

@@ -16,18 +16,33 @@ const createResponseWithCookie = (data, token) => {
   return response;
 };
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 export const register = async (req) => {
   try {
     const body = await req.json();
     const { name, email, password } = body;
 
-    // Validate input
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ error: 'Name must be at least 2 characters', field: 'name' }, { status: 400 });
     }
 
     if (!password || password.length < 6) {
       return NextResponse.json({ error: 'Password must be at least 6 characters', field: 'password' }, { status: 400 });
+    }
+
+    if (!email) {
+      return NextResponse.json({ error: "Email Required", field: "email" }, { status: 400 });
+    }
+
+    if (!validateEmail(email)) {
+      return NextResponse.json({ error: "Please enter a valid email", field: "email" }, { status: 400 });
     }
 
     const existingUser = await User.findOne({ email });
@@ -64,6 +79,11 @@ export const login = async (req) => {
       return NextResponse.json({ error: 'Email not found', field: 'email' }, { status: 401 });
     }
 
+    if (!password || !password == null || !password == "") {
+      return NextResponse.json({ error: "Please enter a password", field: 'password' }, { status: 401 })
+    }
+
+
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return NextResponse.json({ error: 'Incorrect password', field: 'password' }, { status: 401 });
@@ -87,9 +107,9 @@ export const login = async (req) => {
 
 export const getMe = async (req) => {
   try {
-    const cookieStore = await cookies(); 
+    const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-    
+
     if (!token) {
       return NextResponse.json({ error: 'No token provided' }, { status: 401 });
     }
