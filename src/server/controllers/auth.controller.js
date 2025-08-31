@@ -16,6 +16,14 @@ const createResponseWithCookie = (data, token) => {
   return response;
 };
 
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 export const register = async (req) => {
   try {
     const body = await req.json();
@@ -33,7 +41,7 @@ export const register = async (req) => {
       return NextResponse.json({ error: "Email Required", field: "email" }, { status: 400 });
     }
 
-    if (!email.includes('@')) {
+    if (!validateEmail(email)) {
       return NextResponse.json({ error: "Please enter a valid email", field: "email" }, { status: 400 });
     }
 

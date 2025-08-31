@@ -109,8 +109,6 @@ function CustomizePageContent() {
         return null;
     }
 
-    // Get the header color with a safe fallback
-    console.log(botData)
     const headerColor = botData.Colors.headerBg || '#fff';
 
     return (

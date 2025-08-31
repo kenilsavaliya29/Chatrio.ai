@@ -126,7 +126,6 @@ export default function EditBotPage() {
                         url: data.url,
                     };
 
-                    console.log('Converted config:', convertedConfig);
                     setBotData(botDataWithDefaults);
                 } else {
                     router.push('/dashboard?tab=customize');

@@ -26,7 +26,6 @@ export default function BotsTab() {
       const data = await response.json();
       if (response.ok) {
         setBots(data.bots);
-        // console.log(data.bots);
       }
     } catch (error) {
       console.error('Error fetching bots:', error);
@@ -49,7 +48,6 @@ export default function BotsTab() {
         }),
       });
 
-      console.log(response);
 
       if (response.ok) {
         fetchBots();
@@ -87,7 +85,6 @@ export default function BotsTab() {
         }),
       });
       const data = await response.json();
-      console.log(data);
     } catch (e) {
       console.log(`Error occured while deleting the bot{e}`);
     }
