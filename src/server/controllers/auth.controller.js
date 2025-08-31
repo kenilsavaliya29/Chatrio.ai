@@ -21,7 +21,6 @@ export const register = async (req) => {
     const body = await req.json();
     const { name, email, password } = body;
 
-    // Validate input
     if (!name || name.trim().length < 2) {
       return NextResponse.json({ error: 'Name must be at least 2 characters', field: 'name' }, { status: 400 });
     }
