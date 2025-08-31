@@ -30,6 +30,14 @@ export const register = async (req) => {
       return NextResponse.json({ error: 'Password must be at least 6 characters', field: 'password' }, { status: 400 });
     }
 
+    if (!email) {
+      return NextResponse.json({ error: "Email Required", field: "email" }, { status: 400 });
+    }
+    
+    if (!email.includes('@')) {
+      return NextResponse.json({ error: "Please enter a valid email", field: "email" }, { status: 400 });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json({ error: 'Email is already registered', field: 'email' }, { status: 400 });
@@ -87,9 +95,9 @@ export const login = async (req) => {
 
 export const getMe = async (req) => {
   try {
-    const cookieStore = await cookies(); 
+    const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
-    
+
     if (!token) {
       return NextResponse.json({ error: 'No token provided' }, { status: 401 });
     }
