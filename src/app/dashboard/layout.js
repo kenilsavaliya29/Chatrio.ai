@@ -98,7 +98,6 @@ const DashboardLayoutContent = ({ children }) => {
       });
       const data = await res.json();
       if (res.ok) {
-        // ideally update auth context, for now just reload name locally
         user.name = editedName.trim();
         setIsEditingName(false);
       } else {

@@ -156,8 +156,12 @@ export default function BotsTab() {
         title="Delete Bot"
         message={
           <div>
-            <p className="mb-2 text-red-600 font-semibold">This action cannot be undone. This will permanently delete the bot and it cannot be recovered.</p>
-            <span className="mb-2">Please type <span className="font-bold">{botToDelete?.name}</span> to confirm deletion.</span>
+            <p className="mb-2 text-red-600 font-semibold">
+              This action cannot be undone. This will permanently delete the bot and it cannot be recovered.
+            </p>
+            <div className="mb-2">
+              Please type <span className="font-bold">{botToDelete?.name}</span> to confirm deletion.
+            </div>
             <input
               type="text"
               className="w-full border rounded px-2 py-1 mt-2"

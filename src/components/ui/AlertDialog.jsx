@@ -21,7 +21,7 @@ export function AlertDialog({
           <CardTitle>{title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p>{message}</p>
+          <div>{message}</div>
         </CardContent>
         <CardFooter className="flex justify-end space-x-2">
           <Button variant="outline" onClick={onClose}>
