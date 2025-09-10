@@ -5,7 +5,7 @@ import OverviewTab from './_components/overview-tab';
 import BotsTab from './_components/bots-tab';
 import AnalyticsTab from './_components/analytics-tab';
 import SettingsTab from './_components/settings-tab';
-import CustomizeTab from './_components/customize-tab'; // Import new tab
+import CustomizeTab from './_components/customize-tab';
 
 export default function DashboardPage() {
   const searchParams = useSearchParams();

@@ -1,0 +1,54 @@
+The Strategic Content Focus
+For college websites, your scraper should be laser-focused on high-value, actionable information:
+PRIORITY 1 - Critical Student Info:
+
+Admission dates, deadlines, processes
+Course fees, scholarship information
+Eligibility criteria for each program
+Required documents and procedures
+Contact details for admissions office
+
+PRIORITY 2 - Decision-Making Info:
+
+Course curriculum highlights
+Placement statistics and companies
+Hostel/accommodation details
+Campus facilities overview
+Faculty credentials (department level, not individual)
+
+IGNORE COMPLETELY:
+
+Historical events and news archives
+Administrative circular archives
+Individual faculty research papers
+Old academic calendars
+Internal student portal links
+Technical administrative documents
+
+Smart Content Detection
+High-Value Page Indicators:
+
+URLs containing: "admission", "fees", "courses", "programs", "placement"
+Pages with structured information (tables, lists, clear sections)
+Content with numbers, dates, amounts (₹ symbols, deadlines)
+FAQ sections and prospectus pages
+
+Low-Value Page Indicators:
+
+Generated calendar pages (your current problem)
+Pages with mostly links and no content
+Archive pages with historical data
+Procedural administrative content
+
+The Real Game-Changer Approach
+Instead of scraping everything, you could implement intelligent content targeting:
+
+First Pass: Identify website type and map key sections
+Targeted Scraping: Only hit pages likely to contain student-relevant info
+Content Classification: Use simple keyword matching to categorize scraped content
+Quality Scoring: Rank content by student utility
+
+The beauty is that most Indian college websites follow similar structures. Once you crack the pattern for 5-10 universities, you can predict where the valuable content lives on any college site.
+The Vision: A student types "VIT Vellore B.Tech CSE fees" and gets instant, accurate info instead of spending 30 minutes navigating through their horrible website. Multiply that across college research, and you're saving students hundreds of hours.
+This is actually a brilliant use case because you're not trying to replace human interaction - you're eliminating digital friction that shouldn't exist in the first place.
+What's your current approach for detecting these high-value pages? Are you planning to build content classification into the scraper itself?RetryClaude can make mistakes. Please double-check responses.
