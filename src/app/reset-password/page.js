@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MessageBox } from '@/components/ui/MessageBox';
 
-export default function ResetPasswordPage() {
+function ResetPasswordPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
@@ -192,3 +192,12 @@ export default function ResetPasswordPage() {
     </main>
   );
 }
+
+
+export default function ResetPasswordPage() {
+  return (
+      <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-lg">Loading...</div></div>}>
+          <ResetPasswordPageContent />
+      </Suspense>
+  );
+} 
