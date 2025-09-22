@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import { EyeSlashIcon } from '@heroicons/react/24/outline';
 
 
 const GoogleIcon = (props) => (
@@ -27,6 +29,7 @@ export default function SignUpPage() {
     password: '',
     general: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleGoogleLogin = () => {
     window.location.href = '/api/auth/google';
@@ -151,11 +154,11 @@ export default function SignUpPage() {
             >
               Password
             </label>
-            <div className="mt-1">
+            <div className="mt-1 relative">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 value={password}
@@ -166,6 +169,14 @@ export default function SignUpPage() {
               {errors.password && (
                 <p className="mt-1 text-sm text-destructive">{errors.password}</p>
               )}
+              <div
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ?
+                  <EyeSlashIcon className="w-5 h-5 absolute right-3 top-2 cursor-pointer text-white/60" />
+                  :
+                  <EyeIcon className="w-5 h-5 absolute right-3 top-2 cursor-pointer text-white/60" />}
+
+              </div>
             </div>
           </div>
 

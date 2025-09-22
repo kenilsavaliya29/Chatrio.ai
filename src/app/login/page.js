@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { MessageBox } from '@/components/ui/MessageBox';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import { EyeSlashIcon } from '@heroicons/react/24/outline';
+
 
 
 const GoogleIcon = (props) => (
@@ -27,6 +30,7 @@ export default function SignInPage() {
     password: '',
     general: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleGoogleLogin = () => {
     window.location.href = '/api/auth/google';
@@ -40,7 +44,7 @@ export default function SignInPage() {
       const response = await login(email, password);
 
       if (!response.success) {
-        
+
         if (response.field === 'email') {
           setErrors(prev => ({ ...prev, email: response.error }));
         } else if (response.field === 'password') {
@@ -138,12 +142,13 @@ export default function SignInPage() {
               >
                 Password
               </label>
+
             </div>
-            <div className="mt-1">
+            <div className="mt-1 relative">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 required
                 value={password}
@@ -154,6 +159,14 @@ export default function SignInPage() {
               {errors.password && (
                 <p className="mt-1 text-sm text-destructive">{errors.password}</p>
               )}
+              <div
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ?
+                  <EyeSlashIcon className="w-5 h-5 absolute right-3 top-2 cursor-pointer text-white/60" />
+                  :
+                  <EyeIcon className="w-5 h-5 absolute right-3 top-2 cursor-pointer text-white/60" />}
+
+              </div>
             </div>
           </div>
 
