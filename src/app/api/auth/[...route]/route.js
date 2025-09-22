@@ -23,6 +23,21 @@ export async function POST(req, { params }) {
     return await authController.logout();
   }
 
+  //Handle /api/auth/forgot-password
+  if(routePath === 'forgot-password'){
+    return await authController.forgot_password(req);
+  }
+
+  //Handle /api/auth/verify-otp
+  if(routePath === 'verify-otp'){
+    return await authController.verify_otp(req);
+  }
+
+  //Handle /api/auth/reset-password
+  if(routePath === 'reset-password'){
+    return await authController.reset_password(req);
+  }
+
   return NextResponse.json({ error: 'Route not found' }, { status: 404 });
 }
 

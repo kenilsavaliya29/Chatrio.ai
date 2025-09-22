@@ -65,7 +65,7 @@ export default function SignUpPage() {
 
 
     <main className="flex items-center justify-center min-h-screen px-4 sm:px-7 md:px-10 py-20 pb-0 bg-background mt-10">
-      <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-2xl shadow-lg border border-border">
+      <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-2xl shadow-lg border border-border mb-20">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl f-geist-mono">
             Create Account
