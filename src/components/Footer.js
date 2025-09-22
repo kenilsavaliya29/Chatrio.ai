@@ -90,15 +90,15 @@ const Footer = () => {
                         © {new Date().getFullYear()} Chatrio. All rights reserved.
                     </p>
                     <div className="flex items-center space-x-4">
-                        <a href="#" aria-label="Twitter" className="text-muted-foreground hover:text-foreground transition-colors">
+                        <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-foreground transition-colors">
                             <TwitterIcon className="w-5 h-5" />
-                        </a>
-                        <a href="#" aria-label="GitHub" className="text-muted-foreground hover:text-foreground transition-colors">
+                        </Link>
+                        <Link href="#" aria-label="GitHub" className="text-muted-foreground hover:text-foreground transition-colors">
                             <GithubIcon className="w-5 h-5" />
-                        </a>
-                        <a href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-foreground transition-colors">
+                        </Link>
+                        <Link href="#" aria-label="LinkedIn" className="text-muted-foreground hover:text-foreground transition-colors">
                             <LinkedinIcon className="w-5 h-5" />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

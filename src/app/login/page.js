@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { MessageBox } from '@/components/ui/MessageBox';
 
 
 const GoogleIcon = (props) => (
@@ -20,6 +21,7 @@ export default function SignInPage() {
   const { login, checkAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -61,7 +63,7 @@ export default function SignInPage() {
 
 
     <main className="flex items-center justify-center min-h-screen px-4 sm:px-7 md:px-10 py-20 pb-0 bg-background mt-10">
-      <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-2xl shadow-lg border border-border">
+      <div className="w-full max-w-md p-8 space-y-8 bg-card rounded-2xl shadow-lg border border-border mb-20">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl f-geist-mono">
             Welcome Back
@@ -70,10 +72,20 @@ export default function SignInPage() {
             Sign in to access your dashboard.
           </p>
         </div>
+        {successMessage && (
+          <MessageBox
+            type="success"
+            message={successMessage}
+            onClose={() => setSuccessMessage('')}
+          />
+        )}
+
         {errors.general && (
-          <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md">
-            {errors.general}
-          </div>
+          <MessageBox
+            type="error"
+            message={errors.general}
+            onClose={() => setErrors(prev => ({ ...prev, general: '' }))}
+          />
         )}
 
         <button
@@ -146,9 +158,9 @@ export default function SignInPage() {
           </div>
 
           <div className="text-sm mb-3">
-            <a href="#" className="font-medium text-primary hover:underline hover-text-gradient">
+            <Link href="/forgot-password" className="font-medium text-primary hover:underline hover-text-gradient">
               Forgot your password?
-            </a>
+            </Link>
           </div>
 
           <div>
