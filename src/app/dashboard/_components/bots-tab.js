@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Bot, Loader2, Trash } from 'lucide-react';
+import { Bot, Loader2, Trash, Copy, Check } from 'lucide-react';
 import { AlertDialog } from '@/components/ui/AlertDialog';
 
 export default function BotsTab() {
@@ -14,6 +14,7 @@ export default function BotsTab() {
   const [modalOpen, setModalOpen] = useState(false);
   const [botToDelete, setBotToDelete] = useState(null);
   const [confirmName, setConfirmName] = useState('');
+  const [copiedBotId, setCopiedBotId] = useState(null);
 
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function BotsTab() {
     try {
       const response = await fetch('/api/dashboard?tab=bots');
       const data = await response.json();
+
       if (response.ok) {
         setBots(data.bots);
       }
@@ -64,6 +66,14 @@ export default function BotsTab() {
     setConfirmName('');
     setModalOpen(true);
   };
+
+  const handleCopyCode = (bot) => {
+    navigator.clipboard.writeText(bot.scriptCode);
+    setCopiedBotId(bot.id);
+    setTimeout(() => {
+      setCopiedBotId(null);
+    }, 3000);
+  }
 
   const handleConfirmDelete = async () => {
     await deleteBot(botToDelete.id);
@@ -117,6 +127,13 @@ export default function BotsTab() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    className={`me-2 text-sm px-3 py-2 rounded-2xl transition-all duration-200 flex items-center gap-2 ${copiedBotId === bot.id ? 'bg-green-500/20 text-green-600' : 'hover:bg-gray-600/20'}`}
+                    onClick={() => handleCopyCode(bot)}
+                  >
+                    {copiedBotId === bot.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copiedBotId === bot.id ? 'Copied!' : 'Copy Code'}
+                  </button>
                   {updating === bot.id ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (

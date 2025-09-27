@@ -71,8 +71,8 @@ const Footer = () => {
                         <div>
                             <h4 className="font-semibold text-foreground mb-4">Resources</h4>
                             <ul className="space-y-3">
-                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Documentation</Link></li>
-                                <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Guides</Link></li>
+                                <li><Link href="/embed-guide" className="text-sm text-muted-foreground hover-text-gradient">Documentation</Link></li>
+                                {/* <li><Link href="/embed-guide" className="text-sm text-muted-foreground hover-text-gradient">Guides</Link></li> */}
                                 <li><Link href="#" className="text-sm text-muted-foreground hover-text-gradient">Support</Link></li>
                             </ul>
                         </div>

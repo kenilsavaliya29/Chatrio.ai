@@ -23,7 +23,6 @@ const Navbar = () => {
         }
     };
 
-
     return (
         <>
             <nav className="fixed top-3 left-0 right-0 z-50 w-[98%] mx-auto">
@@ -72,26 +71,22 @@ const Navbar = () => {
 
                                 {/* Dropdown Menu */}
                                 <div
-                                    className={`absolute top-full left-0 glass-effect-darker mt-2 w-64 rounded-xl shadow-lg ${isProductsOpen
+                                    className={`absolute top-full left-0 glass-effect-darker mt-2 w-64 rounded-xl shadow-lg z-50 ${isProductsOpen
                                         ? 'opacity-100 visible dropdown-enter-active'
                                         : 'opacity-0 invisible dropdown-exit-active'
                                         }`}
                                     onMouseEnter={() => setIsProductsOpen(true)}
                                 >
                                     <div className="py-4 px-2">
-                                        <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
+                                        <Link href="products/ai-chatbots" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
                                             <div className="text-sm lg:text-base font-medium">AI Chatbots</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Intelligent conversation automation</div>
                                         </Link>
-                                        {/* <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
-                                            <div className="text-sm lg:text-base font-medium">Live Chat</div>
-                                            <div className="text-xs lg:text-sm text-muted-foreground">Real-time customer support</div>
-                                        </Link> */}
-                                        <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
+                                        <Link href="products/analytics" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
                                             <div className="text-sm lg:text-base font-medium">Analytics</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Conversation insights & metrics</div>
                                         </Link>
-                                        <Link href="#" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
+                                        <Link href="products/templates" className="block px-4 py-3 text-foreground hover-text-gradient rounded-lg transition-all duration-300 hover:bg-muted">
                                             <div className="text-sm lg:text-base font-medium">Templates</div>
                                             <div className="text-xs lg:text-sm text-muted-foreground">Choose our predefined high quality preset templates of Bot interface</div>
                                         </Link>
@@ -185,8 +180,12 @@ const Navbar = () => {
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                                 className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors duration-300"
                             >
-                                <svg className={`w-5 h-5 lg:w-6 lg:h-6 text-foreground transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                <svg className={`w-5 h-5 lg:w-6 lg:h-6 text-foreground transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    {isMobileMenuOpen ? (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    ) : (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                    )}
                                 </svg>
                             </button>
                         </div>
@@ -194,28 +193,85 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Menu */}
-                <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? ' opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <div className="glass-effect-darker px-4 py-6 rounded-b-2xl space-y-6 rounded-2xl mt-2">
+                <div className={`lg:hidden transition-all duration-300 ease-in-out z-40 ${
+                    isMobileMenuOpen 
+                        ? 'max-h-96 opacity-100 visible' 
+                        : 'max-h-0 opacity-0 invisible overflow-hidden'
+                }`}>
+                    <div className="glass-effect-darker px-4 py-6 rounded-2xl mt-2 space-y-6">
                         <nav>
                             <ul className="space-y-4 font-[family-name:var(--font-jost)]">
                                 <li>
-                                    <Link href="#" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link 
+                                        href="/dashboard" 
+                                        className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        Dashboard
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link 
+                                        href="/" 
+                                        className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Chat Agent
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="#" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
-                                        Products
-                                    </Link>
+                                    <div className="space-y-2">
+                                        <span className="block py-2 text-base text-foreground font-medium">Products</span>
+                                        <div className="pl-4 space-y-2">
+                                            <Link 
+                                                href="products/ai-chatbots" 
+                                                className="block py-1 text-sm text-muted-foreground hover-text-gradient transition-all duration-300"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                AI Chatbots
+                                            </Link>
+                                            <Link 
+                                                href="products/analytics" 
+                                                className="block py-1 text-sm text-muted-foreground hover-text-gradient transition-all duration-300"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                Analytics
+                                            </Link>
+                                            <Link 
+                                                href="products/templates" 
+                                                className="block py-1 text-sm text-muted-foreground hover-text-gradient transition-all duration-300"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                Templates
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
-                                    <Link href="/pricing" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link 
+                                        href="/pricing" 
+                                        className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Pricing
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/#faq-section" className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300">
+                                    <Link 
+                                        href="/#faq-section" 
+                                        className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         FAQ's
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link 
+                                        href="/embed-guide" 
+                                        className="block py-2 text-base text-foreground hover-text-gradient font-medium transition-all duration-300"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        Embed Guide
                                     </Link>
                                 </li>
                             </ul>
@@ -236,20 +292,38 @@ const Navbar = () => {
                                             <p className="text-xs text-muted-foreground">{user.email}</p>
                                         </div>
                                     </div>
-                                    <Link href="/dashboard" className='w-full py-2.5 text-foreground border border-border hover:bg-muted rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'>
+                                    <Link 
+                                        href="/dashboard" 
+                                        className='w-full py-2.5 text-foreground border border-border hover:bg-muted rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Dashboard
                                     </Link>
-                                    <button onClick={handleLogout} className='w-full py-2.5 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm'>
+                                    <button 
+                                        onClick={() => {
+                                            handleLogout();
+                                            setIsMobileMenuOpen(false);
+                                        }} 
+                                        className='w-full py-2.5 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm'
+                                    >
                                         Sign Out
                                     </button>
                                 </>
                             ) : (
                                 // Mobile: User is not logged in
                                 <>
-                                    <Link href={'/signup'} className='w-full py-2.5 text-foreground border border-border hover:bg-muted rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'>
+                                    <Link 
+                                        href={'/signup'} 
+                                        className='w-full py-2.5 text-foreground border border-border hover:bg-muted rounded-lg transition-all duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Sign In
                                     </Link>
-                                    <Link href={'/login'} className='w-full py-2.5 bg-primary text-primary-foreground hover:scale-105 rounded-lg custom-transition duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'>
+                                    <Link 
+                                        href={'/login'} 
+                                        className='w-full py-2.5 bg-primary text-primary-foreground hover:scale-105 rounded-lg custom-transition duration-300 font-medium font-[family-name:var(--font-jost)] text-sm text-center block'
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
                                         Login
                                     </Link>
                                 </>
