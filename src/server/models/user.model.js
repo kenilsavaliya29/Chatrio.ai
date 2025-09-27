@@ -132,6 +132,12 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  passwordResetOtp: {
+    code: String,
+    expiresAt: Date,
+    attempts: { type: Number, default: 0 },
+    isUsed: { type: Boolean, default: false }
+  },
   bots: [botSchema], // Embed bot configurations here for the MVP
   createdAt: {
     type: Date,
@@ -151,6 +157,9 @@ userSchema.pre('save', async function (next) {
 
 // Compare password
 userSchema.methods.comparePassword = async function (enteredPassword) {
+  if (!this.password) {
+    return false;
+  }
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

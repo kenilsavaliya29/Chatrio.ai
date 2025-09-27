@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect, useCallback } from 'react';
 
 const BotCreationContext = createContext();
 
@@ -158,7 +158,7 @@ export function BotCreationProvider({ children }) {
     }, [embedCode]);
 
     // Clear data when bot creation is complete
-    const clearBotData = () => {
+    const clearBotData = useCallback(() => {
         // Clear both the current bot key and the draft key to avoid stale state
         try {
             localStorage.removeItem(getStorageKey(activeBotId));
@@ -169,13 +169,13 @@ export function BotCreationProvider({ children }) {
         setBotData(initialBotData);
         setProcessedData(null);
         setEmbedCode('');
-    };
+    }, [activeBotId]);
 
-    const updateBotData = (newData) => {
+    const updateBotData = useCallback((newData) => {
         setBotData(prev => ({ ...prev, ...newData }));
-    };
+    }, []);
 
-    const handleInputChange = (category, field, value) => {
+    const handleInputChange = useCallback((category, field, value) => {
         setBotData(prev => {
             const newState = { ...prev };
 
@@ -194,7 +194,7 @@ export function BotCreationProvider({ children }) {
             }
             return newState;
         });
-    };
+    }, []);
 
     return (
         <BotCreationContext.Provider value={{

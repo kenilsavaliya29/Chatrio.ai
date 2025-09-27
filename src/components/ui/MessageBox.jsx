@@ -50,7 +50,6 @@ export function MessageBox({ type, message, onClose, duration = 5000 }) {
     return (
         <div className={`p-4 rounded-md border ${bgColorClass} flex items-center justify-between shadow-sm`}>
             <div className="flex items-center">
-                {icon}
                 <p className={`ml-3 text-sm font-medium ${textColorClass}`}>{message}</p>
             </div>
             <button
