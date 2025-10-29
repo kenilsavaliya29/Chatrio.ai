@@ -36,23 +36,23 @@ const loadEmailTemplate = (templateName, replacements) => {
   try {
     const templatePath = path.join(process.cwd(), 'src', 'server', 'templates', templateName);
     let template = fs.readFileSync(templatePath, 'utf8');
-    
+
     // Load and inline CSS
     const cssFileName = templateName.replace('.html', '.css');
     const cssContent = loadCSS(cssFileName);
-    
+
     // Replace CSS link with inline styles
     template = template.replace(
       /<link rel="stylesheet" href="\.\/styles\/[^"]+">/g,
       `<style>${cssContent}</style>`
     );
-    
+
     // Replace placeholders with actual values
     Object.keys(replacements).forEach(key => {
       const placeholder = `{{${key}}}`;
       template = template.replace(new RegExp(placeholder, 'g'), replacements[key]);
     });
-    
+
     return template;
   } catch (error) {
     console.error(`Error loading template ${templateName}:`, error);
@@ -65,9 +65,9 @@ const createOTPEmailTemplate = (userName, otpCode) => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
   // Use a more reliable logo URL format
   const logoUrl = `${baseUrl}/svgs/logo.svg`;
-  
+
   console.log('Logo URL for email:', logoUrl);
-  
+
   return loadEmailTemplate('otp-email.html', {
     USER_NAME: userName || 'there',
     OTP_CODE: otpCode,
@@ -79,7 +79,7 @@ const createOTPEmailTemplate = (userName, otpCode) => {
 export const sendOTPEmail = async (email, userName, otpCode) => {
   try {
     const transporter = createTransporter();
-    
+
     const mailOptions = {
       from: `"Chatrio" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -103,15 +103,15 @@ export const sendPasswordResetSuccessEmail = async (email, userName) => {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const logoUrl = `${baseUrl}/svgs/logo.svg`;
     const loginUrl = `${baseUrl}/login`;
-    
+
     console.log('Logo URL for success email:', logoUrl);
-    
+
     const htmlContent = loadEmailTemplate('password-reset-success.html', {
       USER_NAME: userName || 'there',
       LOGO_URL: logoUrl,
       LOGIN_URL: loginUrl
     });
-    
+
     const mailOptions = {
       from: `"Chatrio" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -127,3 +127,27 @@ export const sendPasswordResetSuccessEmail = async (email, userName) => {
     return { success: false, error: error.message };
   }
 };
+
+
+
+export const sendFormMessage = async (name, email, Message) => {
+  try {
+    const transporter = createTransporter();
+
+    const mailOptions = {
+      from: `"Chatrio" <${process.env.EMAIL_USER}>`,
+      to: `"Chatrio" <${process.env.EMAIL_USER}>`,
+      replyTo: email,
+      subject: 'Contact Form Submission - Chatrio',
+      text: `New contact form submission\n\nName: ${name || 'Visitor'}\nEmail: ${email || 'N/A'}\n\nMessage:\n${(Message || '').toString()}`,
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+
+    return { success: true, messageId: result.messageId };
+
+  } catch (error) {
+    console.error('Error sending contact form email:', error);
+    return { success: false, error: error.message };
+  }
+}

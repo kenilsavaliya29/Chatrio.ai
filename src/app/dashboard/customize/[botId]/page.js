@@ -24,7 +24,7 @@ const ChatbotPreview = memo(({ botData }) => {
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white text-center p-4">
                         <p>
                             Could not load "{previewUrl}". This might be due to security restrictions (e.g., Content Security Policy). <br />
-                            Displaying <a href="https://example.com" target="_blank" rel="noopener noreferrer" className="underline">example.com</a> instead.
+                            Displaying <Link href="https://example.com" target="_blank" rel="noopener noreferrer" className="underline">example.com</Link> instead.
                         </p>
                     </div>
                 )}

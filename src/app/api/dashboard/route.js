@@ -68,11 +68,13 @@ export async function GET(request) {
         const botsList = user.bots.map(b => ({
           id: b.botId || b._id,
           name: b.name,
-          active: b.status === 'active'
+          active: b.status === 'active',
+          scriptCode: b.scriptCode
         }));
 
         data = { bots: botsList };
-        break; }
+        break;
+      }
 
       case 'analytics':
         data = {

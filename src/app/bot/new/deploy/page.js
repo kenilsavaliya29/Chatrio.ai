@@ -7,19 +7,26 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export default function DeployPage() {
-    const { embedCode, clearBotData, handleInputChange } = useBotCreation();
+    const { embedCode, handleInputChange } = useBotCreation();
     const router = useRouter();
     const [copied, setCopied] = useState(false);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        if (!embedCode) {
-            router.push('/bot/new/basic');
-        } else {
-            handleInputChange('scriptCode', null, embedCode);
-        }
-    }, [embedCode, router]);
+        setIsClient(true);
+    }, []);
 
-    if (!embedCode) {
+    useEffect(() => {
+        if (isClient) {
+            if (!embedCode) {
+                router.push('/bot/new/basic');
+            } else {
+                handleInputChange('scriptCode', null, embedCode);
+            }
+        }
+    }, [isClient, embedCode, router, handleInputChange]);
+
+    if (!isClient || !embedCode) {
         return null;
     }
 
