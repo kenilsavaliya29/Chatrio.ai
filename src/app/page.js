@@ -7,6 +7,45 @@ import React from "react";
 
 export default function Home() {
   const { resolvedTheme } = useTheme();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = React.useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const form = e.currentTarget; // Store reference before async operations
+    
+    try {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+      
+      const formData = new FormData(form);
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const message = formData.get('message');
+  
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        form.reset(); // Use stored reference
+        setIsSuccessOpen(true);
+      } else {
+        console.error('Contact submit failed:', { status: res.status, data });
+        if (typeof window !== 'undefined') window.alert(data.error || 'Failed to send message');
+      }
+    } catch (err) {
+      console.error('Contact submit error:', err);
+      if (typeof window !== 'undefined') window.alert('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   function FAQAccordion() {
     const faqs = [
@@ -32,6 +71,9 @@ export default function Home() {
       },
     ];
     const [openIdx, setOpenIdx] = React.useState(null);
+
+    
+
     return (
       <div className="space-y-4">
         {faqs.map((faq, idx) => (
@@ -503,7 +545,7 @@ export default function Home() {
           <p className="text-lg text-muted-foreground text-center mb-8">Have questions or need help? Fill out the form and our team will get back to you soon.</p>
           <div className="bg-primary rounded-3xl ">
             <div className="contact-form-wrapper rounded-2xl shadow-xl p-8 md:p-12 bg-contact-form transition-colors duration-300">
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2 text-contact-label">Name</label>
                   <input type="text" id="name" name="name" required className="w-full px-4 py-3 rounded-lg border border-border bg-transparent text-contact-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary input-gradient-focus" placeholder="Your Name" />
@@ -516,12 +558,28 @@ export default function Home() {
                   <label htmlFor="message" className="block text-sm font-medium mb-2 text-contact-label">Message</label>
                   <textarea id="message" name="message" rows={5} required className="w-full px-4 py-3 rounded-lg border border-border bg-transparent text-contact-input placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary input-gradient-focus" placeholder="How can we help you?" />
                 </div>
-                <button type="submit" className="w-full py-3 rounded-lg btn-primary-gradient-hover bg-primary text-primary-foreground font-semibold text-lg shadow-md hover:scale-105 custom-transition hover:text-white">Send Message</button>
-              </form>
+                <button type="submit" disabled={isSubmitting} className={`w-full py-3 rounded-lg btn-primary-gradient-hover bg-primary text-primary-foreground font-semibold text-lg shadow-md custom-transition hover:text-white ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'}`}>{isSubmitting ? 'Sending...' : 'Send Message'}</button>
+            </form> 
             </div>
           </div>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {isSuccessOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsSuccessOpen(false)}></div>
+          <div className="relative z-10 w-[90%] max-w-sm rounded-xl border border-border bg-background p-6 shadow-2xl">
+            <div className="mb-3 text-center">
+              <h3 className="text-xl font-semibold text-foreground">Message sent</h3>
+              <p className="mt-1 text-sm text-muted-foreground">Thanks for reaching out. We’ll get back to you soon.</p>
+            </div>
+            <div className="mt-4 flex justify-center">
+              <button onClick={() => setIsSuccessOpen(false)} className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90">Okay</button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </main >
 
