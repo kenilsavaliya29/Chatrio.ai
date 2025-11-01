@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
+import Bot from '@/server/models/bot.model';
 
 export async function GET(req, { params }) {
     try {
@@ -8,16 +9,11 @@ export async function GET(req, { params }) {
         // Connect to database
         await connectDB();
         
-        // Find any user that has this bot (we don't need to authenticate the requester)
-        // This is a public endpoint but we still validate the bot exists
-        const User = (await import('@/server/models/user.model')).default;
-        const user = await User.findOne({ 'bots.botId': botId });
-        
-        if (!user) {
+        // Public endpoint: find bot by botId
+        const bot = await Bot.findOne({ botId });
+        if (!bot) {
             return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
         }
-        
-        const bot = user.bots.find(b => b.botId === botId);
         
         // Check if bot is active
         if (bot.status !== 'active') {

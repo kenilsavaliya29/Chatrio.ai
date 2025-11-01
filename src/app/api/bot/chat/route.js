@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
@@ -22,14 +22,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Bot ID and message are required' }, { status: 400 });
     }
 
-    // In this MVP, we find the user and then the bot. This is not efficient.
-    // A production system would query the bot directly by its botId.
-    const user = await User.findOne({ 'bots.botId': botId });
-    if (!user) {
-      return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
-    }
-
-    const bot = user.bots.find(b => b.botId === botId);
+    const bot = await Bot.findOne({ botId });
     if (!bot || !bot.ragContext) {
       return NextResponse.json({ error: 'Bot configuration or RAG context not found' }, { status: 404 });
     }

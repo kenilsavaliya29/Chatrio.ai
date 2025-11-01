@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
+import Bot from '@/server/models/bot.model';
 
 export async function GET(req) {
   try {
@@ -22,8 +23,6 @@ export async function GET(req) {
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
-
-    const User = (await import('@/server/models/user.model')).default;
 
     const stream = new ReadableStream({
       async start(controller) {
@@ -54,9 +53,7 @@ export async function GET(req) {
 
         const emitOnce = async () => {
           try {
-            const user = await User.findById(decoded.id);
-            if (!user) { safeWrite('error', { error: 'User not found' }); return endStream(); }
-            const bot = user.bots.find(b => b.botId === botId);
+            const bot = await Bot.findOne({ userId: decoded.id, botId });
             if (!bot) { safeWrite('error', { error: 'Bot not found' }); return endStream(); }
             const processing = bot.process?.processing || {};
             const payload = {

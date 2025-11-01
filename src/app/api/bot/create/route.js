@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 
 export async function POST(req) {
     try {
@@ -24,12 +24,7 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Bot ID is required' }, { status: 400 });
         }
 
-        const user = await User.findById(decoded.id);
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
-        const bot = user.bots.find(b => b.botId === botId);
+        const bot = await Bot.findOne({ userId: decoded.id, botId });
         if (!bot) {
             return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
         }
@@ -37,8 +32,7 @@ export async function POST(req) {
         // Update bot with final configuration
         bot.config = requestData;
         bot.status = 'active';
-
-        await user.save();
+        await bot.save();
 
         const baseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
         

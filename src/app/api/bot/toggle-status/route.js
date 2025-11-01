@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
-import mongoose from 'mongoose';
 import { protect } from '@/server/middleware/auth.middleware';
+import Bot from '@/server/models/bot.model';
 
 export async function POST(request) {
   try {
@@ -24,14 +24,12 @@ export async function POST(request) {
     }
 
     await connectDB();
-    const User = mongoose.models.User || mongoose.model('User');
 
-    const result = await User.updateOne(
-      { _id: request.user.id, 'bots.botId': botId }, 
-      { $set: { 'bots.$.status': status } }
+    const result = await Bot.updateOne(
+      { userId: request.user.id, botId },
+      { $set: { status } }
     );
 
-    // console.log('[toggle-status] Update result:', result);
     if (result.modifiedCount === 0) {
       return NextResponse.json(
         { error: 'Bot not found or status not changed' },

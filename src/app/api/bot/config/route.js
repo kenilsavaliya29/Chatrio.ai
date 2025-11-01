@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 
 
 export async function GET(req) {
@@ -15,13 +15,8 @@ export async function GET(req) {
             return NextResponse.json({ error: 'Bot ID is required' }, { status: 400 });
         }
 
-        // Find the bot by botId across all users
-        const user = await User.findOne({ 'bots.botId': botId }); 
-        if (!user) {
-            return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
-        }
-
-        const bot = user.bots.find(b => b.botId === botId);
+        // Find the bot by botId
+        const bot = await Bot.findOne({ botId }); 
         if (!bot || bot.status !== 'active') {
             return NextResponse.json({ error: 'Bot not found or not active' }, { status: 404 });
         }

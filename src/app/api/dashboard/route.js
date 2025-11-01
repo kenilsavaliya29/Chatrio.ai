@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 
 
 export async function GET(request) {
@@ -26,14 +26,11 @@ export async function GET(request) {
           return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        const user = await User.findById(decoded.id);
-        if (!user) {
-          return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
-        // Calculate stats
-        const totalBots = user.bots.length;
-        const activeBots = user.bots.filter(bot => bot.status === 'active').length;
+        // Calculate stats from Bot collection
+        const [totalBots, activeBots] = await Promise.all([
+          Bot.countDocuments({ userId: decoded.id }),
+          Bot.countDocuments({ userId: decoded.id, status: 'active' })
+        ]);
 
         data = {
           stats: {
@@ -59,14 +56,9 @@ export async function GET(request) {
           return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        const user = await User.findById(decoded.id);
-
-        if (!user) {
-          return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
-        const botsList = user.bots.map(b => ({
-          id: b.botId || b._id,
+        const bots = await Bot.find({ userId: decoded.id });
+        const botsList = bots.map(b => ({
+          id: b.botId,
           name: b.name,
           active: b.status === 'active',
           scriptCode: b.scriptCode

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 
 // GET a specific bot's configuration
 export async function GET(request, { params }) {
@@ -20,10 +20,7 @@ export async function GET(request, { params }) {
     const decoded = verifyToken(token);
     if (!decoded) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     
-    const user = await User.findById(decoded.id);
-    if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
-
-    const bot = user.bots.find(b => b.botId === botId);
+    const bot = await Bot.findOne({ userId: decoded.id, botId });
     if (!bot) return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
 
     // Debug: Log the actual bot config from database
@@ -63,11 +60,8 @@ export async function PUT(request, { params }) {
       const decoded = verifyToken(token);
       if (!decoded) return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
       
-      const user = await User.findById(decoded.id);
-      if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
-  
-      const botIndex = user.bots.findIndex(b => b.botId === botId);
-      if (botIndex === -1) return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
+      const bot = await Bot.findOne({ userId: decoded.id, botId });
+      if (!bot) return NextResponse.json({ error: 'Bot not found' }, { status: 404 });
   
       // Update the bot's config
       // Convert flattened config from frontend back to nested structure for DB
@@ -135,11 +129,10 @@ export async function PUT(request, { params }) {
       };
       
       // Merge with existing config to preserve any fields not sent from frontend
-      user.bots[botIndex].config = { ...user.bots[botIndex].config, ...newNestedConfig };
-      user.bots[botIndex].name = updatedConfig.botName || user.bots[botIndex].name;
-      user.bots[botIndex].scriptCode = updatedConfig.scriptCode || user.bots[botIndex].scriptCode; 
-      
-      await user.save();
+      bot.config = { ...bot.config, ...newNestedConfig };
+      bot.name = updatedConfig.botName || bot.name;
+      bot.scriptCode = updatedConfig.scriptCode || bot.scriptCode; 
+      await bot.save();
   
       return NextResponse.json({ success: true, message: 'Bot updated successfully' });
   

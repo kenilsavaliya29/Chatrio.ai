@@ -4,7 +4,7 @@ import { processScrapingReport } from '@/server/utils/rag-processor';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req) {
@@ -32,11 +32,7 @@ export async function POST(req) {
     }
     console.log(`[API /process-data] Token verified for user: ${decoded.id}`);
 
-    // Fetch the user document here so it's available for bot operations
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    const userId = decoded.id;
 
     const body = await req.json();
     console.log('[API /process-data] Request body:', body);
@@ -58,16 +54,16 @@ export async function POST(req) {
 
     const updateProgress = async (botId, { percent, step, message, status }) => {
       try {
-        const idx = user.bots.findIndex(b => b.botId === botId);
-        if (idx === -1) return;
-        user.bots[idx].process = user.bots[idx].process || {};
-        user.bots[idx].process.processing = user.bots[idx].process.processing || {};
-        if (typeof percent === 'number') user.bots[idx].process.processing.progressPercent = percent;
-        if (step) user.bots[idx].process.processing.step = step;
-        if (message !== undefined) user.bots[idx].process.processing.message = message;
-        if (status) user.bots[idx].process.processing.status = status;
-        user.bots[idx].process.processing.lastUpdated = new Date();
-        await user.save();
+        const bot = await Bot.findOne({ userId, botId });
+        if (!bot) return;
+        bot.process = bot.process || {};
+        bot.process.processing = bot.process.processing || {};
+        if (typeof percent === 'number') bot.process.processing.progressPercent = percent;
+        if (step) bot.process.processing.step = step;
+        if (message !== undefined) bot.process.processing.message = message;
+        if (status) bot.process.processing.status = status;
+        bot.process.processing.lastUpdated = new Date();
+        await bot.save();
       } catch (e) {
         console.error('[API /process-data] Failed to update progress:', e);
       }
@@ -75,26 +71,27 @@ export async function POST(req) {
 
     if (botId) {
       // Attempt to find and update an existing bot for this user
-      const existingBotIndex = user.bots.findIndex(b => b.botId === botId);
-      if (existingBotIndex !== -1) {
-        user.bots[existingBotIndex].status = 'processing';
-        user.bots[existingBotIndex].url = url; // Update URL if changed
-        user.bots[existingBotIndex].name = name || user.bots[existingBotIndex].name;
-        user.bots[existingBotIndex].updatedAt = new Date();
+      const existingBot = await Bot.findOne({ userId, botId });
+      if (existingBot) {
+        existingBot.status = 'processing';
+        existingBot.url = url;
+        existingBot.name = name || existingBot.name;
+        existingBot.updatedAt = new Date();
+        await existingBot.save();
         finalBotId = botId;
         botExists = true;
         console.log(`[API /process-data] Updating existing bot ${botId} to processing status.`);
       } else {
-        // If botId was provided but not found for this user, it's an error
         return NextResponse.json({ error: 'Bot not found for this user' }, { status: 404 });
       }
     } else {
-      // Create a new bot entry
+      // Create a new bot document
       finalBotId = uuidv4();
-      const newBotData = {
+      await Bot.create({
+        userId,
         botId: finalBotId,
         name: name || 'My New Bot',
-        url: url,
+        url,
         status: 'processing',
         process: {
           reports: false,
@@ -108,16 +105,10 @@ export async function POST(req) {
             lastUpdated: new Date()
           }
         },
-        createdAt: new Date(),
-      };
-      if (!user.bots) {
-        user.bots = [];
-      }
-      user.bots.push(newBotData);
+        createdAt: new Date()
+      });
       console.log(`[API /process-data] Created new bot ${finalBotId} with processing status.`);
     }
-
-    await user.save(); // Save the user document with the updated/new bot status
 
     // --- TEMPORARY: Synchronous Processing for Local Testing ---
     // In production, this entire block (scraping and RAG) MUST be moved to a background worker.
@@ -149,31 +140,29 @@ export async function POST(req) {
       await updateProgress(finalBotId, { percent: 85, step: 'rag', message: 'Knowledge base generated.' });
 
       // Update bot with processed data and set status to active
-      const botToUpdate = user.bots.find(b => b.botId === finalBotId);
-      if (botToUpdate) {
-        botToUpdate.ragContext = ragContext;
-        botToUpdate.scrapingReport = scrapingReport;
-        botToUpdate.process.reports = true;
-        botToUpdate.status = 'active';
-        botToUpdate.updatedAt = new Date();
-        await user.save(); // Save user with updated bot data
-        console.log(`[API /process-data] Bot ${finalBotId} successfully processed and set to active.`);
-        processingMessage = 'Bot processed successfully!';
-        await updateProgress(finalBotId, { percent: 100, step: 'complete', message: 'Completed.', status: 'active' });
-      } else {
-        throw new Error('Bot not found in user document after processing.');
-      }
+      const botToUpdate = await Bot.findOne({ userId, botId: finalBotId });
+      if (!botToUpdate) throw new Error('Bot not found after processing.');
+      botToUpdate.ragContext = ragContext;
+      botToUpdate.scrapingReport = scrapingReport;
+      botToUpdate.process = botToUpdate.process || {};
+      botToUpdate.process.reports = true;
+      botToUpdate.status = 'active';
+      botToUpdate.updatedAt = new Date();
+      await botToUpdate.save();
+      console.log(`[API /process-data] Bot ${finalBotId} successfully processed and set to active.`);
+      processingMessage = 'Bot processed successfully!';
+      await updateProgress(finalBotId, { percent: 100, step: 'complete', message: 'Completed.', status: 'active' });
 
     } catch (processingError) {
       processingSuccess = false;
       processingMessage = `Bot processing failed: ${processingError.message}`;
       console.error('[API /process-data] Processing failed:', processingError);
       // Set bot status to inactive or error if processing fails
-      const botToUpdate = user.bots.find(b => b.botId === finalBotId);
+      const botToUpdate = await Bot.findOne({ userId, botId: finalBotId });
       if (botToUpdate) {
-        botToUpdate.status = 'inactive'; // Or 'error' status
+        botToUpdate.status = 'inactive';
         botToUpdate.updatedAt = new Date();
-        await user.save();
+        await botToUpdate.save();
       }
       await updateProgress(finalBotId, { percent: 0, step: 'error', message: processingMessage, status: 'error' });
     }

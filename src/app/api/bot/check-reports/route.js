@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/server/config/db';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/server/utils/jwt.utils';
-import User from '@/server/models/user.model';
+import Bot from '@/server/models/bot.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req) {
@@ -27,12 +27,6 @@ export async function POST(req) {
             return NextResponse.json({ error: 'URL and name are required' }, { status: 400 });
         }
 
-        // Find user and their bots
-        const user = await User.findById(decoded.id);
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
         // Normalize URL for consistent comparison
         function normalizeUrl(url) {
             return url.replace(/^(https?:\/\/)?(www\.)?/i, '').replace(/\/+$/, '');
@@ -40,14 +34,10 @@ export async function POST(req) {
 
         const normalizedInputUrl = normalizeUrl(url);
 
-        // Look for an existing bot with the same URL and completed reports
-        const existingBotWithReports = user.bots.find(bot => 
-            normalizeUrl(bot.url) === normalizedInputUrl && 
-            bot.process?.reports === true
-        );
-
-        // Also check for any existing bot with same URL (including drafts)
-        const existingBotAny = user.bots.find(bot => normalizeUrl(bot.url) === normalizedInputUrl);
+        // Query bots for this user once and filter in-memory for normalized match
+        const userBots = await Bot.find({ userId: decoded.id });
+        const existingBotWithReports = userBots.find(bot => normalizeUrl(bot.url) === normalizedInputUrl && bot.process?.reports === true);
+        const existingBotAny = userBots.find(bot => normalizeUrl(bot.url) === normalizedInputUrl);
 
         if (existingBotWithReports) {
             // Return existing bot data in the same format as process-data
@@ -75,11 +65,12 @@ export async function POST(req) {
 
         // If no existing bot found at all, create a new draft bot
         const newBotId = uuidv4();
-        const newBot = {
+        await Bot.create({
+            userId: decoded.id,
             botId: newBotId,
             name: name,
             url: url,
-            status: 'processing', 
+            status: 'processing',
             process: {
                 reports: false,
                 customization: false,
@@ -87,11 +78,7 @@ export async function POST(req) {
             },
             createdAt: new Date(),
             updatedAt: new Date()
-        };
-
-        // Add the new bot to user's bots array
-        user.bots.push(newBot);
-        await user.save();
+        });
 
         // Return response indicating no existing reports but including the new botId
         return NextResponse.json({
